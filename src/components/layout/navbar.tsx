@@ -19,7 +19,7 @@ import Tooltip from '@mui/material/Tooltip'
 import MenuItem from '@mui/material/MenuItem'
 import {useRouter} from 'next/router'
 // consts
-import {AVATAR_LINKS, PAGES_LINKS, YEAR_LINKS} from '@/const'
+import {AVATAR_LINKS, INTERNSHIP_LINKS, PAGES_LINKS, YEAR_LINKS} from '@/const'
 import NavbarDropDown from './navbarDropDown'
 import {Divider} from '@mui/material'
 
@@ -112,10 +112,31 @@ function ResponsiveAppBar() {
               <NavbarDropDown
                 links={YEAR_LINKS}
                 sx={{
-                  btn: {color: 'primary', mx: 1, display: 'block'},
+                  btn: {
+                    color: 'black',
+                    fontWeight: 400,
+                    mx: 1,
+                    my: 1,
+                    display: 'block',
+                  },
                   box: {flexGrow: 0},
                 }}
                 dropDownName="YEARS"
+              />
+              <Divider />
+              <NavbarDropDown
+                links={INTERNSHIP_LINKS}
+                sx={{
+                  btn: {
+                    color: 'black',
+                    fontWeight: 400,
+                    mx: 1,
+                    mt: 1,
+                    display: 'block',
+                  },
+                  box: {flexGrow: 0},
+                }}
+                dropDownName="internships"
               />
             </Menu>
           </Box>
@@ -167,6 +188,11 @@ function ResponsiveAppBar() {
               links={YEAR_LINKS}
               sx={{btn: {color: 'white', my: 2, display: 'block'}}}
               dropDownName="YEARS"
+            />
+            <NavbarDropDown
+              links={INTERNSHIP_LINKS}
+              sx={{btn: {color: 'white', my: 2, display: 'block'}}}
+              dropDownName="internships"
             />
           </Box>
 
