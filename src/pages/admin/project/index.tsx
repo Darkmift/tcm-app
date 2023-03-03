@@ -4,6 +4,7 @@ import TextField from '@mui/material/TextField'
 import React from 'react'
 import {FormData} from '../../../types'
 import {TextareaAutosize, Typography} from '@mui/material'
+import withProtectedRoute from '@/highOrderComponents/withProtectedRoute'
 
 const formItems: FormData[] = [
   {
@@ -40,4 +41,4 @@ function index() {
   )
 }
 
-export default index
+export default withProtectedRoute(index, 'Admin')
