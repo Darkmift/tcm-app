@@ -33,7 +33,7 @@ export default function NavbarDropDown({
   return (
     <Box sx={sx?.box}>
       <Button
-        sx={{color: 'white', ...sx?.btn}}
+        sx={{color: 'primary', ...sx?.btn}}
         aria-controls={open ? 'basic-menu' : undefined}
         aria-haspopup="true"
         aria-expanded={open ? 'true' : undefined}
