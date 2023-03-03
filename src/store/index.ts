@@ -23,7 +23,4 @@ const role = LocalStorageService.get('role')
 console.log('🚀 ~ file: index.ts:23 ~ unsubscribe ~ token', token)
 if (token) {
   store.dispatch(login(role))
-  // unsubscribe()
 }
-// const unsubscribe = store.subscribe(() => {
-// })
