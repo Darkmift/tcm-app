@@ -19,7 +19,7 @@ pb.admins.authWithPassword(
 )
 
 const pocketDbService = {
-  getCollection: async (collectionName: string, options = {}) => {
+  getCollection: async (collectionName: string, options = {}): Promise<any> => {
     try {
       const optionsPayload = {page: 1, perPage: 10, ...options}
       // you can also fetch all records at once via getFullList
@@ -34,7 +34,11 @@ const pocketDbService = {
     }
   },
 
-  getRecord: async (collectionName: string, recordId: string, options = {}) => {
+  getRecord: async (
+    collectionName: string,
+    recordId: string,
+    options = {}
+  ): Promise<any> => {
     try {
       const optionsPayload = {...options}
       return await pb
@@ -49,7 +53,10 @@ const pocketDbService = {
     }
   },
 
-  insertRecord: async (collectionName: string, newRecord: GenericObject) => {
+  insertRecord: async (
+    collectionName: string,
+    newRecord: GenericObject
+  ): Promise<any> => {
     try {
       return await pb.collection(collectionName).create(newRecord)
     } catch (error) {
@@ -62,7 +69,10 @@ const pocketDbService = {
     }
   },
 
-  insertMany: async (collectionName: string, recordSet: GenericObject[]) => {
+  insertMany: async (
+    collectionName: string,
+    recordSet: GenericObject[]
+  ): Promise<any> => {
     try {
       const operations = recordSet.map(async (record) =>
         pb.collection(collectionName).create(record)
@@ -82,7 +92,7 @@ const pocketDbService = {
     collectionName: string,
     updateRecordId: string,
     updatedFields: GenericObject
-  ) => {
+  ): Promise<any> => {
     try {
       return await pb
         .collection(collectionName)
@@ -96,7 +106,10 @@ const pocketDbService = {
     }
   },
 
-  deleteRecord: async (collectionName: string, deleteRecordId: string) => {
+  deleteRecord: async (
+    collectionName: string,
+    deleteRecordId: string
+  ): Promise<any> => {
     try {
       return await pb.collection(collectionName).delete(deleteRecordId)
     } catch (error) {
@@ -109,12 +122,17 @@ const pocketDbService = {
     }
   },
 
-  findByFilter: async (collection: string, filter: string) => {
+  findByFilter: async (
+    collection: string,
+    filter: string,
+    findMany?: boolean
+  ): Promise<any> => {
     try {
-      const memberExists = await pocketDbService.getCollection(collection, {
+      const result = await pocketDbService.getCollection(collection, {
         filter,
       })
-      return memberExists?.[0] || null
+      if (findMany) return result?.length ? result : []
+      return result?.[0] ? result[0] : null
     } catch (error) {
       console.log(
         '🚀 ~ file: pocketbase.ts:119 ~ findByFilter: ~ error:',
