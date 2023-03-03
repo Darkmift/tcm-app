@@ -15,3 +15,9 @@ export const AVATAR_LINKS: LinkConfig[] = [
   {name: 'Add Project', pathTo: '/admin/project'},
   {name: 'Edit Project', pathTo: '/admin/project/edit'},
 ]
+export const INTERNSHIP_LINKS: LinkConfig[] = [
+  {name: 'Internships A', pathTo: '/year/2023/internships/A'},
+  {name: 'Internships B', pathTo: '/year/2023/internships/B'},
+  {name: 'Internships C', pathTo: '/year/2023/internships/C'},
+  {name: 'Internships D', pathTo: '/year/2023/internships/D'},
+]
