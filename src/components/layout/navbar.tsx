@@ -17,12 +17,14 @@ import Avatar from '@mui/material/Avatar'
 import Button from '@mui/material/Button'
 import Tooltip from '@mui/material/Tooltip'
 import MenuItem from '@mui/material/MenuItem'
-import AdbIcon from '@mui/icons-material/Adb'
 import {useRouter} from 'next/router'
-import {LinkConfig} from '../../../types'
+// consts
+import {AVATAR_LINKS, PAGES_LINKS, YEAR_LINKS} from '@/const'
+import NavbarDropDown from './navbarDropDown'
+import {Divider} from '@mui/material'
 
-const pages: LinkConfig[] = [{name: 'Home', pathTo: '/'}]
-const settings: LinkConfig[] = [{name: 'Login', pathTo: '/admin/login'}]
+const pages = PAGES_LINKS
+const settings = AVATAR_LINKS
 
 function ResponsiveAppBar() {
   const router = useRouter()
@@ -106,6 +108,15 @@ function ResponsiveAppBar() {
                   <Typography textAlign="center">{page.name}</Typography>
                 </MenuItem>
               ))}
+              <Divider />
+              <NavbarDropDown
+                links={YEAR_LINKS}
+                sx={{
+                  btn: {color: 'primary', mx: 1, display: 'block'},
+                  box: {flexGrow: 0},
+                }}
+                dropDownName="YEARS"
+              />
             </Menu>
           </Box>
           <Box
@@ -152,6 +163,11 @@ function ResponsiveAppBar() {
                 {page.name}
               </Button>
             ))}
+            <NavbarDropDown
+              links={YEAR_LINKS}
+              sx={{btn: {color: 'white', my: 2, display: 'block'}}}
+              dropDownName="YEARS"
+            />
           </Box>
 
           {/* the user Avatar menu - uses settings */}
