@@ -1,5 +1,6 @@
 import React from 'react'
 
+export type Role = 'User' | 'Admin'
 export type LinkConfig = {name: string; pathTo: string}
 export type StyleObject = {[key: string]: string}
 export type StyleXsObject = {[key: string]: string | number | StyleXsObject}
