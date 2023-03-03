@@ -7,6 +7,7 @@ export type StyleObject = GenericObject
 export type StyleXsObject = {[key: string]: string | number | StyleXsObject}
 export type MuiComponent = (props: any) => JSX.Element
 export type GenericComponent = (props: any) => any
+
 export type FormData = {
   Component: typeof React.Component | MuiComponent | GenericComponent
   name: string
@@ -16,6 +17,7 @@ export type FormData = {
   placeholder?: string
   isDropdown?: boolean
 }
+
 export type JSONValue =
   | string
   | number
@@ -48,3 +50,13 @@ export type Project = {
   //might be hydrated
   members?: Member[]
 }
+
+export type MediaCarousselItem = {
+  image: string
+  heading: string
+  desc: string
+}
+
+export type DbRecordResult = Promise<Array<object>>;
+// export type DbRecordResult = Promise<any>;
+

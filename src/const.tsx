@@ -21,3 +21,35 @@ export const INTERNSHIP_LINKS: LinkConfig[] = [
   {name: 'Internships C', pathTo: '/year/2023/internships/C'},
   {name: 'Internships D', pathTo: '/year/2023/internships/D'},
 ]
+
+export const TOKEN_LS_KEY = 'token'
+export const ROLE_LS_KEY = 'role'
+export const USERNAME_LS_KEY = 'name'
+export const SLIDER_DATA = [
+  {
+    image: 'https://www.youtube.com/embed/Ax6cnEVp_bY',
+    heading: 'Slide One',
+    desc: 'This is the description of slide one Lorem ipsum dolor, sit amet consectetur adipisicing elit. Modi quos quas, voluptatum nesciunt illum exercitationem.',
+  },
+  {
+    image: 'https://www.youtube.com/embed/ygX9FeYLnKE',
+    heading: 'Slide Two',
+    desc: 'This is the description of slide two Lorem ipsum dolor, sit amet consectetur adipisicing elit. Modi quos quas, voluptatum nesciunt illum exercitationem.',
+  },
+  {
+    image: 'https://www.youtube.com/embed/IwK6sYaCHPQ',
+    heading: 'Slide Three',
+    desc: 'This is the description of slide three Lorem ipsum dolor, sit amet consectetur adipisicing elit. Modi quos quas, voluptatum nesciunt illum exercitationem.',
+  },
+]
+
+export const COLLECTIONS = {
+  WINNER_PROJECT_TYPES:'winner_project_types',
+  YEARS_AUTH: 'years_auth',
+  AUTH: 'auth',
+  PROJECTS: 'projects',
+  INSTRUCTORS: 'instructors',
+  INTERNSHIPS: 'internships',
+  PROJECT_MEMBER_RELATION:'project_member_relation',
+  INTERNSHIP_INSTRUCTOR_RELATION:'internship_instructor_relation'
+}

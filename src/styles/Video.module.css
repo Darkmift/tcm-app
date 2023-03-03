@@ -1,0 +1,15 @@
+.video-frame {
+  width: 60%;
+  height: 45vh;
+}
+
+.carousel-container {
+  margin-bottom: 4rem;
+}
+
+@media screen and (max-width: 600px) {
+  .video-frame {
+    width: 90%;
+    height: 40vh;
+  }
+}
