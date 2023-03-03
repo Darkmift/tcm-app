@@ -1,7 +1,6 @@
 import {TypedUseSelectorHook, useDispatch, useSelector} from 'react-redux'
 import {configureStore} from '@reduxjs/toolkit'
-import authReducer, {login} from './user.slice'
-import LocalStorageService from '../Services/LocalStorageService'
+import authReducer from './user.slice'
 
 const store = configureStore({
   reducer: {
@@ -17,10 +16,3 @@ type AppDispatch = typeof store.dispatch
 type DispatchFunc = () => AppDispatch
 export const useAppDispatch: DispatchFunc = useDispatch
 export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector
-
-const token = LocalStorageService.get('token')
-const role = LocalStorageService.get('role')
-console.log('🚀 ~ file: index.ts:23 ~ unsubscribe ~ token', token)
-if (token) {
-  store.dispatch(login(role))
-}

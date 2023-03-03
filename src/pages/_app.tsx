@@ -12,7 +12,35 @@ import Head from 'next/head'
 import Container from '@mui/material/Container'
 // redux
 import {Provider} from 'react-redux'
-import store from '@/store'
+import store, {useAppSelector, useAppDispatch} from '@/store'
+import {useEffect} from 'react'
+import LocalStorageService from '@/Services/LocalStorageService'
+import {login} from '@/store/user.slice'
+import {ROLE_LS_KEY, TOKEN_LS_KEY, USERNAME_LS_KEY} from '@/const'
+
+// handle session logic with localstorage etc
+function WatchUserRedux() {
+  const dispatch = useAppDispatch()
+  const kickUser = useAppSelector((state) => state.auth.kickUser)
+  // token,role,name set in HttpService->login
+  useEffect(() => {
+    const token = LocalStorageService.get(TOKEN_LS_KEY)
+    const role = LocalStorageService.get(ROLE_LS_KEY)
+    const name = LocalStorageService.get(USERNAME_LS_KEY)
+    if (!!token && !!role && !!name) {
+      dispatch(login({role, name}))
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+  useEffect(() => {
+    if (kickUser) {
+      LocalStorageService.delete(TOKEN_LS_KEY)
+      LocalStorageService.delete(ROLE_LS_KEY)
+      LocalStorageService.delete(USERNAME_LS_KEY)
+    }
+  }, [kickUser])
+  return <></>
+}
 
 export default function App({Component, pageProps}: AppProps) {
   return (
@@ -23,8 +51,15 @@ export default function App({Component, pageProps}: AppProps) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
+      <WatchUserRedux />
       <ResponsiveAppBar />
-      <Container maxWidth="xl" sx={{flexGrow: 1, my: 3, mx: 2}}>
+      <Container
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          my: 3
+        }}
+      >
         <Component {...pageProps} />
       </Container>
     </Provider>
