@@ -7,7 +7,6 @@ import {ROLE_LS_KEY, TOKEN_LS_KEY, USERNAME_LS_KEY} from '@/const'
 import HttpService from '@/Services/HttpService'
 import {fetchYears} from '@/store/thunks/year.thunk'
 import {Role} from '@/types'
-import {logout} from '@/store/thunks/user.thunk'
 
 // handle session logic with localstorage etc
 function WatchUserRedux() {
@@ -31,6 +30,7 @@ function WatchUserRedux() {
       })
   }, [])
 
+  // login from LS on app load
   useEffect(() => {
     dispatch(fetchYears())
     const token = LocalStorageService.get(TOKEN_LS_KEY)
@@ -41,14 +41,7 @@ function WatchUserRedux() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
-  useEffect(() => {
-    if (kickUser) {
-      LocalStorageService.delete(TOKEN_LS_KEY)
-      LocalStorageService.delete(ROLE_LS_KEY)
-      LocalStorageService.delete(USERNAME_LS_KEY)
-      dispatch(logout())
-    }
-  }, [kickUser, dispatch])
+
   return <></>
 }
 

@@ -33,6 +33,9 @@ axiosInstance.interceptors.response.use(
     if (error.response.status === 401) {
       // dispatch the logout action
       store.dispatch(logoutAction())
+      LocalStorageService.delete(TOKEN_LS_KEY)
+      LocalStorageService.delete(ROLE_LS_KEY)
+      LocalStorageService.delete(USERNAME_LS_KEY)
     }
     return Promise.reject(error)
   }
@@ -84,6 +87,9 @@ const HttpService = {
   async logout() {
     try {
       await axios.post('/api/admin/logout')
+      LocalStorageService.delete(TOKEN_LS_KEY)
+      LocalStorageService.delete(ROLE_LS_KEY)
+      LocalStorageService.delete(USERNAME_LS_KEY)
     } catch (ex) {
       console.error('Failed to logout', ex)
       throw ex
