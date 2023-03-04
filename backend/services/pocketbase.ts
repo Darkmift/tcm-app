@@ -23,9 +23,11 @@ const runAuth = async () => {
 const pocketDbService = {
   getCollection: async (collectionName: string, options = {}): Promise<any> => {
     try {
-
       await runAuth()
-      const optionsPayload = {page: 1, perPage: 10, ...options}
+      const optionsPayload = {
+        // page: 1, perPage: 10,
+        ...options,
+      }
       // you can also fetch all records at once via getFullList
       return await pb.collection(collectionName).getFullList(optionsPayload)
     } catch (error) {
