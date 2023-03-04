@@ -1,19 +1,99 @@
-import {COLLECTIONS} from '../../const'
-import type {NextApiRequest, NextApiResponse} from 'next'
+import {NextApiRequest, NextApiResponse} from 'next'
 import pocketDbService from '../../../backend/services/pocketbase'
+import {COLLECTIONS, VALID_YEAR_REGEX} from '../../const'
 
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
+const getYears = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     const years = await pocketDbService.getCollection(COLLECTIONS.YEARS_AUTH)
-
-    res.status(200).send({years})
+    res.status(200).json({years})
   } catch (error) {
     console.log('🚀 ~ file: metadata.ts:45 ~ error:', error)
     return res
       .status(500)
       .json({error: 'internal error: ' + (error as Error).message})
+  }
+}
+
+const createYear = async (req: NextApiRequest, res: NextApiResponse) => {
+  try {
+    const {year, is_enabled} = req.body.year
+    // validate year object
+    if (VALID_YEAR_REGEX.test(year) === false) {
+      return res.status(404).json({error: 'Invalid Year'})
+    }
+
+    const newYear = await pocketDbService.insertRecord(COLLECTIONS.YEARS_AUTH, {
+      year,
+      is_enabled,
+    })
+    res.status(201).json(newYear)
+  } catch (error) {
+    console.log('🚀 ~ file: metadata.ts:45 ~ error:', error)
+    return res
+      .status(500)
+      .json({error: 'internal error: ' + (error as Error).message})
+  }
+}
+
+const updateYear = async (req: NextApiRequest, res: NextApiResponse) => {
+  try {
+    const {id, year, is_enabled} = req.body
+    // validate year object
+    if (!year) {
+      return res.status(400).json({error: 'Year object is required'})
+    }
+
+    const updatedYear = await pocketDbService.updateRecord(
+      COLLECTIONS.YEARS_AUTH,
+      id,
+      {year, is_enabled}
+    )
+    res.status(200).json(updatedYear)
+  } catch (error) {
+    console.log('🚀 ~ file: metadata.ts:45 ~ error:', error)
+    return res
+      .status(500)
+      .json({error: 'internal error: ' + (error as Error).message})
+  }
+}
+
+const deleteYear = async (req: NextApiRequest, res: NextApiResponse) => {
+  try {
+    const id = req.query.id as string
+    const deletedYear = await pocketDbService.deleteRecord(
+      COLLECTIONS.YEARS_AUTH,
+      id
+    )
+    res.status(200).json(deletedYear)
+  } catch (error) {
+    console.log('🚀 ~ file: metadata.ts:45 ~ error:', error)
+    return res
+      .status(500)
+      .json({error: 'internal error: ' + (error as Error).message})
+  }
+}
+
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
+  const {method} = req
+
+  switch (method) {
+    case 'GET':
+      return getYears(req, res)
+
+    case 'POST':
+      return createYear(req, res)
+
+    case 'PUT':
+      return updateYear(req, res)
+
+    case 'DELETE':
+      return deleteYear(req, res)
+
+    default:
+      res.setHeader('Allow', ['GET', 'POST', 'PUT', 'DELETE'])
+      res.status(405).json({error: `Method ${method} Not Allowed`})
   }
 }
