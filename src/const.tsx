@@ -47,6 +47,7 @@ export const COLLECTIONS = {
   WINNER_PROJECT_TYPES:'winner_project_types',
   YEARS_AUTH: 'years_auth',
   AUTH: 'auth',
+  MEMBERS: 'members',
   PROJECTS: 'projects',
   INSTRUCTORS: 'instructors',
   INTERNSHIPS: 'internships',
