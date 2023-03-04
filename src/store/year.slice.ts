@@ -1,7 +1,7 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit'
 import {RootState} from './index'
 import {Year} from '../types'
-import {fetchYears} from './year.thunk'
+import {fetchYears} from './thunks/year.thunk'
 
 type YearState = {
   years: Year[]
