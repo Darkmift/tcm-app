@@ -57,16 +57,28 @@ export type MediaCarousselItem = {
   desc: string
 }
 
-export type DbRecordResult = Promise<Array<object>>;
+export type DbRecordResult = Promise<Array<object>>
 
 export type Year = {
-  id?: string;
-  year: number;
-  is_enabled: boolean;
-  collectionId?: string;
-  collectionName?: string;
-  created?: string;
-  expand: any;
-  updated: string;
-};
+  id?: string
+  year: number
+  is_enabled: boolean
+  collectionId?: string
+  collectionName?: string
+  created?: string
+  expand: any
+  updated: string
+}
 
+export interface Internship {
+  id: string
+  name: string
+  legacyId: string
+  description: string
+  year: number
+  collectionId: string
+  collectionName: string
+  created: string
+  updated: string
+  instructors: string[]
+}
