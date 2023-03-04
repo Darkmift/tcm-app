@@ -17,12 +17,35 @@ import {useEffect} from 'react'
 import LocalStorageService from '@/Services/LocalStorageService'
 import {login} from '@/store/user.slice'
 import {ROLE_LS_KEY, TOKEN_LS_KEY, USERNAME_LS_KEY} from '@/const'
+import HttpService from '@/Services/HttpService'
+import {fetchYears} from '@/store/year.thunk'
 
 // handle session logic with localstorage etc
 function WatchUserRedux() {
   const dispatch = useAppDispatch()
   const kickUser = useAppSelector((state) => state.auth.kickUser)
   // token,role,name set in HttpService->login
+
+  useEffect(() => {
+    HttpService.getMetada(2022)
+      .then((data) => {
+        console.log(
+          '🚀 ~ file: _app.tsx:30 ~ HttpService.getMetadat ~ data:',
+          data
+        )
+      })
+      .catch((err) => {
+        console.log(
+          '🚀 ~ file: _app.tsx:35 ~ HttpService.getMetadat ~ err:',
+          err
+        )
+      })
+  }, [])
+
+  useEffect(() => {
+    dispatch(fetchYears())
+  }, [dispatch])
+
   useEffect(() => {
     const token = LocalStorageService.get(TOKEN_LS_KEY)
     const role = LocalStorageService.get(ROLE_LS_KEY)
@@ -57,7 +80,7 @@ export default function App({Component, pageProps}: AppProps) {
         sx={{
           display: 'flex',
           flexDirection: 'column',
-          my: 3
+          my: 3,
         }}
       >
         <Component {...pageProps} />
