@@ -13,14 +13,18 @@ import eventsource from 'eventsource'
 const pb = new PocketBase(process.env.NEXT_PUBLIC_POCKETBASE_HOST)
 pb.autoCancellation(false)
 
-pb.admins.authWithPassword(
-  process.env.NEXT_PUBLIC_POCKETBASE_EMAIL as string,
-  process.env.NEXT_PUBLIC_POCKETBASE_PW as string
-)
+const runAuth = async () => {
+  await pb.admins.authWithPassword(
+    process.env.NEXT_PUBLIC_POCKETBASE_EMAIL as string,
+    process.env.NEXT_PUBLIC_POCKETBASE_PW as string
+  )
+}
 
 const pocketDbService = {
   getCollection: async (collectionName: string, options = {}): Promise<any> => {
     try {
+
+      await runAuth()
       const optionsPayload = {page: 1, perPage: 10, ...options}
       // you can also fetch all records at once via getFullList
       return await pb.collection(collectionName).getFullList(optionsPayload)
@@ -40,6 +44,7 @@ const pocketDbService = {
     options = {}
   ): Promise<any> => {
     try {
+      await runAuth()
       const optionsPayload = {...options}
       return await pb
         .collection(collectionName)
@@ -58,6 +63,7 @@ const pocketDbService = {
     newRecord: GenericObject
   ): Promise<any> => {
     try {
+      await runAuth()
       return await pb.collection(collectionName).create(newRecord)
     } catch (error) {
       console.log('🚀 ~ file: pocketbase.js:51 ~ insertRecord ~ error:', {
@@ -74,6 +80,7 @@ const pocketDbService = {
     recordSet: GenericObject[]
   ): Promise<any> => {
     try {
+      await runAuth()
       const operations = recordSet.map(async (record) =>
         pb.collection(collectionName).create(record)
       )
@@ -94,6 +101,7 @@ const pocketDbService = {
     updatedFields: GenericObject
   ): Promise<any> => {
     try {
+      await runAuth()
       return await pb
         .collection(collectionName)
         .update(updateRecordId, updatedFields)
@@ -111,6 +119,7 @@ const pocketDbService = {
     deleteRecordId: string
   ): Promise<any> => {
     try {
+      await runAuth()
       return await pb.collection(collectionName).delete(deleteRecordId)
     } catch (error) {
       console.log('🚀 ~ file: pocketbase.js:99 ~ deleteRecord ~ error:', {
@@ -125,11 +134,14 @@ const pocketDbService = {
   findByFilter: async (
     collection: string,
     filter: string,
-    findMany?: boolean
+    findMany?: boolean,
+    options?: any
   ): Promise<any> => {
     try {
+      await runAuth()
       const result = await pocketDbService.getCollection(collection, {
         filter,
+        ...options,
       })
       if (findMany) return result?.length ? result : []
       return result?.[0] ? result[0] : null
