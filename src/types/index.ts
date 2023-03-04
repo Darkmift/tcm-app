@@ -58,5 +58,15 @@ export type MediaCarousselItem = {
 }
 
 export type DbRecordResult = Promise<Array<object>>;
-// export type DbRecordResult = Promise<any>;
+
+export type Year = {
+  id?: string;
+  year: number;
+  is_enabled: boolean;
+  collectionId?: string;
+  collectionName?: string;
+  created?: string;
+  expand: any;
+  updated: string;
+};
 
