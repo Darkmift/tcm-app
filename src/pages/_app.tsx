@@ -12,58 +12,11 @@ import Head from 'next/head'
 import Container from '@mui/material/Container'
 // redux
 import {Provider} from 'react-redux'
-import store, {useAppSelector, useAppDispatch} from '@/store'
-import {useEffect} from 'react'
-import LocalStorageService from '@/Services/LocalStorageService'
-import {login} from '@/store/user.slice'
-import {ROLE_LS_KEY, TOKEN_LS_KEY, USERNAME_LS_KEY} from '@/const'
-import HttpService from '@/Services/HttpService'
-import {fetchYears} from '@/store/year.thunk'
-
-// handle session logic with localstorage etc
-function WatchUserRedux() {
-  const dispatch = useAppDispatch()
-  const kickUser = useAppSelector((state) => state.auth.kickUser)
-  // token,role,name set in HttpService->login
-
-  useEffect(() => {
-    HttpService.getMetada(2022)
-      .then((data) => {
-        console.log(
-          '🚀 ~ file: _app.tsx:30 ~ HttpService.getMetadat ~ data:',
-          data
-        )
-      })
-      .catch((err) => {
-        console.log(
-          '🚀 ~ file: _app.tsx:35 ~ HttpService.getMetadat ~ err:',
-          err
-        )
-      })
-  }, [])
-
-  useEffect(() => {
-    dispatch(fetchYears())
-  }, [dispatch])
-
-  useEffect(() => {
-    const token = LocalStorageService.get(TOKEN_LS_KEY)
-    const role = LocalStorageService.get(ROLE_LS_KEY)
-    const name = LocalStorageService.get(USERNAME_LS_KEY)
-    if (!!token && !!role && !!name) {
-      dispatch(login({role, name}))
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-  useEffect(() => {
-    if (kickUser) {
-      LocalStorageService.delete(TOKEN_LS_KEY)
-      LocalStorageService.delete(ROLE_LS_KEY)
-      LocalStorageService.delete(USERNAME_LS_KEY)
-    }
-  }, [kickUser])
-  return <></>
-}
+import store from '@/store'
+// types
+import {Role} from '@/types'
+// components
+import WatchUserRedux from '@/components/WatchUserRedux'
 
 export default function App({Component, pageProps}: AppProps) {
   return (
