@@ -21,14 +21,15 @@ export default async function handler(
       `year = ${year}`
     )
 
-    if (!!yearData?.is_enabled === false) {
+    if (yearData.is_enabled === false) {
       return res.status(401).json({error: 'Year not enabled by admin'})
     }
 
     const projects = await pocketDbService.findByFilter(
       COLLECTIONS.PROJECTS,
       `year = ${year}`,
-      true
+      true,
+      {expand: 'instructorId,internshipId'}
     )
 
     const instructors = await pocketDbService.findByFilter(
@@ -43,7 +44,21 @@ export default async function handler(
       true
     )
 
-    res.status(200).json({year, projects, instructors, internships})
+    const members = await pocketDbService.getCollection(COLLECTIONS.MEMBERS)
+    const projectMemberRelation = await pocketDbService.getCollection(
+      COLLECTIONS.PROJECT_MEMBER_RELATION
+    )
+
+    res
+      .status(200)
+      .send({
+        yearData,
+        instructors,
+        internships,
+        members,
+        projects,
+        projectMemberRelation,
+      })
   } catch (error) {
     console.log('🚀 ~ file: metadata.ts:45 ~ error:', error)
     return res

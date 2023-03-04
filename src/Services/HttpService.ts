@@ -1,10 +1,10 @@
 import axios, {AxiosResponse} from 'axios'
 import LocalStorageService from './LocalStorageService'
-import {Role} from '../types'
+import {Role, Year} from '../types'
 import store from '../store'
 import {logout} from '../store/user.slice'
 import {ROLE_LS_KEY, TOKEN_LS_KEY, USERNAME_LS_KEY} from '@/const'
-import {parseFlatted} from '../../utilities/flatted'
+import StitchProjectsAndMembers from '../../utilities/StitchProjectsAndMembers'
 
 const DOMAIN = process.env.NEXT_PUBLIC_DOMAIN
 console.log('🚀 ~ file: HttpService.ts:8 ~ DOMAIN:', DOMAIN)
@@ -78,25 +78,46 @@ const HttpService = {
       return null
     }
   },
-  async getMetadat(year: string | number): Promise<any> {
+  async getMetada(year: string | number): Promise<any> {
     try {
       const result: AxiosResponse<any, any> = await axiosInstance.get(
-        '/metadata?year=' + year,
-        {
-          transformResponse: (x) => x,
-          responseType: 'text'
-        }
+        '/metadata?year=' + year
       )
 
       if (!result?.data) {
         throw new Error('no data!')
       }
+      const {members, projects, projectMemberRelation} = result.data
 
-      // return result.data
-      return parseFlatted(result.data)
+      const {projects: p, members: m} = StitchProjectsAndMembers({
+        projects,
+        members,
+        relation_object: projectMemberRelation,
+      })
+
+      return {...result.data, projects: p, members: m}
     } catch (error) {
       console.error('🚀 ~ file: HttpService.ts:17 ~ login ~ error', error)
       return null
+    }
+  },
+  async getYears(): Promise<Year[]> {
+    try {
+      const result: AxiosResponse<{years: Year[]}, any> =
+        await axiosInstance.get('/years')
+
+      if (!result?.data) {
+        throw new Error('no data!')
+      }
+
+      console.log(
+        '🚀 ~ file: HttpService.ts:118 ~ getYears ~ result.data.years:',
+        result.data
+      )
+      return result.data.years
+    } catch (error) {
+      console.log('🚀 ~ file: HttpService.ts:115 ~ getYears ~ error:', error)
+      return []
     }
   },
 }
