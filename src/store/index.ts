@@ -2,11 +2,13 @@ import {TypedUseSelectorHook, useDispatch, useSelector} from 'react-redux'
 import {configureStore} from '@reduxjs/toolkit'
 import authReducer from './user.slice'
 import yearsReducer from './year.slice'
+import internshipReducer from './internships.slice'
 
 const store = configureStore({
   reducer: {
     auth: authReducer,
     years: yearsReducer,
+    internships: internshipReducer,
   },
 })
 
