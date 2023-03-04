@@ -1,39 +1,50 @@
 import {PayloadAction, createSlice} from '@reduxjs/toolkit'
-import {Role} from '../types'
+import {login, logout} from './thunks/user.thunk'
+import {Role} from '@/types'
 
 type UserState = {
   isLoggedIn: boolean
+  username: string
   role: Role
   kickUser: boolean
-  name: string
 }
 
 const initialState: UserState = {
   isLoggedIn: false,
+  username: '',
   role: 'User',
   kickUser: false,
-  name: 'Guest',
 }
 
-const authSlice = createSlice({
-  name: 'auth',
+const userSlice = createSlice({
+  name: 'user',
   initialState,
   reducers: {
-    login: (
+    logFromStorage: (
       state: UserState,
-      action: PayloadAction<{role: Role; name: string}>
+      action: PayloadAction<{role: Role; username: string}>
     ) => {
       state.isLoggedIn = true
       state.kickUser = false
       state.role = action.payload.role
-      state.name = action.payload.name
-    },
-    logout: (state: UserState) => {
-      state = structuredClone(initialState)
+      state.username = action.payload.username
     },
   },
+  extraReducers: (builder) => {
+    // Add reducers for additional action types here, and handle loading state as needed
+    builder.addCase(login.fulfilled, (state, action) => {
+      state.isLoggedIn = true
+      if (!action.payload) throw new Error('Invalid payload at login thunk')
+      const {username, role} = action.payload
+      if (!username || !role) throw new Error('Invalid payload at login thunk')
+      state.username = action.payload.username
+      state.role = action.payload.role
+    })
+    builder.addCase(logout.fulfilled, (state) => {
+      state = initialState
+    })
+  },
 })
+export const {logFromStorage} = userSlice.actions
 
-export type {Role}
-export const {login, logout} = authSlice.actions
-export default authSlice.reducer
+export default userSlice.reducer

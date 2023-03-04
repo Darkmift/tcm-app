@@ -2,7 +2,7 @@ import axios, {AxiosResponse} from 'axios'
 import LocalStorageService from './LocalStorageService'
 import {Role, Year} from '../types'
 import store from '../store'
-import {logout} from '../store/user.slice'
+import {logout as logoutAction} from '../store/thunks/user.thunk'
 import {ROLE_LS_KEY, TOKEN_LS_KEY, USERNAME_LS_KEY} from '@/const'
 import StitchProjectsAndMembers from '../../utilities/StitchProjectsAndMembers'
 
@@ -32,24 +32,27 @@ axiosInstance.interceptors.response.use(
     console.log('🚀 ~ file: HttpService.ts:39 ~ error:', error)
     if (error.response.status === 401) {
       // dispatch the logout action
-      store.dispatch(logout())
+      store.dispatch(logoutAction())
     }
     return Promise.reject(error)
   }
 )
 
 type AuthUser = {
-  email: string
+  username: string
   password: string
 }
 
 const HttpService = {
-  async login({email, password}: AuthUser): Promise<Role | null> {
+  async login({
+    username: Uname,
+    password,
+  }: AuthUser): Promise<{username: string; role: Role} | null> {
     try {
       const result: AxiosResponse<any, any> = await axiosInstance.post(
-        '/auth/login',
+        '/admin/login',
         {
-          email,
+          username: Uname,
           password,
         }
       )
@@ -72,10 +75,18 @@ const HttpService = {
         throw new Error('Login failed')
       }
 
-      return role
+      return {role, username}
     } catch (error) {
       console.error('🚀 ~ file: HttpService.ts:17 ~ login ~ error', error)
       return null
+    }
+  },
+  async logout() {
+    try {
+      await axios.post('/api/admin/logout')
+    } catch (ex) {
+      console.error('Failed to logout', ex)
+      throw ex
     }
   },
   async getMetada(year: string | number): Promise<any> {
