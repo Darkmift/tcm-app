@@ -10,7 +10,7 @@ export default function StitchProjectsAndMembers({
   // Build up a map of project IDs to their related members
   const projectMembersMap: any = {}
   for (const {projectId, memberId} of relation_object) {
-    if (!projectMembersMap[projectId]) {
+    if (!projectMembersMap[projectId]?.length) {
       projectMembersMap[projectId] = []
     }
     projectMembersMap[projectId].push(memberId)
@@ -19,9 +19,10 @@ export default function StitchProjectsAndMembers({
   // Build up a map of member IDs to their related projects
   const memberProjectsMap: any = {}
   for (const {projectId, memberId} of relation_object) {
-    if (!memberProjectsMap[memberId]) {
+    if (!memberProjectsMap[memberId]?.length) {
       memberProjectsMap[memberId] = []
     }
+
     memberProjectsMap[memberId].push(projectId)
   }
 
@@ -39,5 +40,8 @@ export default function StitchProjectsAndMembers({
     )
   }
 
-  return {members, projects}
+  return {
+    members,
+    projects,
+  }
 }
