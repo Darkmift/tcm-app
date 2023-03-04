@@ -4,6 +4,7 @@ import {Role} from '../types'
 import store from '../store'
 import {logout} from '../store/user.slice'
 import {ROLE_LS_KEY, TOKEN_LS_KEY, USERNAME_LS_KEY} from '@/const'
+import {parseFlatted} from '../../utilities/flatted'
 
 const DOMAIN = process.env.NEXT_PUBLIC_DOMAIN
 console.log('🚀 ~ file: HttpService.ts:8 ~ DOMAIN:', DOMAIN)
@@ -72,6 +73,27 @@ const HttpService = {
       }
 
       return role
+    } catch (error) {
+      console.error('🚀 ~ file: HttpService.ts:17 ~ login ~ error', error)
+      return null
+    }
+  },
+  async getMetadat(year: string | number): Promise<any> {
+    try {
+      const result: AxiosResponse<any, any> = await axiosInstance.get(
+        '/metadata?year=' + year,
+        {
+          transformResponse: (x) => x,
+          responseType: 'text'
+        }
+      )
+
+      if (!result?.data) {
+        throw new Error('no data!')
+      }
+
+      // return result.data
+      return parseFlatted(result.data)
     } catch (error) {
       console.error('🚀 ~ file: HttpService.ts:17 ~ login ~ error', error)
       return null
