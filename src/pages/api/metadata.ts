@@ -1,9 +1,7 @@
-import {COLLECTIONS} from '../../const'
+import {COLLECTIONS, VALID_YEAR_REGEX} from '../../const'
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type {NextApiRequest, NextApiResponse} from 'next'
 import pocketDbService from '../../../backend/services/pocketbase'
-
-const validYearRegex = /^(200[0-9]|20[1-9][0-9]|2100)$/
 
 export default async function handler(
   req: NextApiRequest,
@@ -12,7 +10,7 @@ export default async function handler(
   try {
     const {year} = req.query
 
-    if (validYearRegex.test(year as string) === false) {
+    if (VALID_YEAR_REGEX.test(year as string) === false) {
       return res.status(404).json({error: 'Invalid Year'})
     }
 
@@ -49,16 +47,14 @@ export default async function handler(
       COLLECTIONS.PROJECT_MEMBER_RELATION
     )
 
-    res
-      .status(200)
-      .send({
-        yearData,
-        instructors,
-        internships,
-        members,
-        projects,
-        projectMemberRelation,
-      })
+    res.status(200).send({
+      yearData,
+      instructors,
+      internships,
+      members,
+      projects,
+      projectMemberRelation,
+    })
   } catch (error) {
     console.log('🚀 ~ file: metadata.ts:45 ~ error:', error)
     return res
