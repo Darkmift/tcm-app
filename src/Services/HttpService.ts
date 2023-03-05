@@ -1,6 +1,6 @@
 import axios, {AxiosResponse} from 'axios'
 import LocalStorageService from './LocalStorageService'
-import {Role, Year} from '../types'
+import {InsertInternShip, Internship, Role, Year} from '../types'
 import store from '../store'
 import {logout as logoutAction} from '../store/thunks/user.thunk'
 import {ROLE_LS_KEY, TOKEN_LS_KEY, USERNAME_LS_KEY} from '@/const'
@@ -9,6 +9,7 @@ import StitchProjectsAndMembers from '../../utilities/StitchProjectsAndMembers'
 const DOMAIN = process.env.NEXT_PUBLIC_DOMAIN
 console.log('🚀 ~ file: HttpService.ts:8 ~ DOMAIN:', DOMAIN)
 const BASE_URL = `${DOMAIN}/api/`
+const API_INTERNSHIPS_URL = `/internships` // Update with your API URL
 
 const axiosInstance = axios.create({
   baseURL: BASE_URL,
@@ -118,6 +119,7 @@ const HttpService = {
       return null
     }
   },
+  // YEARS
   async getYears(): Promise<Year[]> {
     try {
       const result: AxiosResponse<{years: Year[]}, any> =
@@ -135,6 +137,92 @@ const HttpService = {
     } catch (error) {
       console.log('🚀 ~ file: HttpService.ts:115 ~ getYears ~ error:', error)
       return []
+    }
+  },
+  async createYear(year: Year) {
+    try {
+      const result: AxiosResponse<Year> = await axiosInstance.post(
+        '/years',
+        year
+      )
+
+      if (!result?.data) {
+        throw new Error('no data!')
+      }
+
+      return result.data
+    } catch (error) {
+      console.error('Failed to create year', error)
+      throw error
+    }
+  },
+  async updateYear(id: string, year: Year) {
+    try {
+      const result: AxiosResponse<Year> = await axiosInstance.put(
+        `/years/${id}`,
+        year
+      )
+
+      if (!result?.data) {
+        throw new Error('no data!')
+      }
+
+      return result.data
+    } catch (error) {
+      console.error(`Failed to update year with id ${id}`, error)
+      throw error
+    }
+  },
+  async deleteYear(id: string) {
+    try {
+      const result: AxiosResponse<Year> = await axiosInstance.delete(
+        `/years/${id}`
+      )
+
+      if (!result?.data) {
+        throw new Error('no data!')
+      }
+
+      return result.data
+    } catch (error) {
+      console.error(`Failed to delete year with id ${id}`, error)
+      throw error
+    }
+  },
+  // INTERNSHIPS
+  async getAllInternships(): Promise<Internship[]> {
+    try {
+      const response = await axios.get(API_INTERNSHIPS_URL)
+      return response.data.internships
+    } catch (error: any) {
+      throw new Error(error.response.data.error)
+    }
+  },
+
+  async createInternship(internship: InsertInternShip): Promise<Internship> {
+    try {
+      const response = await axios.post(API_INTERNSHIPS_URL, internship)
+      return response.data
+    } catch (error: any) {
+      throw new Error(error.response.data.error)
+    }
+  },
+
+  async updateInternship(internship: Internship): Promise<Internship> {
+    try {
+      const response = await axios.put(API_INTERNSHIPS_URL, internship)
+      return response.data
+    } catch (error: any) {
+      throw new Error(error.response.data.error)
+    }
+  },
+
+  async deleteInternship(id: string): Promise<Internship> {
+    try {
+      const response = await axios.delete(`${API_INTERNSHIPS_URL}?id=${id}`)
+      return response.data
+    } catch (error: any) {
+      throw new Error(error.response.data.error)
     }
   },
 }
