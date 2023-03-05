@@ -2,7 +2,7 @@ import {createAsyncThunk, createSlice} from '@reduxjs/toolkit'
 import {Internship} from '../types'
 import HttpService from '../Services/HttpService'
 
-export const getAllInternships = createAsyncThunk<Internship[]>(
+export const fetchInternships = createAsyncThunk<Internship[]>(
   'internships/getAllInternships',
   async () => {
     const internships = await HttpService.getAllInternships()
@@ -51,16 +51,16 @@ const internshipsSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(getAllInternships.pending, (state) => {
+    builder.addCase(fetchInternships.pending, (state) => {
       state.status = 'loading'
       state.error = null
     })
-    builder.addCase(getAllInternships.fulfilled, (state, action) => {
+    builder.addCase(fetchInternships.fulfilled, (state, action) => {
       state.status = 'succeeded'
       state.error = null
       state.internships = action.payload
     })
-    builder.addCase(getAllInternships.rejected, (state, action) => {
+    builder.addCase(fetchInternships.rejected, (state, action) => {
       state.status = 'failed'
       state.error = action.error.message ?? 'Something went wrong'
     })
