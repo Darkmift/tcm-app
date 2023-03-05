@@ -1,5 +1,5 @@
-import {InsertInternShip, Internship} from '../types'
-import {axiosInstance} from './HttpService'
+import {InsertInternShip, Internship} from '../../types'
+import {axiosInstance} from '../HttpService'
 
 const API_INTERNSHIPS_URL = `/internships`
 

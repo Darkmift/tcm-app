@@ -1,6 +1,6 @@
 import {AxiosResponse} from 'axios'
-import {Year} from '../types'
-import {axiosInstance} from './HttpService'
+import {Year} from '../../types'
+import {axiosInstance} from '../HttpService'
 
 const API_YEARS_URL = `/years`
 

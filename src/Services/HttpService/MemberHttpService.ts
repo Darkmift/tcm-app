@@ -1,5 +1,5 @@
-import {Member} from '../types'
-import {axiosInstance} from './HttpService'
+import {Member} from '../../types'
+import {axiosInstance} from '../HttpService'
 
 const API_MEMBERS_URL = `/members`
 

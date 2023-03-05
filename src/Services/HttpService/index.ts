@@ -1,13 +1,15 @@
 import axios, {AxiosResponse} from 'axios'
-import LocalStorageService from './LocalStorageService'
-import {Role} from '../types'
-import store from '../store'
-import {logout as logoutAction} from '../store/thunks/user.thunk'
+import LocalStorageService from '../LocalStorageService'
+import {Role} from '../../types'
+import store from '../../store'
+import {logout as logoutAction} from '../../store/thunks/user.thunk'
 import {ROLE_LS_KEY, TOKEN_LS_KEY, USERNAME_LS_KEY} from '@/const'
-import StitchProjectsAndMembers from '../../utilities/StitchProjectsAndMembers'
+import StitchProjectsAndMembers from '../../../utilities/StitchProjectsAndMembers'
 import MemberHttpService from './MemberHttpService'
 import YearHttpService from './YearHttpService'
 import InternShipsHttpService from './InternShipsHttpService'
+import InstructorsHttpService from './InstructorsHttpService'
+import ProjectHttpService from './ProjectHttpService'
 
 const DOMAIN = process.env.NEXT_PUBLIC_DOMAIN
 console.log('🚀 ~ file: HttpService.ts:8 ~ DOMAIN:', DOMAIN)
@@ -125,6 +127,8 @@ const HttpService = {
   ...InternShipsHttpService,
   ...YearHttpService,
   ...MemberHttpService,
+  ...InstructorsHttpService,
+  ...ProjectHttpService,
 }
 
 export default HttpService
