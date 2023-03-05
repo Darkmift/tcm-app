@@ -4,6 +4,7 @@ export * from './Member.type'
 export * from './Project.type'
 export * from './Internships.type'
 export * from './Instructors.type'
+export * from './ProjectMemberRelations.type'
 
 export type Role = 'User' | 'Admin'
 export type LinkConfig = {name: string; pathTo: string}

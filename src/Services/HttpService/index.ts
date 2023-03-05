@@ -10,6 +10,7 @@ import YearHttpService from './YearHttpService'
 import InternShipsHttpService from './InternShipsHttpService'
 import InstructorsHttpService from './InstructorsHttpService'
 import ProjectHttpService from './ProjectHttpService'
+import ProjectMemberRelationHttpService from './ProjectMemberRelationHttpService'
 
 const DOMAIN = process.env.NEXT_PUBLIC_DOMAIN
 console.log('🚀 ~ file: HttpService.ts:8 ~ DOMAIN:', DOMAIN)
@@ -129,6 +130,7 @@ const HttpService = {
   ...MemberHttpService,
   ...InstructorsHttpService,
   ...ProjectHttpService,
+  ...ProjectMemberRelationHttpService,
 }
 
 export default HttpService
