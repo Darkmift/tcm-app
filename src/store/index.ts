@@ -3,12 +3,18 @@ import {configureStore} from '@reduxjs/toolkit'
 import authReducer from './user.slice'
 import yearsReducer from './year.slice'
 import internshipReducer from './internships.slice'
+import instructorsReducer from './instructors.slice'
+import membersReducer from './member.slice'
+// import projectsReducer from './project.slice'
 
 const store = configureStore({
   reducer: {
     auth: authReducer,
     years: yearsReducer,
     internships: internshipReducer,
+    instructors: instructorsReducer,
+    members: membersReducer,
+    // projects: membersReducer,
   },
 })
 
