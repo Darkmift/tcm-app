@@ -1,4 +1,4 @@
-import {InsertMemberInProjectRelation, ProjectMemberRelation} from '@/types'
+import {InsertProjectMemberRelation, ProjectMemberRelation} from '@/types'
 import {axiosInstance} from './index'
 
 const API_MEMBER_RELATION_URL = '/project-member-relation'
@@ -14,7 +14,7 @@ const ProjectMemberRelationHttpService = {
   },
 
   async createProjectMemberRelation(
-    relation: InsertMemberInProjectRelation
+    relation: InsertProjectMemberRelation
   ): Promise<ProjectMemberRelation> {
     try {
       const response = await axiosInstance.post(

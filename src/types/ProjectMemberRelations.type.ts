@@ -9,5 +9,5 @@ export type ProjectMemberRelation = {
 }
 
 
-export interface InsertMemberInProjectRelation
+export interface InsertProjectMemberRelation
   extends Pick<ProjectMemberRelation, 'memberId' | 'projectId'> {}
