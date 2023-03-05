@@ -11,3 +11,6 @@ export interface Internship {
   updated: string
   instructors: Instructor[]
 }
+
+export interface InsertInternShip
+  extends Pick<Internship, 'name' | 'description' | 'year'> {}
