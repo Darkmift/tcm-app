@@ -1,6 +1,6 @@
 import axios, {AxiosResponse} from 'axios'
 import LocalStorageService from './LocalStorageService'
-import {InsertInternShip, Internship, Role, Year} from '../types'
+import {InsertInternShip, Internship, Member, Role, Year} from '../types'
 import store from '../store'
 import {logout as logoutAction} from '../store/thunks/user.thunk'
 import {ROLE_LS_KEY, TOKEN_LS_KEY, USERNAME_LS_KEY} from '@/const'
@@ -9,7 +9,8 @@ import StitchProjectsAndMembers from '../../utilities/StitchProjectsAndMembers'
 const DOMAIN = process.env.NEXT_PUBLIC_DOMAIN
 console.log('🚀 ~ file: HttpService.ts:8 ~ DOMAIN:', DOMAIN)
 const BASE_URL = `${DOMAIN}/api/`
-const API_INTERNSHIPS_URL = `/internships` // Update with your API URL
+const API_INTERNSHIPS_URL = `/internships`
+const API_MEMBERS_URL = `/members`
 
 const axiosInstance = axios.create({
   baseURL: BASE_URL,
@@ -220,6 +221,42 @@ const HttpService = {
   async deleteInternship(id: string): Promise<Internship> {
     try {
       const response = await axios.delete(`${API_INTERNSHIPS_URL}?id=${id}`)
+      return response.data
+    } catch (error: any) {
+      throw new Error(error.response.data.error)
+    }
+  },
+
+  // MEMBERS
+  async getAllMembers(): Promise<Member[]> {
+    try {
+      const response = await axios.get(API_MEMBERS_URL)
+      return response.data.members
+    } catch (error: any) {
+      throw new Error(error.response.data.error)
+    }
+  },
+
+  async createMember(member: Member): Promise<Member> {
+    try {
+      const response = await axios.post(API_MEMBERS_URL, member)
+      return response.data
+    } catch (error: any) {
+      throw new Error(error.response.data.error)
+    }
+  },
+
+  async updateMember(member: Member): Promise<Member> {
+    try {
+      const response = await axios.put(API_MEMBERS_URL, member)
+      return response.data
+    } catch (error: any) {
+      throw new Error(error.response.data.error)
+    }
+  },
+  async deleteMember(id: string): Promise<Member> {
+    try {
+      const response = await axios.delete(`${API_MEMBERS_URL}?id=${id}`)
       return response.data
     } catch (error: any) {
       throw new Error(error.response.data.error)
