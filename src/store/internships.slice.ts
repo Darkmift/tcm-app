@@ -1,61 +1,124 @@
-import {createSlice, PayloadAction} from '@reduxjs/toolkit'
-import {RootState} from './index'
+import {createAsyncThunk, createSlice} from '@reduxjs/toolkit'
 import {Internship} from '../types'
+import HttpService from '../Services/HttpService'
 
-type InternshipState = {
+export const getAllInternships = createAsyncThunk<Internship[]>(
+  'internships/getAllInternships',
+  async () => {
+    const internships = await HttpService.getAllInternships()
+    return internships
+  }
+)
+
+export const createInternship = createAsyncThunk<Internship, Internship>(
+  'internships/createInternship',
+  async (internship) => {
+    const createdInternship = await HttpService.createInternship(internship)
+    return createdInternship
+  }
+)
+
+export const updateInternship = createAsyncThunk<Internship, Internship>(
+  'internships/updateInternship',
+  async (internship) => {
+    const updatedInternship = await HttpService.updateInternship(internship)
+    return updatedInternship
+  }
+)
+
+export const deleteInternship = createAsyncThunk<Internship, string>(
+  'internships/deleteInternship',
+  async (id) => {
+    const deletedInternship = await HttpService.deleteInternship(id)
+    return deletedInternship
+  }
+)
+
+export interface InternshipsState {
+  status: 'loading' | 'succeeded' | 'failed'
+  error: string | null
   internships: Internship[]
 }
 
-const initialState: InternshipState = {
+const initialState: InternshipsState = {
+  status: 'loading',
+  error: null,
   internships: [],
 }
 
-const internshipSlice = createSlice({
+const internshipsSlice = createSlice({
   name: 'internships',
   initialState,
-  reducers: {
-    addInternship: (
-      state: InternshipState,
-      action: PayloadAction<Internship>
-    ) => {
+  reducers: {},
+  extraReducers: (builder) => {
+    builder.addCase(getAllInternships.pending, (state) => {
+      state.status = 'loading'
+      state.error = null
+    })
+    builder.addCase(getAllInternships.fulfilled, (state, action) => {
+      state.status = 'succeeded'
+      state.error = null
+      state.internships = action.payload
+    })
+    builder.addCase(getAllInternships.rejected, (state, action) => {
+      state.status = 'failed'
+      state.error = action.error.message ?? 'Something went wrong'
+    })
+    builder.addCase(createInternship.pending, (state) => {
+      state.status = 'loading'
+      state.error = null
+    })
+    builder.addCase(createInternship.fulfilled, (state, action) => {
+      state.status = 'succeeded'
+      state.error = null
       state.internships.push(action.payload)
-    },
-    updateInternship: (
-      state: InternshipState,
-      action: PayloadAction<Internship>
-    ) => {
+    })
+    builder.addCase(createInternship.rejected, (state, action) => {
+      state.status = 'failed'
+      state.error = action.error.message ?? 'Something went wrong'
+    })
+    builder.addCase(updateInternship.pending, (state) => {
+      state.status = 'loading'
+      state.error = null
+    })
+    builder.addCase(updateInternship.fulfilled, (state, action) => {
+      state.status = 'succeeded'
+      state.error = null
       const index = state.internships.findIndex(
-        (i) => i.id === action.payload.id
+        (internship) => internship.id === action.payload.id
       )
       if (index !== -1) {
         state.internships[index] = action.payload
       }
-    },
-    deleteInternship: (
-      state: InternshipState,
-      action: PayloadAction<string>
-    ) => {
+    })
+    builder.addCase(updateInternship.rejected, (state, action) => {
+      state.status = 'failed'
+      state.error = action.error.message ?? 'Something went wrong'
+    })
+    builder.addCase(deleteInternship.pending, (state) => {
+      state.status = 'loading'
+      state.error = null
+    })
+    builder.addCase(deleteInternship.fulfilled, (state, action) => {
+      state.status = 'succeeded'
+      state.error = null
       state.internships = state.internships.filter(
-        (i) => i.id !== action.payload
+        (internship) => internship.id !== action.payload.id
       )
-    },
-    setInternships: (
-      state: InternshipState,
-      action: PayloadAction<Internship[]>
-    ) => {
-      state.internships = action.payload
-    },
+    })
+    builder.addCase(deleteInternship.rejected, (state, action) => {
+      state.status = 'failed'
+      state.error = action.error.message ?? 'Something went wrong'
+    })
   },
 })
 
-export const {
-  addInternship,
-  updateInternship,
-  deleteInternship,
-  setInternships,
-} = internshipSlice.actions
-
-export const selectInternships = (state: RootState) =>
+export default internshipsSlice.reducer
+export const selectInternships = (state: {internships: InternshipsState}) =>
   state.internships.internships
-
-export default internshipSlice.reducer
+export const selectInternshipsStatus = (state: {
+  internships: InternshipsState
+}) => state.internships.status
+export const selectInternshipsError = (state: {
+  internships: InternshipsState
+}) => state.internships.error
