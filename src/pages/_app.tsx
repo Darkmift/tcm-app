@@ -16,7 +16,11 @@ import store from '@/store'
 // types
 import {Role} from '@/types'
 // components
-import WatchUserRedux from '@/components/WatchUserRedux'
+import WatchUserRedux from '@/components/EmptyComponents.ts/WatchUserRedux'
+import WatchYearRedux from '@/components/EmptyComponents.ts/WatchYearRedux'
+import WatchProjectsRedux from '@/components/EmptyComponents.ts/WatchProjectsRedux'
+import WatchInternshipsRedux from '@/components/EmptyComponents.ts/WatchInternshipsRedux'
+import WatchWinningProjectTypesRedux from '@/components/EmptyComponents.ts/WatchWinningProjectTypesRedux'
 
 export default function App({Component, pageProps}: AppProps) {
   return (
@@ -27,8 +31,15 @@ export default function App({Component, pageProps}: AppProps) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <WatchUserRedux />
-      <ResponsiveAppBar />
+      {/* watchers that init redux state */}
+      <>
+        <WatchUserRedux />
+        <WatchYearRedux />
+        <WatchProjectsRedux />
+        <WatchInternshipsRedux />
+        <WatchWinningProjectTypesRedux />
+        <ResponsiveAppBar />
+      </>
       <Container
         sx={{
           display: 'flex',
