@@ -16,7 +16,8 @@ export type MuiComponent = (props: any) => JSX.Element
 export type GenericComponent = (props: any) => any
 export type Payload = {payload?: any}
 // export type FunctionWithOptionalPayload = (payload?: Payload) => void
-export type FunctionWithOptionalPayload<P = unknown> = (payload?: P) => void;
+export type FunctionWithOptionalPayload<P = unknown, T = unknown> = (payload?: P, evt?: T) => void;
+export type NavBarClick = React.MouseEvent<HTMLButtonElement | HTMLButtonElement>
 
 
 export type FormData = {
