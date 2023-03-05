@@ -3,6 +3,7 @@
 import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit'
 import {Project} from '../types'
 import ProjectHttpService from '../Services/HttpService/ProjectHttpService'
+import {RootState} from '.'
 
 type ProjectsState = {
   projects: Project[]
@@ -94,5 +95,8 @@ const projectSlice = createSlice({
     )
   },
 })
+
+export const selectProjectById = (id: string) => (state: RootState) =>
+  state.projects.projects.find((p) => p.id === id)
 
 export default projectSlice.reducer

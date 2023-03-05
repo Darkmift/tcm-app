@@ -10,11 +10,16 @@ import {
 
 type YearState = {
   years: Year[]
+  selectedYear: number
   loading: 'idle' | 'pending' | 'succeeded' | 'failed'
 }
 
+const today = new Date()
+const currentYear = today.getFullYear()
+
 const initialState: YearState = {
   years: [],
+  selectedYear: currentYear,
   loading: 'idle',
 }
 
@@ -28,6 +33,13 @@ const yearSlice = createSlice({
         '🚀 ~ file: year.slice.ts ~ setYears ~ state.years:',
         state.years
       )
+    },
+    setYear: (state: YearState, action: PayloadAction<string>) => {
+      const target = state.years.find((y) => '' + y.year === action.payload)
+      if (!target?.year) {
+        throw new Error('Year passed to setYear is not in years state!!')
+      }
+      state.selectedYear = target.year
     },
   },
   extraReducers: (builder) => {
@@ -81,7 +93,7 @@ const yearSlice = createSlice({
   },
 })
 
-export const {setYears} = yearSlice.actions
+export const {setYears, setYear} = yearSlice.actions
 
 export const selectYears = (state: RootState) => state.years.years
 
