@@ -11,10 +11,10 @@ const getAllProjects = async (
 ) => {
   try {
     const {year} = req.query
-    console.log("🚀 ~ file: projects.ts:14 ~ year:", year)
+    console.log('🚀 ~ file: projects.ts:14 ~ year:', year)
     const projects: Project[] = await pocketDbService.getCollection(
       COLLECTIONS.PROJECTS,
-      {filter: `year=${year}`}
+      {filter: `year=${year}`, expand: 'instructorId,internshipId'}
     )
     const relations: ProjectMemberRelation[] =
       await pocketDbService.getCollection('project_member_relation', {
