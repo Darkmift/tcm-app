@@ -1,0 +1,16 @@
+.internships_img {
+    align-self: flex-start;
+    overflow: hidden;
+}
+
+.internships_img > *:first-child {
+    border-radius: 10px 10px 0 0;
+    transform: translateY(100px);
+    animation: moveUp 1s .2s forwards ease-out;
+}
+
+@keyframes moveUp {
+    0% { transform: translateY(100px) }
+    90% { transform: translateY(0) }
+    100% { transform: translateY(0) }
+}

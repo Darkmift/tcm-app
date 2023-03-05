@@ -1,0 +1,17 @@
+.winning-project-none {
+    color: var(--color-blue) !important;
+    opacity: 0;
+    animation: projectFadein 1s .3s forwards;
+}
+.winning-project_icon > svg {
+    width: 100px;
+    height: 100px;
+}
+.winning-project-none--title {
+    color: var(--color-gray);
+}
+
+@keyframes projectFadein {
+    from {opacity: 0; transform: translateY(-40px)}
+    to {opacity: 1; transform: translateY(0)}
+}

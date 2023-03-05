@@ -1,0 +1,39 @@
+.modal-container{
+    display: flex;
+    justify-content: center;
+    text-align: left;
+    height:520px;
+    padding: 20
+}
+
+.modal-section{
+    margin-left: 1rem;
+    width: 24rem;
+    height: 16rem;
+    overflow-wrap: break-word;
+    flex-wrap: wrap;
+}
+
+.members-container{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 0.2rem;
+    margin: 0.2rem;
+}
+
+@media screen and (max-width: 650px) {
+    .modal-container { 
+        display: flex;
+        flex-direction: column;
+        width: 300px;
+        padding: 10px;
+        align-items: center;
+        justify-content: flex-start;
+    }
+    .modal-section{
+        width:15rem;
+        overflow-y:scroll;
+    }
+
+}

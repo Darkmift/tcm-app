@@ -1,0 +1,39 @@
+@import url('https://fonts.googleapis.com/css2?family=Heebo:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --color-white: #fff;
+  --color-black: #000;
+  --color-dark: #060909;
+  --color-blue: #230cbe;
+  --color-purple: #4d33f8;
+  --color-turquoise:  #23c9d5;
+  --color-card-border: #2474E4;
+  --color-gray: #464545;
+  --color-error: #a23131;
+}
+
+html {
+  /* background: url("/images/bg.jpg") no-repeat center center fixed; */
+  /* background-size: cover; */
+  background-color: rgb(231, 228, 225);
+}
+
+body {
+  font-family: 'Heebo', sans-serif;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+@keyframes fadeinToTop {
+  from {opacity: 0; transform: translateY(-40px)}
+  to {opacity: 1; transform: translateY(0)}
+}

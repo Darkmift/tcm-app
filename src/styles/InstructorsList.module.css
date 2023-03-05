@@ -1,0 +1,24 @@
+.instructors-container{
+    display: grid;
+    gap: 1rem 3rem;
+    align-items: center;
+    justify-items: center;
+   grid-template-columns: repeat(1, 1fr); 
+}
+
+
+@media (min-width: 400px) {
+    .instructors-container { grid-template-columns: repeat(2, 1fr); }
+}
+@media (min-width: 800px) {
+    .instructors-container { grid-template-columns: repeat(3, 1fr); }
+}
+@media (min-width: 1000px) {
+    .instructors-container { grid-template-columns: repeat(4, 1fr); }
+}
+@media (min-width: 1256px) {
+    .instructors-container { grid-template-columns: repeat(5, 1fr); }
+}
+
+  
+  

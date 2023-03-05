@@ -1,0 +1,30 @@
+.projects-container{
+    display: grid;
+    gap: 0.5rem;
+    align-items: center;
+    justify-items: center;
+    opacity: 0;
+    animation: projectFadein 1s .2s ease-in-out forwards;
+    flex-wrap: wrap;
+}
+
+.projects-header{
+    align-self: flex-start;
+    margin: 0 0 2rem 0;
+}
+
+@media (min-width: 400px) {
+    .projects-container { grid-template-columns: repeat(1, 1fr); }
+}
+
+@media (min-width: 800px) {
+    .projects-container { grid-template-columns: repeat(2, 1fr); }
+}
+@media (min-width: 1200px) {
+    .projects-container { grid-template-columns: repeat(3, 1fr); }
+}
+
+@keyframes projectFadein {
+    from {opacity: 0; transform: translateY(-40px)}
+    to {opacity: 1; transform: translateY(0)}
+}
