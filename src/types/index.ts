@@ -8,12 +8,16 @@ export * from './ProjectMemberRelations.type'
 export * from './WinnerProjectType.type'
 
 export type Role = 'User' | 'Admin'
-export type LinkConfig = {name: string; pathTo: string}
+export type LinkConfig = {id?: string; name: string; pathTo: string}
 export type GenericObject = {[key: string]: any}
 export type StyleObject = GenericObject
 export type StyleXsObject = {[key: string]: string | number | StyleXsObject}
 export type MuiComponent = (props: any) => JSX.Element
 export type GenericComponent = (props: any) => any
+export type Payload = {payload?: any}
+// export type FunctionWithOptionalPayload = (payload?: Payload) => void
+export type FunctionWithOptionalPayload<P = unknown> = (payload?: P) => void;
+
 
 export type FormData = {
   Component: typeof React.Component | MuiComponent | GenericComponent
@@ -48,7 +52,3 @@ export type Year = {
   expand: any
   updated: string
 }
-
-
-
-
