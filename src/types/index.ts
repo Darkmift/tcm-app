@@ -1,4 +1,8 @@
 import React from 'react'
+import {Member} from './Member.type'
+export * from './Member.type'
+export * from './Project.type'
+export * from './Internships.type'
 
 export type Role = 'User' | 'Admin'
 export type LinkConfig = {name: string; pathTo: string}
@@ -25,39 +29,11 @@ export type JSONValue =
   | {[x: string]: JSONValue}
   | Array<JSONValue>
 
-export type Member = {
-  id: string
-  name: string
-  email: string
-}
-
-export type Project = {
-  collectionId: string
-  collectionName: string
-  created: string
-  description: string
-  id: string
-  image: string
-  instructorId: string
-  internshipId: string
-  legacyId: string
-  legacyProjectId: string
-  legacyInstructorId: string
-  legacyInternshipId: string
-  name: string
-  updated: string
-  year: number
-  //might be hydrated
-  members?: Member[]
-}
-
 export type MediaCarousselItem = {
   image: string
   heading: string
   desc: string
 }
-
-export type DbRecordResult = Promise<Array<object>>
 
 export type Year = {
   id?: string
@@ -70,15 +46,6 @@ export type Year = {
   updated: string
 }
 
-export interface Internship {
-  id: string
-  name: string
-  legacyId: string
-  description: string
-  year: number
-  collectionId: string
-  collectionName: string
-  created: string
-  updated: string
-  instructors: string[]
-}
+
+
+
