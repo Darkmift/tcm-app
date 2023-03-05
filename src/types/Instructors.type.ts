@@ -12,3 +12,6 @@ export type Instructor = {
   year: number
   internships?: Internship
 }
+
+export interface InsertInstructor
+  extends Pick<Instructor, 'name' | 'description' | 'image' | 'year'> {}

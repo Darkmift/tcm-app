@@ -3,6 +3,7 @@ import {Member} from './Member.type'
 export * from './Member.type'
 export * from './Project.type'
 export * from './Internships.type'
+export * from './Instructors.type'
 
 export type Role = 'User' | 'Admin'
 export type LinkConfig = {name: string; pathTo: string}
