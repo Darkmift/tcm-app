@@ -2,7 +2,7 @@ import * as React from 'react'
 import Button from '@mui/material/Button'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
-import {LinkConfig, StyleXsObject} from '@/types'
+import {FunctionWithOptionalPayload, LinkConfig, StyleXsObject} from '@/types'
 import Link from 'next/link'
 import {Box} from '@mui/material'
 
@@ -13,6 +13,7 @@ type Props = {
     box?: StyleXsObject
     dropdown?: StyleXsObject
   }
+  onDropDownOptionClick?: FunctionWithOptionalPayload<LinkConfig>
   dropDownName?: string
 }
 
@@ -20,13 +21,17 @@ export default function NavbarDropDown({
   links,
   sx,
   dropDownName = 'links',
+  onDropDownOptionClick,
 }: Props) {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
   const open = Boolean(anchorEl)
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget)
+  const handleClick = (evt: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(evt.currentTarget)
   }
-  const handleClose = () => {
+  const handleClose = (payload: LinkConfig) => {
+    if (onDropDownOptionClick) {
+      onDropDownOptionClick(payload)
+    }
     setAnchorEl(null)
   }
 
@@ -54,7 +59,7 @@ export default function NavbarDropDown({
         {links.map((link) => (
           <MenuItem
             key={link.name}
-            onClick={handleClose}
+            onClick={() => handleClose(link)}
             href={link.pathTo}
             component={Link}
           >

@@ -22,12 +22,22 @@ import {useRouter} from 'next/router'
 import {AVATAR_LINKS, INTERNSHIP_LINKS, PAGES_LINKS, YEAR_LINKS} from '@/const'
 import NavbarDropDown from './navbarDropDown'
 import {Divider} from '@mui/material'
+import {useAppDispatch, useAppSelector} from '@/store'
+import {useMemo} from 'react'
+import {FunctionWithOptionalPayload, LinkConfig} from '@/types'
+import {setYear} from '@/store/year.slice'
 
 const pages = PAGES_LINKS
 const settings = AVATAR_LINKS
 
 function ResponsiveAppBar() {
   const router = useRouter()
+  const dispatch = useAppDispatch()
+  const yearsRedux = useAppSelector((state) => state.years.years)
+  const selectedYearRedux = useAppSelector((state) => state.years.selectedYear)
+  const internshipsRedux = useAppSelector(
+    (state) => state.internships.internships
+  )
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null)
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
     null
@@ -39,13 +49,44 @@ function ResponsiveAppBar() {
   const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElUser(event.currentTarget)
   }
-
   const handleCloseNavMenu = () => {
     setAnchorElNav(null)
   }
-
   const handleCloseUserMenu = () => {
     setAnchorElUser(null)
+  }
+
+  const yearsAsRoutes = useMemo(
+    () =>
+      yearsRedux.map((y) => ({
+        name: y.year + '',
+        pathTo: `/year/${y.year}`,
+        id: y.id,
+      })),
+    [yearsRedux]
+  )
+  const internShipsAsRoutes = useMemo(
+    () =>
+      internshipsRedux.map((i) => ({
+        name: i.name,
+        pathTo: `/year/${selectedYearRedux}/internships/${i.name}`,
+        id: i.id,
+      })),
+    [internshipsRedux, selectedYearRedux]
+  )
+
+  const handleYearNavigation: FunctionWithOptionalPayload<LinkConfig> = (
+    payload
+  ) => {
+    if (payload?.name) {
+      //set redux selected year
+      dispatch(setYear(payload.name))
+    }
+
+    console.log(
+      '🚀 ~ file: navbar.tsx:73 ~ handleYearNavigation ~ payload:',
+      payload
+    )
   }
 
   return (
@@ -110,7 +151,7 @@ function ResponsiveAppBar() {
               ))}
               <Divider />
               <NavbarDropDown
-                links={YEAR_LINKS}
+                links={yearsAsRoutes}
                 sx={{
                   btn: {
                     color: 'black',
@@ -122,10 +163,11 @@ function ResponsiveAppBar() {
                   box: {flexGrow: 0},
                 }}
                 dropDownName="YEARS"
+                onDropDownOptionClick={handleYearNavigation}
               />
               <Divider />
               <NavbarDropDown
-                links={INTERNSHIP_LINKS}
+                links={internShipsAsRoutes}
                 sx={{
                   btn: {
                     color: 'black',
@@ -185,12 +227,13 @@ function ResponsiveAppBar() {
               </Button>
             ))}
             <NavbarDropDown
-              links={YEAR_LINKS}
+              links={yearsAsRoutes}
               sx={{btn: {color: 'white', my: 2, display: 'block'}}}
               dropDownName="YEARS"
+              onDropDownOptionClick={handleYearNavigation}
             />
             <NavbarDropDown
-              links={INTERNSHIP_LINKS}
+              links={internShipsAsRoutes}
               sx={{btn: {color: 'white', my: 2, display: 'block'}}}
               dropDownName="internships"
             />
