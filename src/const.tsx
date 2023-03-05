@@ -1,7 +1,7 @@
 import {LinkConfig} from './types'
 
 export const VALID_YEAR_REGEX = /^(200[0-9]|20[1-9][0-9]|2100)$/
-export const VALID_EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+export const VALID_EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
 export const PAGES_LINKS: LinkConfig[] = [
   {name: 'Home', pathTo: '/'},
@@ -47,13 +47,13 @@ export const SLIDER_DATA = [
 ]
 
 export const COLLECTIONS = {
-  WINNER_PROJECT_TYPES:'winner_project_types',
+  WINNER_PROJECT_TYPES: 'winner_project_types',
   YEARS_AUTH: 'years_auth',
   AUTH: 'auth',
   MEMBERS: 'members',
   PROJECTS: 'projects',
   INSTRUCTORS: 'instructors',
   INTERNSHIPS: 'internships',
-  PROJECT_MEMBER_RELATION:'project_member_relation',
-  INTERNSHIP_INSTRUCTOR_RELATION:'internship_instructor_relation'
+  PROJECT_MEMBER_RELATION: 'project_member_relation',
+  INTERNSHIP_INSTRUCTOR_RELATION: 'internship_instructor_relation',
 }
