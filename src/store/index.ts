@@ -7,6 +7,7 @@ import instructorsReducer from './instructors.slice'
 import membersReducer from './member.slice'
 import projectsReducer from './project.slice'
 import projectMemberRelationReducer from './projectMemberRelation.slice'
+import winnerProjectTypesReducer from './winnerProjectTypes.slice'
 
 const store = configureStore({
   reducer: {
@@ -17,6 +18,7 @@ const store = configureStore({
     members: membersReducer,
     projects: projectsReducer,
     projectMemberRelation: projectMemberRelationReducer,
+    winnerProjectTypes: winnerProjectTypesReducer,
   },
 })
 
