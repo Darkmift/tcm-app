@@ -17,10 +17,13 @@ const initialState: ProjectsState = {
   error: null,
 }
 
-export const fetchProjects = createAsyncThunk('projects/fetchAll', async () => {
-  const projects = await ProjectHttpService.getAllProjects()
-  return projects
-})
+export const fetchProjects = createAsyncThunk(
+  'projects/fetchAll',
+  async (selectedYear: number) => {
+    const projects = await ProjectHttpService.getAllProjects(selectedYear)
+    return projects
+  }
+)
 
 export const createProject = createAsyncThunk(
   'projects/create',

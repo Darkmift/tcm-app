@@ -1,37 +1,57 @@
-import { NextApiRequest, NextApiResponse } from 'next'
+import {COLLECTIONS} from '@/const'
+import {NextApiRequest, NextApiResponse} from 'next'
 import pocketDbService from '../../../backend/services/pocketbase'
 import checkAuthMiddleware from '../../../backend/middleware/checkIsAdmin'
-import { Project } from '@/types'
+import {Project, ProjectMemberRelation, Member} from '@/types'
 
 // Handler to get all projects
 const getAllProjects = async (
   req: NextApiRequest,
-  res: NextApiResponse<{ projects: Project[] } | { error: string }>
+  res: NextApiResponse<{projects: Project[]} | {error: string}>
 ) => {
   try {
-    const projects = await pocketDbService.getCollection('projects')
-    res.status(200).json({ projects })
+    const {year} = req.query
+    console.log("🚀 ~ file: projects.ts:14 ~ year:", year)
+    const projects: Project[] = await pocketDbService.getCollection(
+      COLLECTIONS.PROJECTS,
+      {filter: `year=${year}`}
+    )
+    const relations: ProjectMemberRelation[] =
+      await pocketDbService.getCollection('project_member_relation', {
+        expand: 'memberId',
+      })
+    projects.forEach((project) => {
+      const relationsPerProject = relations.filter(
+        (r) => r.projectId === project.id
+      )
+      if (relationsPerProject?.length < 1) return
+      project.members = relationsPerProject.map(
+        (r) => r.expand?.memberId
+      ) as Member[]
+    })
+
+    res.status(200).json({projects})
   } catch (error) {
     console.log('🚀 ~ file: projects.ts ~ line 10 ~ error', error)
     return res
       .status(500)
-      .json({ error: `Internal error: ${(error as Error).message}` })
+      .json({error: `Internal error: ${(error as Error).message}`})
   }
 }
 
 // Handler to create a new project
 const createProject = async (
   req: NextApiRequest,
-  res: NextApiResponse<Project | { error: string }>
+  res: NextApiResponse<Project | {error: string}>
 ) => {
   try {
     // Extract necessary fields from request body
-    const { name, description, year } = req.body
+    const {name, description, year} = req.body
 
     if (!name || !description || !year) {
       return res
         .status(400)
-        .json({ error: 'Please provide a name, description and year' })
+        .json({error: 'Please provide a name, description and year'})
     }
 
     const createdProject = await pocketDbService.insertRecord('projects', {
@@ -45,22 +65,22 @@ const createProject = async (
     console.log('🚀 ~ file: projects.ts ~ line 40 ~ error', error)
     return res
       .status(500)
-      .json({ error: `Internal error: ${(error as Error).message}` })
+      .json({error: `Internal error: ${(error as Error).message}`})
   }
 }
 
 // Handler to update an existing project
 const updateProject = async (
   req: NextApiRequest,
-  res: NextApiResponse<Project | { error: string }>
+  res: NextApiResponse<Project | {error: string}>
 ) => {
   try {
-    const { id, name, description, year } = req.body
+    const {id, name, description, year} = req.body
 
     if (!id || !name || !description || !year) {
       return res
         .status(400)
-        .json({ error: 'Please provide an id, name, description and year' })
+        .json({error: 'Please provide an id, name, description and year'})
     }
 
     const updatedProject = await pocketDbService.updateRecord('projects', id, {
@@ -74,24 +94,27 @@ const updateProject = async (
     console.log('🚀 ~ file: projects.ts ~ line 68 ~ error', error)
     return res
       .status(500)
-      .json({ error: `Internal error: ${(error as Error).message}` })
+      .json({error: `Internal error: ${(error as Error).message}`})
   }
 }
 
 // Handler to delete an existing project
 const deleteProject = async (
   req: NextApiRequest,
-  res: NextApiResponse<Project | { error: string }>
+  res: NextApiResponse<Project | {error: string}>
 ) => {
   try {
-    const { id } = req.query
-    const deletedProject = await pocketDbService.deleteRecord('projects', id as string)
+    const {id} = req.query
+    const deletedProject = await pocketDbService.deleteRecord(
+      'projects',
+      id as string
+    )
     res.status(200).json(deletedProject)
   } catch (error) {
     console.log('🚀 ~ file: projects.ts ~ line 86 ~ error', error)
     return res
       .status(500)
-      .json({ error: `Internal error: ${(error as Error).message}` })
+      .json({error: `Internal error: ${(error as Error).message}`})
   }
 }
 
@@ -104,7 +127,7 @@ export default function handler(
   req: NextApiRequest,
   res: NextApiResponse<any>
 ) {
-  const { method } = req
+  const {method} = req
 
   switch (method) {
     case 'GET':
@@ -121,6 +144,6 @@ export default function handler(
 
     default:
       res.setHeader('Allow', ['GET', 'POST', 'PUT', 'DELETE'])
-      res.status(405).json({ error: `Method ${method} Not Allowed` })
+      res.status(405).json({error: `Method ${method} Not Allowed`})
   }
 }
