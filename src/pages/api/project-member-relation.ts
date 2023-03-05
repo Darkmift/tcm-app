@@ -1,17 +1,17 @@
 import {NextApiRequest, NextApiResponse} from 'next'
 import pocketDbService from '../../../backend/services/pocketbase'
 import checkAuthMiddleware from '../../../backend/middleware/checkIsAdmin'
-import {MemberInProjectRelation} from '@/types'
+import {ProjectMemberRelation} from '@/types'
 
 const getAllRelations = async (
   req: NextApiRequest,
-  res: NextApiResponse<MemberInProjectRelation[] | {error: string}>
+  res: NextApiResponse<ProjectMemberRelation[] | {error: string}>
 ) => {
   try {
     const projectId = req.query?.projectId?.toString()
     const memberId = req.query?.memberId?.toString()
 
-    let members: MemberInProjectRelation[]
+    let memberProjectRelation: ProjectMemberRelation[]
 
     if (projectId || memberId) {
       const filterByProject = projectId ? `projectId = "${projectId}"` : null
@@ -19,16 +19,20 @@ const getAllRelations = async (
       const filterString = [filterByProject, filterByMember]
         .filter((f) => f != null)
         .join(' && ')
-      members = await pocketDbService.findByFilter(
+      memberProjectRelation = await pocketDbService.findByFilter(
         'project_member_relation',
         filterString,
-        true
+        true,
+        {expand: 'projectId,memberId'}
       )
     } else {
-      members = await pocketDbService.getCollection('project_member_relation')
+      memberProjectRelation = await pocketDbService.getCollection(
+        'project_member_relation',
+        {expand: 'projectId,memberId'}
+      )
     }
 
-    res.status(200).json(members)
+    res.status(200).json(memberProjectRelation)
   } catch (error) {
     console.error(
       '🚀 ~ error ~ file: index.ts ~ line 14 ~ getAllMembersInProjects ~ error',
@@ -40,7 +44,7 @@ const getAllRelations = async (
 
 const createRecord = async (
   req: NextApiRequest,
-  res: NextApiResponse<MemberInProjectRelation | {error: string}>
+  res: NextApiResponse<ProjectMemberRelation | {error: string}>
 ) => {
   try {
     const {memberId, projectId} = req.body
@@ -69,7 +73,7 @@ const createRecord = async (
 
 const updateRecord = async (
   req: NextApiRequest,
-  res: NextApiResponse<MemberInProjectRelation | {error: string}>
+  res: NextApiResponse<ProjectMemberRelation | {error: string}>
 ) => {
   try {
     const {id} = req.query

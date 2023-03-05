@@ -2,7 +2,12 @@ import * as React from 'react'
 import Button from '@mui/material/Button'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
-import {FunctionWithOptionalPayload, LinkConfig, StyleXsObject} from '@/types'
+import {
+  FunctionWithOptionalPayload,
+  LinkConfig,
+  NavBarClick,
+  StyleXsObject,
+} from '@/types'
 import Link from 'next/link'
 import {Box} from '@mui/material'
 
@@ -12,8 +17,10 @@ type Props = {
     btn?: StyleXsObject
     box?: StyleXsObject
     dropdown?: StyleXsObject
+    menuItem?: StyleXsObject
   }
-  onDropDownOptionClick?: FunctionWithOptionalPayload<LinkConfig>
+  btnVariant?: string
+  onDropDownOptionClick?: FunctionWithOptionalPayload<LinkConfig, NavBarClick>
   dropDownName?: string
 }
 
@@ -22,15 +29,16 @@ export default function NavbarDropDown({
   sx,
   dropDownName = 'links',
   onDropDownOptionClick,
+  btnVariant,
 }: Props) {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
   const open = Boolean(anchorEl)
-  const handleClick = (evt: React.MouseEvent<HTMLButtonElement>) => {
+  const handleClick = (evt: NavBarClick) => {
     setAnchorEl(evt.currentTarget)
   }
-  const handleClose = (payload: LinkConfig) => {
-    if (onDropDownOptionClick) {
-      onDropDownOptionClick(payload)
+  const handleClose = (evt: NavBarClick, payload: LinkConfig | null) => {
+    if (onDropDownOptionClick && payload) {
+      onDropDownOptionClick(payload, evt)
     }
     setAnchorEl(null)
   }
@@ -43,6 +51,7 @@ export default function NavbarDropDown({
         aria-haspopup="true"
         aria-expanded={open ? 'true' : undefined}
         onClick={handleClick}
+        variant={btnVariant ? (btnVariant as 'text') : 'text'}
       >
         {dropDownName}
       </Button>
@@ -50,7 +59,7 @@ export default function NavbarDropDown({
         id="basic-menu"
         anchorEl={anchorEl}
         open={open}
-        onClose={handleClose}
+        onClose={(evt: NavBarClick) => handleClose(evt, null)}
         MenuListProps={{
           'aria-labelledby': 'basic-button',
         }}
@@ -59,9 +68,10 @@ export default function NavbarDropDown({
         {links.map((link) => (
           <MenuItem
             key={link.name}
-            onClick={() => handleClose(link)}
+            onClick={(evt: any) => handleClose(evt, link)}
             href={link.pathTo}
             component={Link}
+            sx={{...sx?.menuItem}}
           >
             {link.name}
           </MenuItem>

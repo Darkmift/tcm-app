@@ -24,7 +24,7 @@ import NavbarDropDown from './navbarDropDown'
 import {Divider} from '@mui/material'
 import {useAppDispatch, useAppSelector} from '@/store'
 import {useMemo} from 'react'
-import {FunctionWithOptionalPayload, LinkConfig} from '@/types'
+import {FunctionWithOptionalPayload, LinkConfig, NavBarClick} from '@/types'
 import {setYear} from '@/store/year.slice'
 
 const pages = PAGES_LINKS
@@ -75,9 +75,13 @@ function ResponsiveAppBar() {
     [internshipsRedux, selectedYearRedux]
   )
 
-  const handleYearNavigation: FunctionWithOptionalPayload<LinkConfig> = (
-    payload
-  ) => {
+  const handleYearNavigation: FunctionWithOptionalPayload<
+    LinkConfig,
+    NavBarClick
+  > = (payload, evt) => {
+    if (evt?.preventDefault) {
+      evt.preventDefault()
+    }
     if (payload?.name) {
       //set redux selected year
       dispatch(setYear(payload.name))

@@ -10,6 +10,7 @@ import {useMemo} from 'react'
 import Link from 'next/link'
 import {Box, Typography} from '@mui/material'
 import Arrow from './icons/ArrowLeft'
+import { useAppSelector } from '../store'
 // import Link from 'components/Link'
 
 // const iconsWinners = {
@@ -29,9 +30,11 @@ function ProjectCard({id, title, imgName, projectWinner}: Prop) {
     () => projectWinner /*&& iconsWinners[projectWinner.id]*/,
     [projectWinner]
   )
+  const selectedYear = useAppSelector((state) => state.years.selectedYear)
+
 
   return (
-    <Link href={`/projects/${id}`}>
+    <Link href={`/year/${selectedYear}/projects/${id}`}>
       <Box sx={{display: 'flex', flexDirection: 'column'}}>
         {projectWinner && Icon && (
           <Tooltip title={projectWinner.name}>

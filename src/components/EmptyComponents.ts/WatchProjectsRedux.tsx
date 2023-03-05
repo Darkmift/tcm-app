@@ -1,14 +1,15 @@
 // redux
-import {useAppDispatch} from '@/store'
+import {useAppDispatch, useAppSelector} from '@/store'
 import {useEffect} from 'react'
-import { fetchProjects } from '@/store/project.slice'
+import {fetchProjects} from '@/store/project.slice'
 
 function WatchProjectsRedux() {
   const dispatch = useAppDispatch()
+  const selectedYear = useAppSelector((state) => state.years.selectedYear)
 
   useEffect(() => {
-    dispatch(fetchProjects())
-  }, [dispatch])
+    dispatch(fetchProjects(selectedYear))
+  }, [dispatch, selectedYear])
 
   return <></>
 }
