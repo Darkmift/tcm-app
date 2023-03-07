@@ -9,6 +9,7 @@ export interface Internship {
   collectionName: string
   created: string
   updated: string
+  image: string
   instructors: Instructor[]
 }
 
