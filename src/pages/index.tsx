@@ -68,7 +68,7 @@ export default function Home() {
               </Typography>
             </Grid>
 
-            <Grid container xs={12}>
+            <Grid container item xs={12}>
               <Grid item xs={4}></Grid>
               <Grid item xs={8}>
                 <NavbarDropDown
