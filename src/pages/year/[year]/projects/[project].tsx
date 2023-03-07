@@ -5,6 +5,7 @@ import {selectProjectById} from '../../../../store/project.slice'
 import styles from '../../../../styles/ProjectPage.module.css'
 import Image from 'next/image'
 import {Typography} from '@mui/material'
+import {IMAGE_ASSETS_FOLDER_PATH} from '@/const'
 
 type Props = {}
 
@@ -12,13 +13,11 @@ function ProjectIndex({}: Props) {
   const router = useRouter()
   const projectId = router.query.project
   const project = useAppSelector(selectProjectById(projectId as string))
-  console.log("🚀 ~ file: [project].tsx:15 ~ ProjectIndex ~ project:", project)
-
   const internship = project?.expand?.internshipId
   const instructor = project?.expand?.instructorId
   // const intenrShip = useAppSelector(selectProjectById(projectId as string))
   // return <div>{project?.id}</div>
-  const pathImage = '/projects/'
+  const pathImage = IMAGE_ASSETS_FOLDER_PATH + '/projects/'
   return (
     <>
       {project && (

@@ -1,22 +1,10 @@
-/* eslint-disable @next/next/no-img-element */
-// import Arrow from 'components/icons/ArrowLeft'
-// import Image from 'components/Image'
-// import Text from 'components/Text'
 import styles from '../styles/ProjectCard.module.css'
-// import {GiArchiveResearch, GiPodiumWinner} from 'react-icons/gi'
 import Tooltip from '@mui/material/Tooltip'
-import {useRouter} from 'next/router'
 import {useMemo} from 'react'
 import Link from 'next/link'
 import {Box, Typography} from '@mui/material'
-import Arrow from './icons/ArrowLeft'
-import { useAppSelector } from '../store'
-// import Link from 'components/Link'
-
-// const iconsWinners = {
-//   1: GiPodiumWinner,
-//   2: GiArchiveResearch,
-// }
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos'
+import {useAppSelector} from '../store'
 
 type Prop = {
   id: string
@@ -32,10 +20,24 @@ function ProjectCard({id, title, imgName, projectWinner}: Prop) {
   )
   const selectedYear = useAppSelector((state) => state.years.selectedYear)
 
-
   return (
     <Link href={`/year/${selectedYear}/projects/${id}`}>
-      <Box sx={{display: 'flex', flexDirection: 'column'}}>
+      <Box
+        sx={{
+          transition: 'all .4s ease-in-out',
+          backgroundColor:'white',
+          backgroundImage: `url(${imgName})`,
+          height: '275px',
+          backgroundSize: '350px 275px',
+          backgroundRepeat: 'no-repeat',
+          width: '350px',
+          objectFit: 'fill',
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'end',
+          '&:hover': {transform: 'scale(1.05)'},
+        }}
+      >
         {projectWinner && Icon && (
           <Tooltip title={projectWinner.name}>
             <span
@@ -46,17 +48,17 @@ function ProjectCard({id, title, imgName, projectWinner}: Prop) {
             </span>
           </Tooltip>
         )}
-        <img
-          src={imgName}
-          style={{height: '265px'}}
-          className={styles['project-card-img']}
-          alt={title}
-        />
         <Typography
-          sx={{display: 'flex', alignSelf: 'flex-start', alignItems: 'center'}}
+          sx={{
+            display: 'flex',
+            alignSelf: 'flex-start',
+            marginBottom: '30px',
+            backgroundColor: 'rgba(62,62,60,0.6)',
+            borderLeft: '0.5rem solid #2474e4',
+          }}
         >
-          <span>{title} </span>
-          <Arrow className={''} width={25} height={25} />
+          <span style={{color: 'white', margin: '0 20px 0 15px'}}>{title}</span>
+          <ArrowForwardIosIcon sx={{backgroundColor: 'white'}} />
         </Typography>
       </Box>
     </Link>
