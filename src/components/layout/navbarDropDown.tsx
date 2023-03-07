@@ -43,6 +43,8 @@ export default function NavbarDropDown({
     setAnchorEl(null)
   }
 
+  if (!links.length) return <></>
+
   return (
     <Box sx={sx?.box}>
       <Button
