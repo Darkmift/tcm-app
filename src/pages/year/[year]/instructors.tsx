@@ -10,7 +10,9 @@ function Instructors() {
   const pathImage = IMAGE_ASSETS_FOLDER_PATH + '/instructors/'
 
   const dispatch = useAppDispatch()
-  const instructors = useAppSelector(
+  const selectedYearRedux = useAppSelector((state) => state.years.selectedYear)
+
+  const instructorsRedux = useAppSelector(
     (state) => state.instructors.allInstructors
   )
   const selectedInstructor = useAppSelector(
@@ -27,11 +29,17 @@ function Instructors() {
     setOpen(!!selectedInstructor?.id)
   }, [selectedInstructor])
 
+  if(!instructorsRedux?.length){
+    return <Container>
+      <Typography variant="h6">There are no instructors for {selectedYearRedux}</Typography>
+    </Container>
+  }
+
   return (
     <Container>
-      <Grid container spacing={4} xs={12}>
-        {instructors &&
-          instructors.map((instructor) => (
+      <Grid container spacing={4}>
+        {instructorsRedux &&
+          instructorsRedux.map((instructor) => (
             <Grid
               key={`${instructor.id}`}
               item
