@@ -18,8 +18,11 @@ function Instructors() {
   )
 
   const [open, setOpen] = React.useState(false)
-  const handleOpen = () => setOpen(true)
-  const handleClose = () => setOpen(false)
+  // const handleOpen = () => setOpen(true) //manged by useEffect
+  const handleClose = () => {
+    dispatch(setSelectedInstructor(''))
+    // setOpen(false)
+  }
   useEffect(() => {
     setOpen(!!selectedInstructor?.id)
   }, [selectedInstructor])
@@ -44,7 +47,7 @@ function Instructors() {
           ))}
       </Grid>
       <Dialog
-        open={!!selectedInstructor?.id && open}
+        open={open}
         onClose={handleClose}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
