@@ -5,8 +5,10 @@ import InstructorHttpService from '../Services/HttpService'
 
 export const fetchAllInstructors = createAsyncThunk(
   'instructors/fetchAllInstructors',
-  async () => {
-    const instructors = await InstructorHttpService.getAllInstructors()
+  async (selectedYear: number) => {
+    const instructors = await InstructorHttpService.getAllInstructors(
+      selectedYear
+    )
     return instructors
   }
 )

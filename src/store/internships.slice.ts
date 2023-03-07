@@ -1,11 +1,11 @@
-import {createAsyncThunk, createSlice} from '@reduxjs/toolkit'
+import {PayloadAction, createAsyncThunk, createSlice} from '@reduxjs/toolkit'
 import {Internship} from '../types'
 import HttpService from '../Services/HttpService'
 
-export const fetchInternships = createAsyncThunk<Internship[]>(
+export const fetchInternships = createAsyncThunk(
   'internships/getAllInternships',
-  async () => {
-    const internships = await HttpService.getAllInternships()
+  async (selectedYears: number) => {
+    const internships = await HttpService.getAllInternships(selectedYears)
     return internships
   }
 )
@@ -38,18 +38,28 @@ export interface InternshipsState {
   status: 'loading' | 'succeeded' | 'failed'
   error: string | null
   internships: Internship[]
+  selectedInternship: Internship | undefined
 }
 
 const initialState: InternshipsState = {
   status: 'loading',
   error: null,
   internships: [],
+  selectedInternship: undefined,
 }
 
 const internshipsSlice = createSlice({
   name: 'internships',
   initialState,
-  reducers: {},
+  reducers: {
+    setSelectedInternship(
+      state: InternshipsState,
+      action: PayloadAction<string>
+    ) {
+      const id = action.payload
+      state.selectedInternship = state.internships?.find((i) => i.id === id)
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(fetchInternships.pending, (state) => {
       state.status = 'loading'
@@ -58,7 +68,7 @@ const internshipsSlice = createSlice({
     builder.addCase(fetchInternships.fulfilled, (state, action) => {
       state.status = 'succeeded'
       state.error = null
-      state.internships = action.payload
+      state.internships = action.payload?.length ? action.payload : []
     })
     builder.addCase(fetchInternships.rejected, (state, action) => {
       state.status = 'failed'
@@ -112,8 +122,9 @@ const internshipsSlice = createSlice({
     })
   },
 })
-
+export const {setSelectedInternship} = internshipsSlice.actions
 export default internshipsSlice.reducer
+
 export const selectInternships = (state: {internships: InternshipsState}) =>
   state.internships.internships
 export const selectInternshipsStatus = (state: {

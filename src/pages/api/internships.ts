@@ -2,18 +2,21 @@ import {NextApiRequest, NextApiResponse} from 'next'
 import {COLLECTIONS, INTERNSHIP_LINKS, VALID_YEAR_REGEX} from '../../const'
 import pocketDbService from '../../../backend/services/pocketbase'
 import checkAuthMiddleware from '../../../backend/middleware/checkIsAdmin'
-import { Internship } from '@/types'
-
+import {Internship} from '@/types'
 
 const getInterships = async (
   req: NextApiRequest,
   res: NextApiResponse<{internships: Internship[]} | {error: string}>
 ) => {
   try {
+    const {year} = req.query
+    console.log("🚀 ~ file: internships.ts:13 ~ year:", year)
+
     const internships = await pocketDbService.getCollection(
-      COLLECTIONS.INTERNSHIPS
+      COLLECTIONS.INTERNSHIPS,
+      {filter: `year = ${year}`}
     )
-    res.status(200).json({internships})
+    res.status(200).json(internships)
   } catch (error) {
     console.log('🚀 ~ file: internships.ts ~ error:', error)
     return res

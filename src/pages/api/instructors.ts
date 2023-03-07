@@ -9,8 +9,10 @@ const getInstructors = async (
   res: NextApiResponse<{instructors: Instructor[]} | {error: string}>
 ) => {
   try {
+    const {year} = req.query
     const instructors = await pocketDbService.getCollection(
-      COLLECTIONS.INSTRUCTORS
+      COLLECTIONS.INSTRUCTORS,
+      {filter: `year=${year}`}
     )
     return res.status(200).json({instructors})
   } catch (error) {
