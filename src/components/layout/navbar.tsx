@@ -69,7 +69,7 @@ function ResponsiveAppBar() {
     () =>
       internshipsRedux.map((i) => ({
         name: i.name,
-        pathTo: `/year/${selectedYearRedux}/internships/${i.name}`,
+        pathTo: `/year/${selectedYearRedux}/internships/${i.id}`,
         id: i.id,
       })),
     [internshipsRedux, selectedYearRedux]
