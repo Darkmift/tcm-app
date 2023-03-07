@@ -12,6 +12,7 @@ type Props = {
   style?: StyleObject
   submitBtnText?: string
   submitHandler: (data: any) => void
+  formButton?: any
 }
 
 function FormToJson({
@@ -19,6 +20,7 @@ function FormToJson({
   submitBtnText,
   style = {},
   submitHandler,
+  formButton = null,
 }: Props) {
   const {handleSubmit, register} = useForm()
 
@@ -82,9 +84,13 @@ function FormToJson({
           )
         }
       )}
-      <Button variant="contained" type="submit">
-        {submitBtnText || 'Submit'}
-      </Button>
+      {formButton ? (
+        formButton
+      ) : (
+        <Button variant="contained" type="submit">
+          {submitBtnText || 'Submit'}
+        </Button>
+      )}
     </Container>
   )
 }
