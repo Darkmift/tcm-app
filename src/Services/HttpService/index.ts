@@ -13,7 +13,8 @@ import ProjectHttpService from './ProjectHttpService'
 import ProjectMemberRelationHttpService from './ProjectMemberRelationHttpService'
 import WinnerProjectTypeHttpService from './WinnerProjectTypeHttpService'
 
-const DOMAIN = process.env.NEXT_PUBLIC_DOMAIN
+const DOMAIN = ''
+// const DOMAIN = ''process.env.NEXT_PUBLIC_DOMAIN
 console.log('🚀 ~ file: HttpService.ts:8 ~ DOMAIN:', DOMAIN)
 const BASE_URL = `${DOMAIN}/api/`
 
@@ -132,7 +133,7 @@ const HttpService = {
   ...InstructorsHttpService,
   ...ProjectHttpService,
   ...ProjectMemberRelationHttpService,
-  ...WinnerProjectTypeHttpService
+  ...WinnerProjectTypeHttpService,
 }
 
 export default HttpService
