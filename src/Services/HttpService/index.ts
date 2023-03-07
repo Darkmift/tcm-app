@@ -2,7 +2,7 @@ import axios, {AxiosResponse} from 'axios'
 import LocalStorageService from '../LocalStorageService'
 import {Role} from '../../types'
 import store from '../../store'
-import {logout as logoutAction} from '../../store/thunks/user.thunk'
+import {logout as logoutAction} from '../../store/user.slice'
 import {ROLE_LS_KEY, TOKEN_LS_KEY, USERNAME_LS_KEY} from '@/const'
 import StitchProjectsAndMembers from '../../../utilities/StitchProjectsAndMembers'
 import MemberHttpService from './MemberHttpService'
@@ -89,7 +89,7 @@ const HttpService = {
       return {role, username}
     } catch (error) {
       console.error('🚀 ~ file: HttpService.ts:17 ~ login ~ error', error)
-      return null
+      throw error
     }
   },
   async logout() {

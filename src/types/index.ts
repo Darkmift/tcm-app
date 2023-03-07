@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {ReactElement} from 'react'
 import {Member} from './Member.type'
 export * from './Member.type'
 export * from './Project.type'
@@ -8,17 +8,28 @@ export * from './ProjectMemberRelations.type'
 export * from './WinnerProjectType.type'
 
 export type Role = 'User' | 'Admin'
-export type LinkConfig = {id?: string; name: string; pathTo: string}
+export type LinkConfig = {
+  id?: string
+  name: string
+  pathTo: string
+  role?: Role
+}
 export type GenericObject = {[key: string]: any}
 export type StyleObject = GenericObject
 export type StyleXsObject = {[key: string]: string | number | StyleXsObject}
 export type MuiComponent = (props: any) => JSX.Element
-export type GenericComponent = (props: any) => any
+export type GenericComponent = (
+  props: any
+) => any | Element | ReactElement<any, any> | MuiComponent
 export type Payload = {payload?: any}
 // export type FunctionWithOptionalPayload = (payload?: Payload) => void
-export type FunctionWithOptionalPayload<P = unknown, T = unknown> = (payload?: P, evt?: T) => void;
-export type NavBarClick = React.MouseEvent<HTMLButtonElement | HTMLButtonElement>
-
+export type FunctionWithOptionalPayload<P = unknown, T = unknown> = (
+  payload?: P,
+  evt?: T
+) => void
+export type NavBarClick = React.MouseEvent<
+  HTMLButtonElement | HTMLButtonElement
+>
 
 export type FormData = {
   Component: typeof React.Component | MuiComponent | GenericComponent
