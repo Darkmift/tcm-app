@@ -33,6 +33,9 @@ const settings = AVATAR_LINKS
 function ResponsiveAppBar() {
   const router = useRouter()
   const dispatch = useAppDispatch()
+  const usernameRedux = useAppSelector((state) => state.auth.username)
+  const roleRedux = useAppSelector((state) => state.auth.role)
+  const isLoggedInRedux = useAppSelector((state) => state.auth.isLoggedIn)
   const yearsRedux = useAppSelector((state) => state.years.years)
   const selectedYearRedux = useAppSelector((state) => state.years.selectedYear)
   const internshipsRedux = useAppSelector(
@@ -247,7 +250,7 @@ function ResponsiveAppBar() {
           <Box sx={{flexGrow: 0}}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{p: 0}}>
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+                <Avatar alt={usernameRedux || 'Guest'} />
               </IconButton>
             </Tooltip>
             <Menu
@@ -266,16 +269,24 @@ function ResponsiveAppBar() {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
-              {settings.map((setting) => (
-                <MenuItem
-                  href={setting.pathTo}
-                  component={Link}
-                  key={setting.name}
-                  onClick={handleCloseUserMenu}
-                >
-                  <Typography textAlign="center">{setting.name}</Typography>
-                </MenuItem>
-              ))}
+              {settings
+                .filter((s) => {
+                  if (s.name === 'Login') {
+                    if (roleRedux === 'Admin') return false
+                  }
+                  if (roleRedux === 'Admin') return true
+                  return s.role !== 'Admin'
+                })
+                .map((setting) => (
+                  <MenuItem
+                    href={setting.pathTo}
+                    component={Link}
+                    key={setting.name}
+                    onClick={handleCloseUserMenu}
+                  >
+                    <Typography textAlign="center">{setting.name}</Typography>
+                  </MenuItem>
+                ))}
             </Menu>
           </Box>
         </Toolbar>
