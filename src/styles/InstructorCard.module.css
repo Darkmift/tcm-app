@@ -1,4 +1,4 @@
-.window{
+.window {
   width: 100%;
 }
 
@@ -13,9 +13,6 @@
 .img-border {
   position: relative;
   border: 0.5px solid var(--color-card-border);
-  display: flex;
-  justify-content: center;
-  align-items: center;
   width: 11rem;
   height: 13rem;
 }
@@ -28,6 +25,7 @@
   justify-content: center;
   filter: grayscale(100%);
   transition: filter 0.3s ease;
+  width: max-content;
 }
 
 .second-img-border:hover {

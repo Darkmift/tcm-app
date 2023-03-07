@@ -6,3 +6,25 @@
   font-weight: 500;
   color: #21212a;
 }
+
+:root {
+  --color-white: #fff;
+  --color-black: #000;
+  --color-dark: #060909;
+  --color-blue: #230cbe;
+  --color-purple: #4d33f8;
+  --color-turquoise: #23c9d5;
+  --color-card-border: #2474e4;
+  --color-gray: #464545;
+  --color-error: #a23131;
+}
+@keyframes fadeinToTop {
+  from {
+    opacity: 0;
+    transform: translateY(-40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
