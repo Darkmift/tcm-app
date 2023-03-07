@@ -8,18 +8,20 @@ function Instructors() {
     (state) => state.instructors.allInstructors
   )
   return (
-    <Grid container spacing={2} xs={12}>
-      {instructors &&
-        instructors.map((instructor) => (
-          <Grid key={`${instructor.id}`} item xl={3}>
-            <InstructorCard
-              imgName={instructor.image}
-              title={instructor.name}
-              description={instructor.description}
-            />
-          </Grid>
-        ))}
-    </Grid>
+    <Container>
+      <Grid container spacing={4} xs={12}>
+        {instructors &&
+          instructors.map((instructor) => (
+            <Grid key={`${instructor.id}`} item xl={3}>
+              <InstructorCard
+                imgName={instructor.image}
+                title={instructor.name}
+                description={instructor.description}
+              />
+            </Grid>
+          ))}
+      </Grid>
+    </Container>
   )
 }
 
