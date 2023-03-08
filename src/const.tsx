@@ -16,6 +16,7 @@ export const YEAR_LINKS: LinkConfig[] = [
 ]
 export const AVATAR_LINKS: LinkConfig[] = [
   {name: 'Login', pathTo: '/admin/login'},
+  {name: 'Dashboard', pathTo: '/admin', role: 'Admin'},
   {name: 'Add Project', pathTo: '/admin/project', role: 'Admin'},
   {name: 'Edit Project', pathTo: '/admin/project/edit', role: 'Admin'},
 ]
