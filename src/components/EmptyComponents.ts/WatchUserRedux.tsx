@@ -15,9 +15,9 @@ function WatchUserRedux() {
     const token = LocalStorageService.get(TOKEN_LS_KEY)
     const role = LocalStorageService.get(ROLE_LS_KEY) as Role
     const username = LocalStorageService.get(USERNAME_LS_KEY)
-    if (!!token && !!role && !!username) {
-      dispatch(logFromStorage({role, username}))
-    }
+
+    dispatch(logFromStorage({role, username}))
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 

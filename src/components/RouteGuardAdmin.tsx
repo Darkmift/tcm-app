@@ -10,21 +10,20 @@ type ProtectedRouteProps = {
 
 const ProtectedRoute = ({requiredRole, children}: ProtectedRouteProps) => {
   const router = useRouter()
-  const {isLoggedIn, role} = useAppSelector((state: RootState) => state.auth)
+  const isLoggedIn = useAppSelector((state: RootState) => state.auth.isLoggedIn)
+  const role = useAppSelector((state: RootState) => state.auth.role)
+  const authDone = useAppSelector((state: RootState) => state.auth.authDone)
 
   useEffect(() => {
-    if (!isLoggedIn) {
-      // Handle unauthorized access
-      console.log('Unauthorized access!')
-      router.push('/admin/login')
-    } else if (requiredRole !== role) {
-      // Handle insufficient privileges
-      console.log('Insufficient privileges!')
-      router.push('/')
+    if (authDone) {
+      if (!isLoggedIn) {
+        // Handle unauthorized access
+        router.push(requiredRole !== role ? '/' : '/admin/login')
+      }
     }
-  }, [isLoggedIn, role, requiredRole, router])
+  }, [authDone, isLoggedIn, role, requiredRole, router])
 
-  return <>{children}</>
+  return <>{isLoggedIn && role === requiredRole ? children : <></>}</>
 }
 
 export default ProtectedRoute

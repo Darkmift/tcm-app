@@ -3,6 +3,8 @@ import {Role} from '@/types'
 
 import {createAsyncThunk} from '@reduxjs/toolkit'
 import HttpService from '../Services/HttpService'
+import LocalStorageService from '@/Services/LocalStorageService'
+import {ROLE_LS_KEY, TOKEN_LS_KEY, USERNAME_LS_KEY} from '@/const'
 
 export const login = createAsyncThunk(
   'auth/login',
@@ -19,19 +21,21 @@ export const logout = createAsyncThunk('auth/logout', async () => {
 })
 
 type UserState = {
-  isLoggedIn: boolean
+  isLoggedIn: boolean | null
   username: string
   role: Role
   status: 'idle' | 'loading' | 'succeeded' | 'failed'
   kickUser: boolean
+  authDone: boolean
 }
 
 const initialState: UserState = {
-  isLoggedIn: false,
+  isLoggedIn: null,
   username: '',
   role: 'User',
   status: 'idle',
   kickUser: false,
+  authDone: false,
 }
 
 const userSlice = createSlice({
@@ -42,16 +46,21 @@ const userSlice = createSlice({
       state: UserState,
       action: PayloadAction<{role: Role; username: string}>
     ) => {
-      state.isLoggedIn = true
-      state.kickUser = false
-      state.role = action.payload.role
-      state.username = action.payload.username
+      const {role, username} = action.payload
+      const isValidRole = ['User', 'Admin'].includes(role)
+      const isValidUser = isValidRole && !!username?.length
+      state.authDone = true
+      state.isLoggedIn = isValidUser
+      state.kickUser = isValidUser ? false : true
+      state.role = isValidRole ? role : 'User'
+      state.username = username
     },
   },
   extraReducers: (builder) => {
     // Add reducers for additional action types here, and handle loading state as needed
     builder.addCase(login.fulfilled, (state, action) => {
       state.isLoggedIn = true
+      state.authDone = true
       if (!action.payload) throw new Error('Invalid payload at login thunk')
       const {username, role} = action.payload
       if (!username || !role) throw new Error('Invalid payload at login thunk')
