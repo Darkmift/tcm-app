@@ -19,8 +19,7 @@ function SelectMUI({
   name,
   options,
   optionLabelKey,
-  optionValueKey,
-  multiple = false,
+  optionValueKey
 }: Props) {
   const htmlId = uuid()
   return (
@@ -32,7 +31,6 @@ function SelectMUI({
         value={value}
         onChange={handleChange}
         label={name}
-        multiple
       >
         <MenuItem value="">
           <em>None</em>
