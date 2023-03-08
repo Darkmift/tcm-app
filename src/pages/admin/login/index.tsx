@@ -24,16 +24,14 @@ const formItems: FormData[] = [
 ]
 
 const InitialState = {
-  message: null,
-  username: null,
-  password: null,
+  message: '',
+  username: '',
+  password: '',
 }
 
 function LoginPage() {
   const dispatch = useAppDispatch()
-  const usernameRedux = useAppSelector((state) => state.auth.username)
   const statusRedux = useAppSelector((state) => state.auth.status === 'loading')
-  const roleRedux = useAppSelector((state) => state.auth.role)
   const isLoggedInRedux = useAppSelector((state) => state.auth.isLoggedIn)
   const router = useRouter()
 
@@ -54,11 +52,11 @@ function LoginPage() {
   }) => {
     dispatch(login({username, password}))
       .unwrap()
-      .then((data) => {
+      .then((data: any) => {
         console.log('🚀 ~ file: index.tsx:51 ~ .then ~ data:', data)
         setErrors(InitialState)
       })
-      .catch((error) => {
+      .catch((error: Error) => {
         setErrors((v) => ({...v, message: error.message}))
         console.log('🚀 ~ file: index.tsx:54 ~ .then ~ error:', error)
       })
