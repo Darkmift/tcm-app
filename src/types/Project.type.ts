@@ -25,3 +25,10 @@ export type Project = {
     internshipId: Internship
   }
 }
+
+export interface InsertOrUpdateProject
+  extends Pick<Project, 'description' | 'image' | 'name' | 'year'> {
+  members?: Member[]
+  instructorId?: string
+  internshipId?: string
+}

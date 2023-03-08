@@ -1,44 +1,80 @@
-import FormToJson from '@/components/FormToJson'
-import Container from '@mui/material/Container'
-import TextField from '@mui/material/TextField'
 import React from 'react'
-import {FormData} from '../../../types'
-import {TextareaAutosize, Typography} from '@mui/material'
+import {useFormik} from 'formik'
+import * as yup from 'yup'
+import {Button, Container, TextField, Typography} from '@mui/material'
 import withProtectedRoute from '@/highOrderComponents/withProtectedRoute'
+import {InsertOrUpdateProject} from '@/types'
 
-const formItems: FormData[] = [
-  {
-    name: 'name',
-    placeholder: 'name',
-    Component: TextField,
-  },
-  {
-    name: 'description',
-    placeholder: 'description',
-    extraProps: {
-      multiline: true,
-      rows: 4,
-      variant: 'outlined',
-      inputProps: {
-        style: {
-          padding: 0,
-        },
-      },
-    },
-    Component: TextareaAutosize,
-  },
+const fieldKeys = [
+  'description',
+  'image',
+  'name',
+  'year',
+  'members',
+  'instructorId',
+  'internshipId',
 ]
+const schema = fieldKeys.reduce((acc: any, item) => {
+  acc[item] = yup.string().required(`${item} is required`)
+  return acc
+}, {})
+schema.description.min(12, 'at least 12 characters')
+schema.members = yup.array()
+schema.image = yup.mixed().required('File is required')
+const validationSchema = yup.object<InsertOrUpdateProject>(schema)
 
-function index() {
+type FormSchema = yup.InferType<typeof validationSchema>
+type KeysInForm = keyof FormSchema
+// type FormValues = Record<KeysInForm,string>
+
+function EditProject() {
+  const formik = useFormik({
+    initialValues: {
+      description: '',
+      image: '',
+      name: '',
+      year: '',
+      members: [],
+      instructorId: '',
+      internshipId: '',
+    },
+    validationSchema: validationSchema,
+    onSubmit: (values) => {
+      console.log('values', values)
+    },
+  })
+
   return (
-    <Container>
+    <Container component="form" onSubmit={formik.handleSubmit}>
       <Typography sx={{ml: 3, fontWeight: 900, fontSize: 35}} color="primary">
         EDIT PROJECT
       </Typography>
-
-      <FormToJson formData={formItems} submitHandler={(data) => {}} submitBtnText={'Edit Project'} />
+      {Object.keys(schema).map((item) => {
+        if (item === 'members') return <span key={item}>members todo</span>
+        const keyItem = item as KeysInForm
+        return (
+          <TextField
+            key={item}
+            sx={{py: 1}}
+            fullWidth
+            variant="standard"
+            id={item}
+            name={item}
+            label={item.toUpperCase()}
+            type={item === 'image' ? 'file' : 'text'}
+            InputLabelProps={{shrink: item === 'image'}}
+            value={formik.values[keyItem]}
+            onChange={formik.handleChange}
+            error={formik.touched[keyItem] && Boolean(formik.errors[keyItem])}
+            helperText={formik.touched[keyItem] && formik.errors[keyItem]}
+          />
+        )
+      })}
+      <Button color="primary" variant="contained" fullWidth type="submit">
+        Submit
+      </Button>
     </Container>
   )
 }
 
-export default withProtectedRoute(index, 'Admin')
+export default withProtectedRoute(EditProject, 'Admin')
