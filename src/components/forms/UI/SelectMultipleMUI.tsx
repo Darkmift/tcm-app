@@ -8,7 +8,7 @@ import MenuItem from '@mui/material/MenuItem'
 import FormControl from '@mui/material/FormControl'
 import Select, {SelectChangeEvent} from '@mui/material/Select'
 import Chip from '@mui/material/Chip'
-import {IconButton} from '@mui/material'
+import {FormHelperText, IconButton} from '@mui/material'
 import ClearIcon from '@mui/icons-material/Clear'
 
 const ITEM_HEIGHT = 48
@@ -39,6 +39,8 @@ type Props = {
   options: any[]
   optionLabelKey: string
   optionValueKey: string
+  error?: boolean
+  helperText?: string
 }
 
 function SelectMultipleMUI({
@@ -49,12 +51,14 @@ function SelectMultipleMUI({
   options,
   optionLabelKey,
   optionValueKey,
+  error,
+  helperText,
 }: Props) {
   const theme = useTheme()
 
   const parseEventHandler = (evt: SelectChangeEvent | any) => {
     if (!evt.target.value) {
-      evt.target.value = []
+      evt.target.value = multiple ? [] : ''
     }
     evt.target.name = name
     handleChange(evt)
@@ -62,7 +66,7 @@ function SelectMultipleMUI({
 
   return (
     !!options && (
-      <FormControl sx={{width: '100%'}}>
+      <FormControl sx={{width: '100%'}} error={error}>
         <InputLabel id="demo-multiple-chip-label">{name}</InputLabel>
         <Select
           name={name}
@@ -88,19 +92,7 @@ function SelectMultipleMUI({
             )
 
             return (
-              <Chip
-                label={selectedOption[optionLabelKey]}
-                variant="outlined"
-                // onDelete={(evt: any) => {
-                //   console.log("🚀 ~ file: SelectMultipleMUI.tsx:102 ~ onDelete ~ evt:", evt)
-                //   evt.target.value = value?.filter(
-                //     (o: any) =>
-                //       o[optionValueKey] === selectedOption[optionValueKey]
-                //   )
-                //   evt.target.name = name
-                //   parseEventHandler(evt)
-                // }}
-              />
+              <Chip label={selectedOption[optionLabelKey]} variant="outlined" />
             )
           }}
           endAdornment={
@@ -123,6 +115,7 @@ function SelectMultipleMUI({
             </MenuItem>
           ))}
         </Select>
+        <FormHelperText sx={{color: 'red'}}>{helperText}</FormHelperText>
       </FormControl>
     )
   )
