@@ -8,7 +8,7 @@ const MemberHttpService = {
   async getAllMembers(): Promise<Member[]> {
     try {
       const response = await axiosInstance.get(API_MEMBERS_URL)
-      return response.data.members
+      return response.data
     } catch (error: any) {
       throw new Error(error.response.data.error)
     }
