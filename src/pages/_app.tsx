@@ -1,3 +1,4 @@
+import {useEffect, useState} from 'react'
 // styles
 import '@fontsource/roboto/300.css'
 import '@fontsource/roboto/400.css'
@@ -13,8 +14,6 @@ import Container from '@mui/material/Container'
 // redux
 import {Provider} from 'react-redux'
 import store from '@/store'
-// types
-import {Role} from '@/types'
 // components
 import WatchUserRedux from '@/components/EmptyComponents.ts/WatchUserRedux'
 import WatchYearRedux from '@/components/EmptyComponents.ts/WatchYearRedux'
@@ -33,6 +32,7 @@ export default function App({Component, pageProps}: AppProps) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       {/* watchers that init redux state */}
+
       <>
         <WatchUserRedux />
         <WatchYearRedux />
@@ -42,6 +42,7 @@ export default function App({Component, pageProps}: AppProps) {
         <WatchWinningProjectTypesRedux />
         <ResponsiveAppBar />
       </>
+
       <Container
         sx={{
           display: 'flex',
