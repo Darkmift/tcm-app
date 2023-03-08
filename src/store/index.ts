@@ -33,8 +33,5 @@ export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector
 
 store.subscribe(() => {
   const state = store.getState()
-  console.log('🚀 ~ file: index.ts:24 ~ store.subscribe ~ state:', state)
-
-  console.log('Years have changed!')
-  // Do something here
+  console.log(Date.now(), ': 🚀 ~ CURR$ENT STATE:', state)
 })
