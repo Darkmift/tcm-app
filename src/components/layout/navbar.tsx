@@ -89,11 +89,6 @@ function ResponsiveAppBar() {
       //set redux selected year
       dispatch(setYear(payload.name))
     }
-
-    console.log(
-      '🚀 ~ file: navbar.tsx:73 ~ handleYearNavigation ~ payload:',
-      payload
-    )
   }
 
   return (
@@ -250,7 +245,12 @@ function ResponsiveAppBar() {
           <Box sx={{flexGrow: 0}}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{p: 0}}>
-                <Avatar alt={usernameRedux || 'Guest'} />
+                <Avatar
+                  alt={usernameRedux || 'Guest'}
+                  sx={{bgcolor: 'white', color: 'blue'}}
+                >
+                  {(usernameRedux || 'Guest').charAt(0).toUpperCase()}
+                </Avatar>
               </IconButton>
             </Tooltip>
             <Menu
