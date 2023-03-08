@@ -21,6 +21,7 @@ import WatchProjectsRedux from '@/components/EmptyComponents.ts/WatchProjectsRed
 import WatchInternshipsRedux from '@/components/EmptyComponents.ts/WatchInternshipsRedux'
 import WatchWinningProjectTypesRedux from '@/components/EmptyComponents.ts/WatchWinningProjectTypesRedux'
 import WatchInstructorsRedux from '@/components/EmptyComponents.ts/WatchInstructorsRedux'
+import WatchMembersRedux from '@/components/EmptyComponents.ts/WatchMembersRedux'
 
 export default function App({Component, pageProps}: AppProps) {
   return (
@@ -40,6 +41,7 @@ export default function App({Component, pageProps}: AppProps) {
         <WatchInternshipsRedux />
         <WatchInstructorsRedux />
         <WatchWinningProjectTypesRedux />
+        <WatchMembersRedux />
         <ResponsiveAppBar />
       </>
 
