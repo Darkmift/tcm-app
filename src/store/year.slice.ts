@@ -1,12 +1,52 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit'
 import {RootState} from './index'
 import {Year} from '../types'
-import {
-  fetchYears,
-  addYear as addYearThunk,
-  updateYear as updateYearThunk,
-  deleteYear as deleteYearThunk,
-} from './thunks/year.thunk'
+import {createAsyncThunk} from '@reduxjs/toolkit'
+import HttpService from '../Services/HttpService'
+
+export const fetchYears = createAsyncThunk('year/fetchYears', async () => {
+  const years = await HttpService.getYears()
+  return years
+})
+
+// thunk to add year
+export const addYearThunk = createAsyncThunk(
+  'years/addYear',
+  async (year: Year, thunkAPI) => {
+    try {
+      const response = await HttpService.createYear(year)
+      return response
+    } catch (err) {
+      return thunkAPI.rejectWithValue((err as any).response.data)
+    }
+  }
+)
+
+// thunk to update year by id
+export const updateYearThunk = createAsyncThunk(
+  'years/updateYear',
+  async (year: Year, thunkAPI) => {
+    try {
+      const response = await HttpService.updateYear(year)
+      return response
+    } catch (err) {
+      return thunkAPI.rejectWithValue((err as any).response.data)
+    }
+  }
+)
+
+// thunk to delete year by id
+export const deleteYearThunk = createAsyncThunk(
+  'years/deleteYear',
+  async (id: string, thunkAPI) => {
+    try {
+      await HttpService.deleteYear(id)
+      return id // return deleted record id
+    } catch (err) {
+      return thunkAPI.rejectWithValue((err as any).response.data)
+    }
+  }
+)
 
 type YearState = {
   years: Year[]
@@ -57,7 +97,7 @@ const yearSlice = createSlice({
       })
 
       .addCase(addYearThunk.fulfilled, (state, action) => {
-        state.years.push(action.payload)
+        state.years.push(action.payload as unknown as Year)
       })
       .addCase(addYearThunk.pending, (state) => {
         state.loading = 'pending'
@@ -94,7 +134,5 @@ const yearSlice = createSlice({
 })
 
 export const {setYears, setYear} = yearSlice.actions
-
-export const selectYears = (state: RootState) => state.years.years
 
 export default yearSlice.reducer

@@ -1,7 +1,7 @@
 // redux
 import {useAppDispatch} from '@/store'
 import {useEffect} from 'react'
-import {fetchYears} from '@/store/thunks/year.thunk'
+import {fetchYears} from '@/store/year.slice'
 
 function WatchYearRedux() {
   const dispatch = useAppDispatch()

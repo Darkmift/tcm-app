@@ -15,10 +15,6 @@ const YearHttpService = {
         throw new Error('no data!')
       }
 
-      console.log(
-        '🚀 ~ file: HttpService.ts:118 ~ getYears ~ result.data.years:',
-        result.data
-      )
       return result.data.years
     } catch (error: any) {
       throw new Error(error.response.data.error)
@@ -30,20 +26,15 @@ const YearHttpService = {
         API_YEARS_URL,
         year
       )
-
-      if (!result?.data) {
-        throw new Error('no data!')
-      }
-
       return result.data
     } catch (error: any) {
       throw new Error(error.response.data.error)
     }
   },
-  async updateYear(id: string, year: Year) {
+  async updateYear(year: Year) {
     try {
       const result: AxiosResponse<Year> = await axiosInstance.put(
-        `${API_YEARS_URL}/${id}`,
+        `${API_YEARS_URL}?id=${year.id}`,
         year
       )
 
