@@ -16,10 +16,23 @@ const getYears = async (req: NextApiRequest, res: NextApiResponse) => {
 
 const createYear = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
-    const {year, is_enabled} = req.body.year
+    const {year, is_enabled} = req.body
+    console.log(
+      '🚀 ~ file: years.ts:20 ~ createYear ~ year, is_enabled:',
+      year,
+      is_enabled
+    )
     // validate year object
     if (VALID_YEAR_REGEX.test(year) === false) {
-      return res.status(404).json({error: 'Invalid Year'})
+      return res.status(400).json({error: 'Invalid Year'})
+    }
+
+    const existingYear = await pocketDbService.findByFilter(
+      COLLECTIONS.YEARS_AUTH,
+      `year = ${year}`
+    )
+    if (existingYear) {
+      return res.status(400).json({error: 'Year exists'})
     }
 
     const newYear = await pocketDbService.insertRecord(COLLECTIONS.YEARS_AUTH, {
@@ -37,7 +50,9 @@ const createYear = async (req: NextApiRequest, res: NextApiResponse) => {
 
 const updateYear = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
-    const {id, year, is_enabled} = req.body
+    const {year, is_enabled} = req.body
+    const {id} = req.query
+
     // validate year object
     if (!year) {
       return res.status(400).json({error: 'Year object is required'})
@@ -45,7 +60,7 @@ const updateYear = async (req: NextApiRequest, res: NextApiResponse) => {
 
     const updatedYear = await pocketDbService.updateRecord(
       COLLECTIONS.YEARS_AUTH,
-      id,
+      id as unknown as string,
       {year, is_enabled}
     )
     res.status(200).json(updatedYear)
