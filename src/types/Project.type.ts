@@ -1,4 +1,4 @@
-import {Internship} from '@/types'
+import {Internship, Year} from '@/types'
 import {Instructor} from './Instructors.type'
 import {Member} from './Member.type'
 
@@ -31,4 +31,12 @@ export interface InsertOrUpdateProject
   members?: Member[]
   instructorId?: string
   internshipId?: string
+}
+export interface ApiProjectEntry
+  extends Pick<Project, 'description' | 'image' | 'name'> {
+  id?: string
+  members?: Member[]
+  instructorId?: Instructor
+  internshipId?: Internship
+  year: Year
 }
