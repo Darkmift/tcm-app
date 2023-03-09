@@ -62,11 +62,12 @@ const pocketDbService = {
 
   insertRecord: async (
     collectionName: string,
-    newRecord: GenericObject
+    newRecord: GenericObject,
+    options = {}
   ): Promise<any> => {
     try {
       await runAuth()
-      return await pb.collection(collectionName).create(newRecord)
+      return await pb.collection(collectionName).create(newRecord, options)
     } catch (error) {
       console.log('🚀 ~ file: pocketbase.js:51 ~ insertRecord ~ error:', {
         collectionName,
@@ -100,13 +101,14 @@ const pocketDbService = {
   updateRecord: async (
     collectionName: string,
     updateRecordId: string,
-    updatedFields: GenericObject
+    updatedFields: GenericObject,
+    options = {}
   ): Promise<any> => {
     try {
       await runAuth()
       return await pb
         .collection(collectionName)
-        .update(updateRecordId, updatedFields)
+        .update(updateRecordId, updatedFields, options)
     } catch (error) {
       console.log('🚀 ~ file: pocketbase.js:86 ~ updateRecord ~ error:', {
         collectionName,
