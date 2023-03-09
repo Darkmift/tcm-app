@@ -31,14 +31,12 @@ const createImage = async (
   try {
     const [fields, files] = await parseForm(req)
 
-    const {title, collection} = fields
+    const {title, collection: Cname} = fields
     const {imageFile} = files as any
 
-    if (!Object.values(COLLECTIONS).includes(collection as string)) {
-      console.log('🚀 ~ createImage ~ file: images.ts:23 ~ collection:', {
-        o: Object.values(COLLECTIONS),
-        collection,
-      })
+    const collection = Cname as string
+
+    if (!Object.values(COLLECTIONS).includes(collection)) {
       return res.status(400).json({error: 'Invalid collection name'})
     }
 
@@ -63,7 +61,7 @@ const createImage = async (
     }
 
     const filename = `${id}.${extension}`
-    const filePath = path.join(IMAGE_DIRECTORY, collection as string, filename)
+    const filePath = path.join(IMAGE_DIRECTORY, collection, filename)
     const imageBuffer = await fs.readFile(imageFile.filepath)
 
     await fs.writeFile(filePath, imageBuffer)
@@ -71,7 +69,7 @@ const createImage = async (
     const newImage: Image = {
       id,
       title: filename,
-      url: filename,
+      url: '/' + filePath.replaceAll('\\', '/'),
     }
 
     return res.status(201).json(newImage)
@@ -164,7 +162,7 @@ const updateImage = async (req: NextApiRequest, res: NextApiResponse) => {
     const updatedImage: Image = {
       id: id as string,
       title: id as string,
-      url: newFilename,
+      url: '/' + newFilename.replaceAll('\\', '/'),
     }
 
     return res.status(200).json(updatedImage)
