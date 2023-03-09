@@ -7,6 +7,19 @@ export * from './Instructors.type'
 export * from './ProjectMemberRelations.type'
 export * from './WinnerProjectType.type'
 
+export type AuthUser = {
+  username: string
+  password: string
+  id?: string
+}
+
+export type RegisterResult = {
+  id: string | undefined
+  username: string | undefined
+  password: string | undefined
+  created: boolean
+}[]
+
 export type Role = 'User' | 'Admin'
 export type LinkConfig = {
   id?: string
@@ -61,6 +74,6 @@ export type Year = {
   collectionId?: string
   collectionName?: string
   created?: string
-  expand: any
-  updated: string
+  expand?: any
+  updated?: string
 }
