@@ -1,6 +1,6 @@
 import axios, {AxiosResponse} from 'axios'
 import LocalStorageService from '../LocalStorageService'
-import {Role} from '../../types'
+import {AuthUser, Role} from '../../types'
 import store from '../../store'
 import {logout as logoutAction} from '../../store/user.slice'
 import {ROLE_LS_KEY, TOKEN_LS_KEY, USERNAME_LS_KEY} from '@/const'
@@ -13,6 +13,7 @@ import ProjectHttpService from './ProjectHttpService'
 import ProjectMemberRelationHttpService from './ProjectMemberRelationHttpService'
 import WinnerProjectTypeHttpService from './WinnerProjectTypeHttpService'
 import ImageHttpService from './ImageHttpService'
+import StudentHttpService from './StudentHttpService'
 
 const DOMAIN = ''
 // const DOMAIN = ''process.env.NEXT_PUBLIC_DOMAIN
@@ -49,11 +50,6 @@ axiosInstance.interceptors.response.use(
     return Promise.reject(error)
   }
 )
-
-type AuthUser = {
-  username: string
-  password: string
-}
 
 const HttpService = {
   async login({
@@ -136,6 +132,7 @@ const HttpService = {
   ...ProjectMemberRelationHttpService,
   ...WinnerProjectTypeHttpService,
   ...ImageHttpService,
+  ...StudentHttpService,
 }
 
 export default HttpService
