@@ -30,6 +30,14 @@ function index() {
       >
         Projects
       </Button>
+      <Button
+        fullWidth
+        variant="contained"
+        component={Link}
+        href="/admin/students/create-users-from-csv"
+      >
+        Create users from csv
+      </Button>
     </Container>
   )
 }
