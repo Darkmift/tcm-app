@@ -1,17 +1,80 @@
-import React from 'react'
+import React, {useState} from 'react'
 import {Formik, Form, Field} from 'formik'
-import {FormControl, Button, Grid, TextField} from '@mui/material'
+import {FormControl, Button, Grid, TextField, Typography} from '@mui/material'
 import * as Yup from 'yup'
-import {
-  Member
-} from '@/types'
-import {useAppSelector} from '@/store'
-import SelectMultipleMUI from './UI/SelectMultipleMUI'
+import {Member, Project} from '@/types'
+import {useAppDispatch, useAppSelector} from '@/store'
 import SelectMultipleMUI2 from './UI/SelectMultipleMUI2'
+import HttpService from '@/Services/HttpService'
+import {createProject} from '@/store/project.slice'
+import isObject from '../../../utilities/isObject'
+
+const validationSchema = Yup.object({
+  name: Yup.string().required('Name is required'),
+  description: Yup.string(),
+  image: Yup.mixed(),
+  year: Yup.mixed().test(
+    'is-year',
+    'Select a year',
+    (value) => !value || ('year' in value && 'is_enabled' in value)
+  ),
+  members: Yup.array<Member>(),
+  internshipId: Yup.mixed().test(
+    'is-internship',
+    'Select an internship',
+    (value) => {
+      if (isObject(value) === false) {
+        return true
+      }
+
+      return !value || ('id' in value && 'name' in value)
+    }
+  ),
+  instructorId: Yup.mixed().test(
+    'is-instructor',
+    'Select an instructor',
+    (value) => {
+      if (isObject(value) === false) {
+        return true
+      }
+
+      return !value || ('id' in value && 'name' in value)
+    }
+  ),
+})
+
+type FormSchema = Yup.InferType<typeof validationSchema>
+type KeysInForm = keyof FormSchema
+
+const initialValues: {
+  description: string
+  image: File | null
+  name: string
+  year: string[] | null
+  members: string[]
+  instructorId: string[] | null
+  internshipId: string[] | null
+} = {
+  description: '',
+  image: null,
+  name: '',
+  year: [],
+  members: [],
+  instructorId: [],
+  internshipId: [],
+}
+
+const simpleFields = ['name', 'description']
+
+const validate = (values: any) => {
+  // for some fucking reason I need this to properly submit
+  return {}
+}
 
 type Props = {}
 
 function ProjectForm({}: Props) {
+  const dispatch = useAppDispatch()
   const yearsRedux = useAppSelector((state) => state.years.years)
   const memberRedux = useAppSelector((state) => state.members.members)
   const internshipsRedux = useAppSelector(
@@ -21,75 +84,8 @@ function ProjectForm({}: Props) {
     (state) => state.instructors.allInstructors
   )
 
-  function isObject(val: any): boolean {
-    return (
-      val != null && typeof val === 'object' && Array.isArray(val) === false
-    )
-  }
+  const [errorMsg, setErrorMsg] = useState('')
 
-  const validationSchema = Yup.object({
-    name: Yup.string().required('Name is required'),
-    description: Yup.string(),
-    image: Yup.mixed(),
-    year: Yup.mixed().test(
-      'is-year',
-      'Select a year',
-      (value) => !value || ('year' in value && 'is_enabled' in value)
-    ),
-    members: Yup.array<Member>(),
-    internshipId: Yup.mixed().test(
-      'is-internship',
-      'Select an internship',
-      (value) => {
-        if (isObject(value) === false) {
-          return true
-        }
-
-        return !value || ('id' in value && 'name' in value)
-      }
-    ),
-    instructorId: Yup.mixed().test(
-      'is-instructor',
-      'Select an instructor',
-      (value) => {
-        if (isObject(value) === false) {
-          return true
-        }
-
-        return !value || ('id' in value && 'name' in value)
-      }
-    ),
-  })
-
-  type FormSchema = Yup.InferType<typeof validationSchema>
-  type KeysInForm = keyof FormSchema
-
-  const initialValues: {
-    description: string
-    image: File | null
-    name: string
-    year: string[] | null
-    members: string[]
-    instructorId: string[] | null
-    internshipId: string[] | null
-  } = {
-    description: '',
-    image: null,
-    name: '',
-    year: [],
-    members: [],
-    instructorId: [],
-    internshipId: [],
-  }
-
-  const handleSubmit = (values: any) => {
-    console.log(
-      '🚀 ~ file: ProjectForm.tsx:78 ~ handleSubmit ~ values:',
-      values
-    )
-  }
-
-  const simpleFields = ['name', 'description']
   const selectFields = [
     {
       name: 'year',
@@ -121,9 +117,50 @@ function ProjectForm({}: Props) {
     },
   ]
 
-  const validate = (values: any) => {
-    // for some fucking reason I need this to properly submit
-    return {}
+  const processImage = async (
+    title: string,
+    collectionName: string,
+    imageFile: File
+  ): Promise<any> => {
+    try {
+      return await HttpService.createImage(title, collectionName, imageFile)
+    } catch (error: any) {
+      console.log(
+        '🚀 ~ file: ProjectForm.tsx:136 ~ handleSubmit ~ error:',
+        error
+      )
+      return null
+    }
+  }
+
+  const handleSubmit = async (values: any) => {
+    try {
+      setErrorMsg('')
+      const projectFormData = structuredClone(values) as Project
+
+      if (projectFormData.image) {
+        const imageData = await processImage(
+          projectFormData.name,
+          'projects',
+          projectFormData.image as unknown as File
+        )
+        if (imageData === null) throw new Error('Failed to save image')
+        projectFormData.image = imageData.url
+      }
+
+      dispatch(createProject(projectFormData))
+        .unwrap()
+        .then(() => {})
+        .catch((err: any) => {
+          setErrorMsg(err.message)
+        })
+    } catch (error: any) {
+      console.log(
+        '🚀 ~ file: ProjectForm.tsx:167 ~ handleSubmit ~ error:',
+        error
+      )
+      setErrorMsg(error.message)
+    }
   }
 
   return (
@@ -241,6 +278,15 @@ function ProjectForm({}: Props) {
           <Button color="primary" variant="contained" fullWidth type="submit">
             Submit
           </Button>
+          {errorMsg && (
+            <Typography
+              sx={{p: 2, color: 'red'}}
+              variant="h6"
+              textAlign="center"
+            >
+              {errorMsg}
+            </Typography>
+          )}
         </Form>
       )}
     </Formik>
