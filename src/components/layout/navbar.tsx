@@ -61,11 +61,13 @@ function ResponsiveAppBar() {
 
   const yearsAsRoutes = useMemo(
     () =>
-      yearsRedux.map((y) => ({
-        name: y.year + '',
-        pathTo: `/year/${y.year}`,
-        id: y.id,
-      })),
+      yearsRedux
+        .filter((y) => y.is_enabled)
+        .map((y) => ({
+          name: y.year + '',
+          pathTo: `/year/${y.year}`,
+          id: y.id,
+        })),
     [yearsRedux]
   )
   const internShipsAsRoutes = useMemo(
