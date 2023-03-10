@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react'
+import React, {useState} from 'react'
 import {Formik, Form, Field} from 'formik'
 import {
   FormControl,
@@ -10,7 +10,7 @@ import {
 } from '@mui/material'
 import * as Yup from 'yup'
 import {useAppDispatch} from '@/store'
-import {addYearThunk, updateYearThunk} from '@/store/year.slice'
+import {updateYearThunk} from '@/store/year.slice'
 import {Year} from '@/types'
 
 const validationSchema = Yup.object({

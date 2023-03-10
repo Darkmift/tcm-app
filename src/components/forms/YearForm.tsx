@@ -1,20 +1,15 @@
 import React, {useState} from 'react'
 import {Formik, Form, Field} from 'formik'
 import {
-  Container,
   FormControl,
   Button,
-  Grid,
   TextField,
   Typography,
   FormControlLabel,
   Switch,
 } from '@mui/material'
 import * as Yup from 'yup'
-import {Member, Project} from '@/types'
-import {useAppDispatch, useAppSelector} from '@/store'
-import SelectMultipleMUI2 from './UI/SelectMultipleMUI2'
-import HttpService from '@/Services/HttpService'
+import {useAppDispatch} from '@/store'
 import {addYearThunk} from '@/store/year.slice'
 
 const validationSchema = Yup.object({
