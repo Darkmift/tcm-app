@@ -29,7 +29,8 @@ function ProjectIndex({}: Props) {
       {projectRedux && (
         <div className={styles['project-container']}>
           <Image
-            src={pathImage + projectRedux.image}
+            src={projectRedux.image}
+            // src={pathImage + projectRedux.image}
             alt={projectRedux.name}
             width="400"
             height="480"

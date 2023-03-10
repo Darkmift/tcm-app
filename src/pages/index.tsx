@@ -56,7 +56,7 @@ export default function Home() {
               <ProjectCard
                 id={project.id}
                 title={project.name}
-                imgName={pathImage + project.image}
+                imgName={project.image}
               />
             </Grid>
           ))
