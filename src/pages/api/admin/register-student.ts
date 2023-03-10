@@ -1,11 +1,9 @@
 import {NextApiRequest, NextApiResponse} from 'next'
 import pocketDbService from '../../../../backend/services/pocketbase'
 import {COLLECTIONS} from '../../../const'
+import checkAuthMiddleware from '../../../../backend/middleware/checkIsAdmin'
 
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
+async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
     const {username, password} = req.body
     const existingUser = await pocketDbService.findByFilter(
@@ -37,3 +35,5 @@ export default async function handler(
       .json({errorMsg: 'Internal server error\n\t' + (error as Error).message})
   }
 }
+
+export default checkAuthMiddleware(handler)

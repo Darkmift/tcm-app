@@ -1,23 +1,31 @@
-import fs from 'fs'
 import type {NextApiRequest, NextApiResponse} from 'next'
-import pocketDbService from '../../../backend/services/pocketbase'
+import pocketDbService from '../../../../backend/services/pocketbase'
 import axios from 'axios'
+import {Project} from '@/types'
+import checkAuthMiddleware from '../../../../backend/middleware/checkIsAdmin'
 
 export async function setProjectFiles() {
   try {
     const projects = await pocketDbService.getCollection('projects')
-    
+
     if (!projects?.length) {
       throw new Error('not found')
     }
-    
-    const projectId = 'tim51psw1olaxgv' // Replace with your actual project ID
-    const pathPrefix = 'http://localhost:3000/projects'
 
-    // Example usage:
-    return await storeImage(projectId, `${pathPrefix}/513.jpg`, '513.jpg')
+    const pathPrefix = '/assets/images/projects/'
+    await Promise.all(
+      projects.forEach(async (project: Project) => {
+        const id = project.id
+        delete (project as Partial<Project>).id
+        if (project.image?.length) {
+          const filePath = project.image
+          const fileName = filePath.slice(filePath.lastIndexOf('/') + 1)
 
-    // const pathImg = 'original/app/db/2022/storage/projects'
+          project.image = pathPrefix + fileName
+        }
+        await pocketDbService.updateRecord('projects', id, {...project})
+      })
+    )
   } catch (error) {
     console.log('🚀 ~ file: projectService.ts:120 ~ error:', error)
     return null
@@ -54,6 +62,7 @@ async function storeImage(
   }
 }
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+async function handler(req: NextApiRequest, res: NextApiResponse) {
   res.status(200).json({name: 'John Doe', durr: await setProjectFiles()})
 }
+export default checkAuthMiddleware(handler)
