@@ -1,10 +1,12 @@
 import Container from '@mui/material/Container'
 import React, {useEffect, useState} from 'react'
-import {Grid, Typography} from '@mui/material'
+import {Card, Grid, Typography} from '@mui/material'
 import withProtectedRoute from '@/highOrderComponents/withProtectedRoute'
 import {useAppSelector} from '@/store'
 import {Project} from '@/types'
 import SelectMultipleMUI from '@/components/forms/UI/SelectMultipleMUI'
+import SelectMultipleMUI2 from '@/components/forms/UI/SelectMultipleMUI2'
+import ProjectForm from '@/components/forms/ProjectForm'
 
 function ProjectsIndex() {
   const selectedYear = useAppSelector((state) => state.years.selectedYear)
@@ -14,40 +16,40 @@ function ProjectsIndex() {
     if (!selectedProject && projectsRedux?.[0]) {
       setSelectedProject(projectsRedux[0])
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [projectsRedux])
 
-  const handleChange = ({
-    target: {value},
-  }: React.ChangeEvent<{value: unknown}>) => {
-    console.log('🚀 ~ file: index.tsx:19 ~ handleChange ~ project:', value)
-  }
-
   return (
-    <Container>
-      <Grid container spacing={2}>
-        <Grid item xs={12}>
-          <Typography sx={{fontWeight: 900, fontSize: 35}} color="primary">
-            PROJECT MANAGEMENT
+    <Container sx={{display: 'flex', flexDirection: 'column', gap: '20px'}}>
+      <Card raised sx={{p: 4}}>
+        <Typography variant="h4">Add Project Form</Typography>
+        <ProjectForm />
+      </Card>
+
+      {!projectsRedux?.length && (
+        <Card raised sx={{p: 4}}>
+          <Typography variant="h6">
+            There are no projects for {selectedYear}
           </Typography>
-        </Grid>
-        <Grid item xs={12}>
-          {projectsRedux?.length && selectedProject?.id ? (
-            <SelectMultipleMUI
-              multiple={false}
-              value={selectedProject?.id}
-              handleChange={handleChange}
-              name="Project"
-              options={projectsRedux}
-              optionLabelKey="name"
-              optionValueKey="id"
-            />
-          ) : (
-            <Typography>
-              There are no projects...please select another year
-            </Typography>
-          )}
-        </Grid>
-      </Grid>
+        </Card>
+      )}
+
+      {projectsRedux?.length && selectedProject ? (
+        <Card raised sx={{p: 4}}>
+          <Typography variant="h4">Edit Project Form</Typography>
+          <SelectMultipleMUI2
+            value={selectedProject}
+            handleChange={(evt) => setSelectedProject(evt.target.value)}
+            multiple={false}
+            name=""
+            options={projectsRedux}
+            optionLabelKey="name"
+            optionIdKey="id"
+          />
+        </Card>
+      ) : (
+        <></>
+      )}
     </Container>
   )
 }
