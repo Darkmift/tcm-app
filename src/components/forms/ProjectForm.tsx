@@ -1,13 +1,16 @@
-import React, {useState} from 'react'
+import React, {useEffect, useRef, useState} from 'react'
 import {Formik, Form, Field} from 'formik'
-import {FormControl, Button, Grid, TextField, Typography} from '@mui/material'
+import {FormControl, Grid, TextField, Typography} from '@mui/material'
 import * as Yup from 'yup'
 import {Member, Project} from '@/types'
 import {useAppDispatch, useAppSelector} from '@/store'
-import SelectMultipleMUI2 from './UI/SelectMultipleMUI2'
-import HttpService from '@/Services/HttpService'
 import {createProject} from '@/store/project.slice'
 import isObject from '../../../utilities/isObject'
+import processImage from '../../../utilities/ProcessImage'
+import InputFormikMUI from './FormikUI/InputFormikMUI'
+import SelectFormikMUI from './FormikUI/SelectFormikMUI'
+import {LoadingButton} from '@mui/lab'
+import AutoCloseSnackBar from './UI/AutoCloseSnackBar'
 
 const validationSchema = Yup.object({
   name: Yup.string().required('Name is required'),
@@ -48,7 +51,7 @@ type KeysInForm = keyof FormSchema
 
 const initialValues: {
   description: string
-  image: File | null
+  image: File | null | undefined
   name: string
   year: string[] | null
   members: string[]
@@ -56,7 +59,7 @@ const initialValues: {
   internshipId: string[] | null
 } = {
   description: '',
-  image: null,
+  image: undefined,
   name: '',
   year: [],
   members: [],
@@ -77,6 +80,7 @@ function ProjectForm({}: Props) {
   const dispatch = useAppDispatch()
   const yearsRedux = useAppSelector((state) => state.years.years)
   const memberRedux = useAppSelector((state) => state.members.members)
+  const status = useAppSelector((state) => state.projects.status)
   const internshipsRedux = useAppSelector(
     (state) => state.internships.internships
   )
@@ -85,6 +89,15 @@ function ProjectForm({}: Props) {
   )
 
   const [errorMsg, setErrorMsg] = useState('')
+  const [snackBarState, setSnackBarState] = useState<{
+    open: boolean
+    msg: string
+    severity: 'error' | 'success' | 'warning' | 'info'
+  }>({
+    severity: 'info',
+    open: false,
+    msg: '',
+  })
 
   const selectFields = [
     {
@@ -117,23 +130,21 @@ function ProjectForm({}: Props) {
     },
   ]
 
-  const processImage = async (
-    title: string,
-    collectionName: string,
-    imageFile: File
-  ): Promise<any> => {
-    try {
-      return await HttpService.createImage(title, collectionName, imageFile)
-    } catch (error: any) {
-      console.log(
-        '🚀 ~ file: ProjectForm.tsx:136 ~ handleSubmit ~ error:',
-        error
-      )
-      return null
-    }
-  }
+  useEffect(() => {
+    let timer: any
 
-  const handleSubmit = async (values: any) => {
+    if (snackBarState.open) {
+      timer = setTimeout(() => {
+        setSnackBarState({...snackBarState, open: false})
+      }, 4000)
+    }
+
+    return () => clearTimeout(timer)
+  }, [snackBarState])
+
+  const fileInputRef = useRef<HTMLInputElement>()
+
+  const handleSubmit = async (values: any, actions: any) => {
     try {
       setErrorMsg('')
       const projectFormData = structuredClone(values) as Project
@@ -150,9 +161,25 @@ function ProjectForm({}: Props) {
 
       dispatch(createProject(projectFormData))
         .unwrap()
-        .then(() => {})
+        .then((data) => {
+          console.log('🚀 ~ file: ProjectForm.tsx:144 ~ .then ~ data:', data)
+          setSnackBarState({
+            severity: 'success',
+            open: true,
+            msg: 'created with id: ' + data.id,
+          })
+
+          actions.setSubmitting(false)
+          actions.resetForm({
+            values: initialValues,
+          })
+          if (fileInputRef.current) {
+            fileInputRef.current.value = ''
+          }
+        })
         .catch((err: any) => {
           setErrorMsg(err.message)
+          setSnackBarState({severity: 'error', open: false, msg: err.message})
         })
     } catch (error: any) {
       console.log(
@@ -169,48 +196,21 @@ function ProjectForm({}: Props) {
       validationSchema={validationSchema}
       onSubmit={handleSubmit}
       validate={validate}
+      enableReinitialize
     >
       {({errors, touched}) => (
         <Form>
           {/* text fields */}
-          {simpleFields.map((item) => {
-            const keyItem = item as KeysInForm
-            return (
-              <Field name={item} key={item}>
-                {({field}: {field: any}) => (
-                  <FormControl
-                    fullWidth
-                    margin="normal"
-                    error={touched[keyItem] && Boolean(errors[keyItem])}
-                  >
-                    <TextField
-                      key={item}
-                      sx={{py: 1}}
-                      fullWidth
-                      variant={
-                        field.name === 'description' ? 'outlined' : 'standard'
-                      }
-                      id={item}
-                      name={field.name}
-                      value={field.value}
-                      onChange={field.onChange}
-                      label={field.name.toUpperCase()}
-                      type="text"
-                      // InputLabelProps={{shrink: item === 'image'}}
-                      error={touched[keyItem] && Boolean(errors[keyItem])}
-                      helperText={touched[keyItem] && errors[keyItem]}
-                      {...(field.name === 'description'
-                        ? {
-                            multiline: true,
-                            rows: 4,
-                          }
-                        : {})}
-                    />
-                  </FormControl>
-                )}
-              </Field>
-            )
-          })}
+          {simpleFields.map((item) => (
+            <InputFormikMUI
+              key={item}
+              isMultiLine={item === 'description'}
+              rowNums={4}
+              item={item}
+              touched={touched}
+              errors={errors}
+            />
+          ))}
           {/* selects */}
           <Grid container spacing={1} alignItems="stretch">
             {selectFields.map(
@@ -218,31 +218,17 @@ function ProjectForm({}: Props) {
                 const keyItem = name as KeysInForm
                 return (
                   <Grid item xs={6} key={key} alignItems="center">
-                    <Field name={name}>
-                      {(props: any) => {
-                        return (
-                          <FormControl
-                            fullWidth
-                            margin="normal"
-                            error={touched[keyItem] && Boolean(errors[keyItem])}
-                          >
-                            <SelectMultipleMUI2
-                              multiple={multiple}
-                              value={props.field.value}
-                              handleChange={props.field.onChange}
-                              name={props.field.name}
-                              options={values}
-                              optionLabelKey={optionLabelKey}
-                              optionIdKey={optionIdKey}
-                              error={
-                                touched[keyItem] && Boolean(errors[keyItem])
-                              }
-                              helperText={touched[keyItem] && errors[keyItem]}
-                            />
-                          </FormControl>
-                        )
+                    <SelectFormikMUI
+                      {...{
+                        optionLabelKey,
+                        optionIdKey,
+                        isMultiLine: multiple,
+                        options: values,
+                        item: name,
+                        touched,
+                        errors,
                       }}
-                    </Field>
+                    />
                   </Grid>
                 )
               }
@@ -257,6 +243,7 @@ function ProjectForm({}: Props) {
                 error={touched.image && Boolean(errors.image)}
               >
                 <TextField
+                  inputRef={fileInputRef}
                   sx={{py: 1}}
                   fullWidth
                   variant="standard"
@@ -275,9 +262,16 @@ function ProjectForm({}: Props) {
               </FormControl>
             )}
           </Field>
-          <Button color="primary" variant="contained" fullWidth type="submit">
-            Submit
-          </Button>
+          <LoadingButton
+            fullWidth
+            variant="contained"
+            loading={status === 'loading'}
+            loadingIndicator="Loading…"
+            type="submit"
+          >
+            Create Project
+          </LoadingButton>
+
           {errorMsg && (
             <Typography
               sx={{p: 2, color: 'red'}}
@@ -286,6 +280,16 @@ function ProjectForm({}: Props) {
             >
               {errorMsg}
             </Typography>
+          )}
+
+          {snackBarState?.open && snackBarState?.msg ? (
+            <AutoCloseSnackBar
+              open={snackBarState.open}
+              message={snackBarState.msg}
+              severity={snackBarState.severity}
+            />
+          ) : (
+            <></>
           )}
         </Form>
       )}
