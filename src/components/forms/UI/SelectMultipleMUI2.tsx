@@ -56,6 +56,16 @@ function SelectMultipleMUI2({
 }: Props) {
   const theme = useTheme()
 
+  React.useEffect(() => {
+    if (name === 'instructorId' || name === 'internshipId') {
+      console.log('🚀 ~ file: SelectMultipleMUI2.tsx:57 ~ value:', {
+        name,
+        value,
+      })
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [value])
+
   const parseEventHandler = (evt: SelectChangeEvent | any) => {
     if (!evt.target.value) {
       evt.target.value = multiple ? [] : null
@@ -88,12 +98,21 @@ function SelectMultipleMUI2({
               })
             }
 
+            if (selected?.[0]?.[optionIdKey]) {
+              return (
+                <Chip label={selected[0][optionLabelKey]} variant="outlined" />
+              )
+            }
+
             const selectedOption = options.find(
               (o) => o[optionIdKey] === selected[optionIdKey]
             )
 
             return (
-              <Chip label={selectedOption[optionLabelKey]} variant="outlined" />
+              <Chip
+                label={selectedOption?.[optionLabelKey]}
+                variant="outlined"
+              />
             )
           }}
           endAdornment={

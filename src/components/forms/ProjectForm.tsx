@@ -11,6 +11,7 @@ import InputFormikMUI from './FormikUI/InputFormikMUI'
 import SelectFormikMUI from './FormikUI/SelectFormikMUI'
 import {LoadingButton} from '@mui/lab'
 import AutoCloseSnackBar from './UI/AutoCloseSnackBar'
+import FileInputFormikMUI from './FormikUI/FileInputFormikMUI'
 
 const validationSchema = Yup.object({
   name: Yup.string().required('Name is required'),
@@ -205,7 +206,7 @@ function ProjectForm({}: Props) {
       validate={validate}
       enableReinitialize
     >
-      {({errors, touched}) => (
+      {({errors, touched, setFieldValue}) => (
         <Form>
           {/* text fields */}
           {simpleFields.map((item) => (
@@ -242,33 +243,17 @@ function ProjectForm({}: Props) {
             )}
           </Grid>
           {/* image file */}
-          <Field name="image">
-            {(props: any) => (
-              <FormControl
-                fullWidth
-                margin="normal"
-                error={touched.image && Boolean(errors.image)}
-              >
-                <TextField
-                  inputRef={fileInputRef}
-                  sx={{py: 1}}
-                  fullWidth
-                  variant="standard"
-                  id="image"
-                  name={props.field.name}
-                  onChange={(event) => {
-                    const file = (event.currentTarget as any).files[0]
-                    props.form.setFieldValue('image', file)
-                  }}
-                  label={props.field.name.toUpperCase()}
-                  type="file"
-                  InputLabelProps={{shrink: true}}
-                  error={touched.image && Boolean(errors.image)}
-                  helperText={touched.image && errors.image}
-                />
-              </FormControl>
-            )}
-          </Field>
+          <FileInputFormikMUI
+            {...{
+              onChange: (event: any) => {
+                const file = (event.currentTarget as any).files[0]
+                setFieldValue('image', file)
+              },
+              item: 'image',
+              touched,
+              errors,
+            }}
+          />
           <LoadingButton
             fullWidth
             variant="contained"

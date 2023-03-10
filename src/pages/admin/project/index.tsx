@@ -4,9 +4,9 @@ import {Card, Grid, Typography} from '@mui/material'
 import withProtectedRoute from '@/highOrderComponents/withProtectedRoute'
 import {useAppSelector} from '@/store'
 import {Project} from '@/types'
-import SelectMultipleMUI from '@/components/forms/UI/SelectMultipleMUI'
 import SelectMultipleMUI2 from '@/components/forms/UI/SelectMultipleMUI2'
 import ProjectForm from '@/components/forms/ProjectForm'
+import ProjectUpdateForm from '@/components/forms/ProjectUpdateForm'
 
 function ProjectsIndex() {
   const selectedYear = useAppSelector((state) => state.years.selectedYear)
@@ -46,6 +46,7 @@ function ProjectsIndex() {
             optionLabelKey="name"
             optionIdKey="id"
           />
+          <ProjectUpdateForm project={selectedProject} />
         </Card>
       ) : (
         <></>
