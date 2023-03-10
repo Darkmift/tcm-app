@@ -80,7 +80,6 @@ function ProjectForm({}: Props) {
   const dispatch = useAppDispatch()
   const yearsRedux = useAppSelector((state) => state.years.years)
   const memberRedux = useAppSelector((state) => state.members.members)
-  const status = useAppSelector((state) => state.projects.status)
   const internshipsRedux = useAppSelector(
     (state) => state.internships.internships
   )
@@ -98,6 +97,8 @@ function ProjectForm({}: Props) {
     open: false,
     msg: '',
   })
+
+  const [loadingStatus, setLoadingStatus] = useState(false)
 
   const selectFields = [
     {
@@ -147,6 +148,7 @@ function ProjectForm({}: Props) {
   const handleSubmit = async (values: any, actions: any) => {
     try {
       setErrorMsg('')
+      setLoadingStatus(true)
       const projectFormData = structuredClone(values) as Project
 
       if (projectFormData.image) {
@@ -181,12 +183,17 @@ function ProjectForm({}: Props) {
           setErrorMsg(err.message)
           setSnackBarState({severity: 'error', open: false, msg: err.message})
         })
+        .finally(() => {
+          setLoadingStatus(false)
+        })
     } catch (error: any) {
       console.log(
         '🚀 ~ file: ProjectForm.tsx:167 ~ handleSubmit ~ error:',
         error
       )
       setErrorMsg(error.message)
+    } finally {
+      setLoadingStatus(false)
     }
   }
 
@@ -265,7 +272,7 @@ function ProjectForm({}: Props) {
           <LoadingButton
             fullWidth
             variant="contained"
-            loading={status === 'loading'}
+            loading={loadingStatus}
             loadingIndicator="Loading…"
             type="submit"
           >
