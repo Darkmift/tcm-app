@@ -6,7 +6,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "dev": "cross-env NODE_OPTIONS='--inspect=localhost:9229' && (if exist .next rd /s /q .next 2>nul) && concurrently --prefix \" \" \"pocketbase serve\" next dev",
+    "dev": "cross-env NODE_OPTIONS='--inspect=http://localhost:3000' && (if exist .next rd /s /q .next 2>nul) && concurrently --prefix \" \" \"pocketbase serve\" next dev",
     "test:old": "nodemon -r dotenv/config tests/dbService.js",
     "test:legacy": "concurrently --prefix \" \" \"pocketbase serve\" \"nodemon -r dotenv/config --no-warnings tests/index.ts\"",
     "test": "cross-env NODE_OPTIONS=--experimental-vm-modules && concurrently \"pocketbase serve\" jest --runInBand"
