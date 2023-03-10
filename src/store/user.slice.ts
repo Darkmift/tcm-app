@@ -54,6 +54,7 @@ const userSlice = createSlice({
       state.kickUser = isValidUser ? false : true
       state.role = isValidRole ? role : 'User'
       state.username = username
+      state.status = isValidRole && isValidUser ? 'succeeded' : 'idle'
     },
   },
   extraReducers: (builder) => {
@@ -66,6 +67,7 @@ const userSlice = createSlice({
       if (!username || !role) throw new Error('Invalid payload at login thunk')
       state.username = action.payload.username
       state.role = action.payload.role
+      state.status = 'succeeded'
     })
     builder.addCase(login.pending, (state, action) => {
       state.status = 'loading'

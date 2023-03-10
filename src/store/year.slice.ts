@@ -88,6 +88,7 @@ const yearSlice = createSlice({
     builder
       .addCase(fetchYears.fulfilled, (state, action) => {
         state.years = action.payload
+        state.loading = 'succeeded'
       })
       .addCase(fetchYears.pending, (state) => {
         state.loading = 'pending'
