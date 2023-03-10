@@ -9,15 +9,15 @@ export type Project = {
   description: string
   id: string
   image: string
-  instructorId: string
-  internshipId: string
+  instructorId: string | Instructor
+  internshipId: string | Internship
   legacyId: string
   legacyProjectId: string
   legacyInstructorId: string
   legacyInternshipId: string
   name: string
   updated: string
-  year: number
+  year: number | Year
   //might be hydrated
   members?: Member[]
   expand?: {
