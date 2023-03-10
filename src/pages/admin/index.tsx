@@ -3,7 +3,7 @@ import {Button, Container, Typography} from '@mui/material'
 import Link from 'next/link'
 import React from 'react'
 
-function index() {
+function AdminDashboard() {
   return (
     <Container
       sx={{
@@ -14,6 +14,30 @@ function index() {
       }}
     >
       <Typography variant="h4">Admin Dashboard</Typography>
+      <Button
+        fullWidth
+        variant="contained"
+        component={Link}
+        href="/admin/instructors"
+      >
+        Instructors
+      </Button>
+      <Button
+        fullWidth
+        variant="contained"
+        component={Link}
+        href="/admin/internships"
+      >
+        Internships
+      </Button>
+      <Button
+        fullWidth
+        variant="contained"
+        component={Link}
+        href="/admin/members"
+      >
+        Members
+      </Button>
       <Button
         fullWidth
         variant="contained"
@@ -42,4 +66,4 @@ function index() {
   )
 }
 
-export default withProtectedRoute(index, 'Admin')
+export default withProtectedRoute(AdminDashboard, 'Admin')

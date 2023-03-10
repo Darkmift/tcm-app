@@ -9,7 +9,7 @@ import React, {useEffect, useState} from 'react'
 
 type Props = {}
 
-function YearAdd({}: Props) {
+function YearDashboard({}: Props) {
   const yearsRedux = useAppSelector((state) => state.years.years)
   const [yearToUpdate, setYearToUpdate] = useState<Year>(yearsRedux[0])
 
@@ -17,14 +17,8 @@ function YearAdd({}: Props) {
     if (!yearToUpdate) {
       yearsRedux?.length && setYearToUpdate(yearsRedux[0])
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [yearsRedux])
-
-  useEffect(() => {
-    console.log(
-      '🚀 ~ file: index.tsx:15 ~ YearAdd ~ yearToUpdate:',
-      yearToUpdate
-    )
-  }, [yearToUpdate])
 
   return (
     <Container sx={{display: 'flex', flexDirection: 'column', gap: '20px'}}>
@@ -53,4 +47,4 @@ function YearAdd({}: Props) {
   )
 }
 
-export default withProtectedRoute(YearAdd, 'Admin')
+export default withProtectedRoute(YearDashboard, 'Admin')
