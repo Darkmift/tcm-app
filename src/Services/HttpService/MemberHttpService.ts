@@ -1,4 +1,4 @@
-import {Member} from '../../types'
+import {InsertMember, Member} from '../../types'
 import {axiosInstance} from '../HttpService'
 
 const API_MEMBERS_URL = `/members`
@@ -14,7 +14,7 @@ const MemberHttpService = {
     }
   },
 
-  async createMember(member: Member): Promise<Member> {
+  async createMember(member: InsertMember): Promise<Member> {
     try {
       const response = await axiosInstance.post(API_MEMBERS_URL, member)
       return response.data
@@ -25,7 +25,10 @@ const MemberHttpService = {
 
   async updateMember(member: Member): Promise<Member> {
     try {
-      const response = await axiosInstance.put(API_MEMBERS_URL, member)
+      const response = await axiosInstance.put(
+        `${API_MEMBERS_URL}?id=${member.id}`,
+        member
+      )
       return response.data
     } catch (error: any) {
       throw new Error(error.response.data.error)
