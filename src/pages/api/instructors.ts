@@ -37,17 +37,12 @@ const createInstructor = async (
     }
 
     const newInstructor: InsertInstructor = {name, image, year, description}
-    const {_id} = await pocketDbService.insertRecord(
+    const createdInstructor = await pocketDbService.insertRecord(
       COLLECTIONS.INSTRUCTORS,
-      newInstructor
+      {...newInstructor, year: year.year}
     )
 
-    const instructorRecord = await pocketDbService.getRecord(
-      COLLECTIONS.INSTRUCTORS,
-      _id
-    )
-
-    return res.status(201).json(instructorRecord as Instructor)
+    return res.status(201).json(createdInstructor as Instructor)
   } catch (error) {
     console.error('Error creating new instructor', error)
     return res
