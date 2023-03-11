@@ -7,6 +7,7 @@ import {Project} from '@/types'
 import SelectMultipleMUI2 from '@/components/forms/UI/SelectMultipleMUI2'
 import ProjectForm from '@/components/forms/ProjectForm'
 import ProjectUpdateForm from '@/components/forms/ProjectUpdateForm'
+import GoBackBtn from '@/components/GoBackBtn'
 
 function ProjectsIndex() {
   const selectedYear = useAppSelector((state) => state.years.selectedYear)
@@ -21,6 +22,7 @@ function ProjectsIndex() {
 
   return (
     <Container sx={{display: 'flex', flexDirection: 'column', gap: '20px'}}>
+      <GoBackBtn />
       <Card raised sx={{p: 4}}>
         <Typography variant="h4">Add Project Form</Typography>
         <ProjectForm />

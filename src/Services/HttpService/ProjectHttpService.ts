@@ -26,7 +26,10 @@ const ProjectHttpService = {
 
   async updateProject(project: Project): Promise<Project> {
     try {
-      const response = await axiosInstance.put(API_PROJECTS_URL, project)
+      const response = await axiosInstance.put(
+        `${API_PROJECTS_URL}?id=${project.id}`,
+        project
+      )
       return response.data
     } catch (error: any) {
       throw new Error(error.response.data.error)

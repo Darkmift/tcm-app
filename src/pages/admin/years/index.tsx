@@ -1,10 +1,11 @@
+import GoBackBtn from '@/components/GoBackBtn'
 import SelectMultipleMUI2 from '@/components/forms/UI/SelectMultipleMUI2'
 import YearForm from '@/components/forms/YearForm'
 import YearUpdateForm from '@/components/forms/YearUpdateForm'
 import withProtectedRoute from '@/highOrderComponents/withProtectedRoute'
 import {useAppSelector} from '@/store'
 import {Year} from '@/types'
-import {Card, Container, Typography} from '@mui/material'
+import {Button, Card, Container, Typography} from '@mui/material'
 import React, {useEffect, useState} from 'react'
 
 type Props = {}
@@ -22,6 +23,8 @@ function YearDashboard({}: Props) {
 
   return (
     <Container sx={{display: 'flex', flexDirection: 'column', gap: '20px'}}>
+      <GoBackBtn />
+
       <Card raised sx={{p: 4}}>
         <Typography variant="h4">Add Year</Typography>
         <YearForm />

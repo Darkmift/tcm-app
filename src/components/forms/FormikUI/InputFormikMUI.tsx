@@ -8,9 +8,17 @@ type Props = {
   item: string
   touched: any
   errors: any
+  disabled?: boolean
 }
 
-function InputFormikMUI({isMultiLine, rowNums, item, touched, errors}: Props) {
+function InputFormikMUI({
+  disabled,
+  isMultiLine,
+  rowNums,
+  item,
+  touched,
+  errors,
+}: Props) {
   return (
     <Field name={item} key={item}>
       {({field}: {field: any}) => (
@@ -20,6 +28,7 @@ function InputFormikMUI({isMultiLine, rowNums, item, touched, errors}: Props) {
           error={touched[item] && Boolean(errors[item])}
         >
           <TextField
+            disabled={disabled}
             key={item}
             sx={{py: 1}}
             fullWidth

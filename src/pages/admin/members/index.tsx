@@ -1,3 +1,4 @@
+import GoBackBtn from '@/components/GoBackBtn'
 import MemberForm from '@/components/forms/MemberForm'
 import MemberUpdateForm from '@/components/forms/MemberUpdateForm'
 import SelectMultipleMUI2 from '@/components/forms/UI/SelectMultipleMUI2'
@@ -21,6 +22,7 @@ function MembersDashboard({}: Props) {
 
   return (
     <Container sx={{display: 'flex', flexDirection: 'column', gap: '20px'}}>
+      <GoBackBtn />
       <Card raised sx={{p: 4}}>
         <Typography variant="h4">Add Member Form</Typography>
         <MemberForm />

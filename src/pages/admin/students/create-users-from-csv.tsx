@@ -1,5 +1,6 @@
 import HttpService from '@/Services/HttpService'
 import BasicTable from '@/components/BasicTable'
+import GoBackBtn from '@/components/GoBackBtn'
 import {RegisterResult} from '@/types'
 import {LoadingButton} from '@mui/lab'
 
@@ -78,6 +79,7 @@ function CreateUsersFromCsv({}: Props) {
         gap: '20px',
       }}
     >
+      <GoBackBtn />
       <Typography variant="h4">Create Students From Csv</Typography>
       <TextField
         name="Csv File Upload"

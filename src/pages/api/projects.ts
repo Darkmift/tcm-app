@@ -165,7 +165,8 @@ const updateProject = async (
     const filter = `projectId = "${updatedProject.id}"`
     const result = await pocketDbService.findByFilter(
       COLLECTIONS.PROJECT_MEMBER_RELATION,
-      filter
+      filter,
+      true
     )
 
     for await (const relation of result) {

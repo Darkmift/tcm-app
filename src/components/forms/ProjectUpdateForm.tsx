@@ -18,11 +18,9 @@ const validationSchema = Yup.object({
   name: Yup.string().required('Name is required'),
   description: Yup.string(),
   image: Yup.mixed(),
-  year: Yup.mixed().test(
-    'is-year',
-    'Select a year',
-    (value) => !value || ('year' in value && 'is_enabled' in value)
-  ),
+  year: Yup.number()
+    .min(2000, 'year is too early')
+    .max(2100, 'year is too late'),
   members: Yup.array<Member>(),
   internshipId: Yup.mixed().test(
     'is-internship',
@@ -88,12 +86,12 @@ function ProjectUpdateForm({project}: Props) {
   useEffect(() => {
     async function setImageFromUrl() {
       try {
-        const url = project.image
+        const url = project.image as string
         const filename = url.substring(url.lastIndexOf('/') + 1)
         const type = filename.split('.')[1]
         const mimeType = `image/${type}`
 
-        const file = await urlToFile(project.image, filename, mimeType)
+        const file = await urlToFile(url, filename, mimeType)
         if (file?.size) {
           initialValues.image = file
         }
@@ -105,13 +103,15 @@ function ProjectUpdateForm({project}: Props) {
       }
     }
 
-    console.log("🚀 ~ file: ProjectUpdateForm.tsx:115 ~ ProjectUpdateForm ~ project.image:", project.image)
+    console.log(
+      '🚀 ~ file: ProjectUpdateForm.tsx:115 ~ ProjectUpdateForm ~ project.image:',
+      project.image
+    )
     setImageFromUrl()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [project.image])
 
   const dispatch = useAppDispatch()
-  const yearsRedux = useAppSelector((state) => state.years.years)
   const memberRedux = useAppSelector((state) => state.members.members)
   const internshipsRedux = useAppSelector(
     (state) => state.internships.internships
@@ -134,13 +134,6 @@ function ProjectUpdateForm({project}: Props) {
   const [loadingStatus, setLoadingStatus] = useState(false)
 
   const selectFields = [
-    // {
-    //   name: 'year',
-    //   multiple: false,
-    //   values: yearsRedux,
-    //   optionLabelKey: 'year',
-    //   optionIdKey: 'id',
-    // },
     {
       name: 'members',
       multiple: true,
@@ -183,8 +176,9 @@ function ProjectUpdateForm({project}: Props) {
       setErrorMsg('')
       setLoadingStatus(true)
       const projectFormData = structuredClone(values) as Project
+      projectFormData.id = project.id
 
-      if (projectFormData.image) {
+      if ((projectFormData.image as File)?.size) {
         const imageData = await processImage(
           projectFormData.name,
           'projects',
@@ -256,6 +250,7 @@ function ProjectUpdateForm({project}: Props) {
                 item={item}
                 touched={touched}
                 errors={errors}
+                disabled={item === 'year'}
               />
             ))}
             {/* selects */}
@@ -290,12 +285,16 @@ function ProjectUpdateForm({project}: Props) {
               {...{
                 onChange: (event: any) => {
                   const file = (event.currentTarget as any).files[0]
+                  console.log(
+                    '🚀 ~ file: ProjectUpdateForm.tsx:292 ~ ProjectUpdateForm ~ file:',
+                    file
+                  )
                   setFieldValue('image', file)
                 },
                 item: 'image',
                 touched,
                 errors,
-                originalFileSrc: project.image,
+                originalFileSrc: project.image as string,
               }}
             />
 
@@ -333,7 +332,7 @@ function ProjectUpdateForm({project}: Props) {
               loadingIndicator="Loading…"
               type="submit"
             >
-              Create Project
+              Update Project
             </LoadingButton>
 
             {errorMsg && (
