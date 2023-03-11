@@ -26,7 +26,10 @@ const InstructorsHttpService = {
 
   async updateInstructor(instructor: Instructor): Promise<Instructor> {
     try {
-      const response = await axiosInstance.put(API_INSTRUCTORS_URL, instructor)
+      const response = await axiosInstance.put(
+        `${API_INSTRUCTORS_URL}?id=${instructor.id}`,
+        instructor
+      )
       return response.data
     } catch (error: any) {
       throw new Error(error.response.data.error)
