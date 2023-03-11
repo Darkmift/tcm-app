@@ -24,7 +24,7 @@ function InstructorCard({imgName, title, description}: Props) {
           <Image
             width={500}
             height={500}
-            src={pathImage + (imgName ? imgName : 'default-instructor-img.jpg')}
+            src={imgName ? imgName : pathImage + 'default-instructor-img.jpg'}
             alt={title}
           />
         </div>

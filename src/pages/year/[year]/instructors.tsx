@@ -29,10 +29,14 @@ function Instructors() {
     setOpen(!!selectedInstructor?.id)
   }, [selectedInstructor])
 
-  if(!instructorsRedux?.length){
-    return <Container>
-      <Typography variant="h6">There are no instructors for {selectedYearRedux}</Typography>
-    </Container>
+  if (!instructorsRedux?.length) {
+    return (
+      <Container>
+        <Typography variant="h6">
+          There are no instructors for {selectedYearRedux}
+        </Typography>
+      </Container>
+    )
   }
 
   return (
@@ -65,10 +69,9 @@ function Instructors() {
             <Box sx={{minWidth: '33%'}}>
               <Image
                 src={
-                  pathImage +
-                  (selectedInstructor.image
+                  selectedInstructor.image
                     ? selectedInstructor.image
-                    : 'default-instructor-img.jpg')
+                    : pathImage + 'default-instructor-img.jpg'
                 }
                 alt={selectedInstructor.name}
                 width={200}
