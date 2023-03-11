@@ -15,7 +15,7 @@ export const YEAR_LINKS: LinkConfig[] = [
   {name: '2023', pathTo: '/year/2023'},
 ]
 export const AVATAR_LINKS: LinkConfig[] = [
-  {name: 'Login', pathTo: '/admin/login'},
+  // {name: 'Login', pathTo: '/admin/login'},
   {name: 'Dashboard', pathTo: '/admin', role: 'Admin'},
 ]
 export const INTERNSHIP_LINKS: LinkConfig[] = [

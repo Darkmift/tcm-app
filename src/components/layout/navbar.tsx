@@ -26,6 +26,7 @@ import {useAppDispatch, useAppSelector} from '@/store'
 import {useMemo} from 'react'
 import {FunctionWithOptionalPayload, LinkConfig, NavBarClick} from '@/types'
 import {setYear} from '@/store/year.slice'
+import {logout} from '@/store/user.slice'
 
 const pages = PAGES_LINKS
 const settings = AVATAR_LINKS
@@ -271,6 +272,16 @@ function ResponsiveAppBar() {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
+              {!isLoggedInRedux && (
+                <MenuItem
+                  href="/admin/login"
+                  component={Link}
+                  onClick={handleCloseUserMenu}
+                >
+                  {/* /admin/login */}
+                  <Typography textAlign="center">Log in</Typography>
+                </MenuItem>
+              )}
               {settings
                 .filter((s) => {
                   if (s.name === 'Login') {
@@ -289,6 +300,17 @@ function ResponsiveAppBar() {
                     <Typography textAlign="center">{setting.name}</Typography>
                   </MenuItem>
                 ))}
+              {/* LOGOUT */}
+              {isLoggedInRedux && (
+                <MenuItem
+                  onClick={(evt: any) => {
+                    handleCloseUserMenu()
+                    dispatch(logout())
+                  }}
+                >
+                  <Typography textAlign="center">Log Out</Typography>
+                </MenuItem>
+              )}
             </Menu>
           </Box>
         </Toolbar>

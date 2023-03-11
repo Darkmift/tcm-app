@@ -91,15 +91,17 @@ const HttpService = {
   },
   async logout() {
     try {
-      await axios.post('/api/admin/logout')
       LocalStorageService.delete(TOKEN_LS_KEY)
       LocalStorageService.delete(ROLE_LS_KEY)
       LocalStorageService.delete(USERNAME_LS_KEY)
+      const result = await axios.post('/api/admin/logout')
+      return true
     } catch (ex) {
       console.error('Failed to logout', ex)
       throw ex
     }
   },
+  // DEPRECATED
   async getMetada(year: string | number): Promise<any> {
     try {
       const result: AxiosResponse<any, any> = await axiosInstance.get(
