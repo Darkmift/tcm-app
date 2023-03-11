@@ -10,7 +10,7 @@ const getInterships = async (
 ) => {
   try {
     const {year} = req.query
-    console.log("🚀 ~ file: internships.ts:13 ~ year:", year)
+    console.log('🚀 ~ file: internships.ts:13 ~ year:', year)
 
     const internships = await pocketDbService.getCollection(
       COLLECTIONS.INTERNSHIPS,
@@ -30,10 +30,10 @@ const createInternship = async (
   res: NextApiResponse<Internship | {error: string}>
 ) => {
   try {
-    const {name, year, description} = req.body
+    const {name, year, description, instructors} = req.body
 
     // Validate year object
-    if (VALID_YEAR_REGEX.test(String(year)) === false) {
+    if (VALID_YEAR_REGEX.test(String(year.year)) === false) {
       return res.status(400).json({error: 'Invalid Year'})
     }
 
@@ -46,10 +46,30 @@ const createInternship = async (
       COLLECTIONS.INTERNSHIPS,
       {
         name,
-        year,
+        year: year.year,
         description,
       }
     )
+
+    if (!internshipRecord) throw new Error('Internship creation failed')
+
+    if (instructors?.length) {
+      for await (const instructor of instructors) {
+        const filter = `internshipId = "${internshipRecord.id}" && instructorId = "${instructor.id}"`
+        const result = await pocketDbService.findByFilter(
+          COLLECTIONS.INTERNSHIP_INSTRUCTOR_RELATION,
+          filter
+        )
+        if (result) continue
+        await pocketDbService.insertRecord(
+          COLLECTIONS.INTERNSHIP_INSTRUCTOR_RELATION,
+          {
+            internshipId: internshipRecord.id,
+            instructorId: instructor.id,
+          }
+        )
+      }
+    }
 
     res.status(201).json(internshipRecord)
   } catch (error) {
@@ -65,7 +85,7 @@ const updateInternship = async (
   res: NextApiResponse<Internship | {error: string; statusCode?: number}>
 ) => {
   try {
-    const {id, year, name, description} = req.body
+    const {id, year, name, description, image, instructors} = req.body
 
     // Validate year object
     if (year && VALID_YEAR_REGEX.test(String(year)) === false) {
@@ -83,8 +103,43 @@ const updateInternship = async (
         year,
         name,
         description,
+        image,
       }
     )
+
+    if (!updatedInternship) throw new Error('Internship update failed')
+
+    const filter = `internshipId = "${updatedInternship.id}"`
+    const result = await pocketDbService.findByFilter(
+      COLLECTIONS.INTERNSHIP_INSTRUCTOR_RELATION,
+      filter,
+      true
+    )
+
+    for await (const relation of result) {
+      await pocketDbService.deleteRecord(
+        COLLECTIONS.INTERNSHIP_INSTRUCTOR_RELATION,
+        relation.id
+      )
+    }
+
+    if (instructors?.length) {
+      for await (const instructor of instructors) {
+        const filter = `internshipId = "${updatedInternship.id}" && instructorId = "${instructor.id}"`
+        const result = await pocketDbService.findByFilter(
+          COLLECTIONS.INTERNSHIP_INSTRUCTOR_RELATION,
+          filter
+        )
+        if (result) continue
+        await pocketDbService.insertRecord(
+          COLLECTIONS.INTERNSHIP_INSTRUCTOR_RELATION,
+          {
+            internshipId: updatedInternship.id,
+            instructorId: instructor.id,
+          }
+        )
+      }
+    }
 
     res.status(200).json(updatedInternship)
   } catch (error) {
