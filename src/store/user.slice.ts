@@ -62,6 +62,7 @@ const userSlice = createSlice({
     builder.addCase(login.fulfilled, (state, action) => {
       state.isLoggedIn = true
       state.authDone = true
+      state.kickUser = false
       if (!action.payload) throw new Error('Invalid payload at login thunk')
       const {username, role} = action.payload
       if (!username || !role) throw new Error('Invalid payload at login thunk')
@@ -76,7 +77,7 @@ const userSlice = createSlice({
       state.status = 'idle'
     })
     builder.addCase(logout.fulfilled, (state) => {
-      state = initialState
+      return structuredClone(initialState)
     })
   },
 })
