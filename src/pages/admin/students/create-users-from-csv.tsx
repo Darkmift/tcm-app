@@ -1,6 +1,7 @@
 import HttpService from '@/Services/HttpService'
 import BasicTable from '@/components/BasicTable'
 import GoBackBtn from '@/components/GoBackBtn'
+import withProtectedRoute from '@/highOrderComponents/withProtectedRoute'
 import {RegisterResult} from '@/types'
 import {LoadingButton} from '@mui/lab'
 
@@ -123,4 +124,4 @@ function CreateUsersFromCsv({}: Props) {
   )
 }
 
-export default CreateUsersFromCsv
+export default withProtectedRoute(CreateUsersFromCsv, 'Admin')

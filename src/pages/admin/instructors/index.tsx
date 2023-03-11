@@ -6,6 +6,7 @@ import {useAppSelector} from '@/store'
 import {Instructor} from '@/types'
 import SelectMultipleMUI2 from '@/components/forms/UI/SelectMultipleMUI2'
 import InstructorUpdateForm from '@/components/forms/InstructorUpdateForm'
+import withProtectedRoute from '@/highOrderComponents/withProtectedRoute'
 
 type Props = {}
 
@@ -61,4 +62,4 @@ function InstructorsDashboard({}: Props) {
   )
 }
 
-export default InstructorsDashboard
+export default withProtectedRoute(InstructorsDashboard, 'Admin')

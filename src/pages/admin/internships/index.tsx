@@ -2,6 +2,7 @@ import GoBackBtn from '@/components/GoBackBtn'
 import InternShipForm from '@/components/forms/InternshipForm'
 import InternShipUpdateForm from '@/components/forms/InternshipUpdateForm'
 import SelectMultipleMUI2 from '@/components/forms/UI/SelectMultipleMUI2'
+import withProtectedRoute from '@/highOrderComponents/withProtectedRoute'
 import {useAppSelector} from '@/store'
 import {Internship} from '@/types'
 import {Card, Container, Typography} from '@mui/material'
@@ -62,4 +63,4 @@ function InternshipDashboard({}: Props) {
   )
 }
 
-export default InternshipDashboard
+export default withProtectedRoute(InternshipDashboard, 'Admin')

@@ -2,6 +2,7 @@ import GoBackBtn from '@/components/GoBackBtn'
 import MemberForm from '@/components/forms/MemberForm'
 import MemberUpdateForm from '@/components/forms/MemberUpdateForm'
 import SelectMultipleMUI2 from '@/components/forms/UI/SelectMultipleMUI2'
+import withProtectedRoute from '@/highOrderComponents/withProtectedRoute'
 import {useAppSelector} from '@/store'
 import {Member} from '@/types'
 import {Card, Container, Typography} from '@mui/material'
@@ -46,4 +47,4 @@ function MembersDashboard({}: Props) {
   )
 }
 
-export default MembersDashboard
+export default withProtectedRoute(MembersDashboard, 'Admin')
