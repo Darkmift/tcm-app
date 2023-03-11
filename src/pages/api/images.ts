@@ -66,11 +66,17 @@ const createImage = async (
 
     await fs.writeFile(filePath, imageBuffer)
 
+    const imagePath = path.join('/assets/images/', collection, filename)
+
+    const regex = /\\/g
+    const formattedImagePath = imagePath.replace(regex, '/')
+
     const newImage: Image = {
       id,
       title: filename,
-      url: '/' + filePath.replaceAll('\\', '/'),
+      url: formattedImagePath,
     }
+    console.log('🚀 ~ file: images.ts:70 ~ newImage:', newImage)
 
     return res.status(201).json(newImage)
   } catch (error) {
