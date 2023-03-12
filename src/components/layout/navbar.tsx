@@ -279,7 +279,17 @@ function ResponsiveAppBar() {
                   onClick={handleCloseUserMenu}
                 >
                   {/* /admin/login */}
-                  <Typography textAlign="center">Log in</Typography>
+                  <Typography textAlign="center">Admin Log in</Typography>
+                </MenuItem>
+              )}
+              {!isLoggedInRedux && (
+                <MenuItem
+                  href="/login-student"
+                  component={Link}
+                  onClick={handleCloseUserMenu}
+                >
+                  {/* /student/login */}
+                  <Typography textAlign="center">Student Log in</Typography>
                 </MenuItem>
               )}
               {settings
