@@ -1,4 +1,4 @@
-import {AuthUser, Instructor, Role} from '../../types'
+import {AuthUser, Project, Role} from '../../types'
 import {axiosInstance} from '.'
 import LocalStorageService from '../LocalStorageService'
 import {ROLE_LS_KEY, TOKEN_LS_KEY, USERNAME_LS_KEY} from '@/const'
@@ -71,6 +71,37 @@ const StudentHttpService = {
       console.error('🚀 ~ file: HttpService.ts:17 ~ register ~ error', error)
       return null
     }
+  },
+  async updateStudentProject(project: Project): Promise<Project> {
+    try {
+      const response = await axiosInstance.put(
+        `/student-project-edit?id=${project.id}`,
+        project
+      )
+      return response.data
+    } catch (error: any) {
+      throw new Error(error.response.data.error)
+    }
+  },
+  async updateStudentImage(
+    title: string,
+    collection: string,
+    file: File,
+    studentUsername?: string
+  ): Promise<File> {
+    const formData = new FormData()
+    formData.append('title', title)
+    formData.append('collection', collection)
+    formData.append('imageFile', file)
+
+    const response = await axiosInstance.put(
+      `student-update-image?id=${file.name}&studentUsername=${studentUsername}`,
+      formData,
+      {
+        headers: {'Content-Type': 'multipart/form-data'},
+      }
+    )
+    return response.data
   },
 }
 

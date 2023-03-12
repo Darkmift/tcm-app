@@ -6,6 +6,7 @@ import styles from '../../../../styles/ProjectPage.module.css'
 import Image from 'next/image'
 import {Typography} from '@mui/material'
 import {IMAGE_ASSETS_FOLDER_PATH} from '@/const'
+import ProjectUpdateForm from '@/components/forms/ProjectUpdateForm'
 
 type Props = {}
 
@@ -13,11 +14,9 @@ function ProjectIndex({}: Props) {
   const router = useRouter()
   const projectId = router.query.project
   const projectRedux = useAppSelector(selectProjectById(projectId as string))
+  const usernameRedux = useAppSelector((state) => state.auth.username)
   const internship = projectRedux?.expand?.internshipId
   const instructor = projectRedux?.expand?.instructorId
-  // const intenrShip = useAppSelector(selectProjectById(projectId as string))
-  // return <div>{project?.id}</div>
-  const pathImage = IMAGE_ASSETS_FOLDER_PATH + '/projects/'
 
   useEffect(() => {
     if (!!projectRedux?.id === false) {
@@ -29,8 +28,7 @@ function ProjectIndex({}: Props) {
       {projectRedux && (
         <div className={styles['project-container']}>
           <Image
-            src={projectRedux.image}
-            // src={pathImage + projectRedux.image}
+            src={projectRedux.image as string}
             alt={projectRedux.name}
             width="400"
             height="480"
@@ -68,6 +66,15 @@ function ProjectIndex({}: Props) {
             </div>
           </div>
         </div>
+      )}
+
+      {projectRedux && usernameRedux === projectRedux.id ? (
+        <ProjectUpdateForm
+          project={projectRedux}
+          studentUsername={usernameRedux}
+        />
+      ) : (
+        <></>
       )}
     </>
   )

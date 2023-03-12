@@ -1,16 +1,22 @@
 import {PayloadAction, createSlice} from '@reduxjs/toolkit'
 import {Role} from '@/types'
-
 import {createAsyncThunk} from '@reduxjs/toolkit'
 import HttpService from '../Services/HttpService'
-import LocalStorageService from '@/Services/LocalStorageService'
-import {ROLE_LS_KEY, TOKEN_LS_KEY, USERNAME_LS_KEY} from '@/const'
 
 export const login = createAsyncThunk(
   'auth/login',
   async (payload: {username: string; password: string}) => {
     const {username, password} = payload
     const data = await HttpService.login({username, password})
+    return data
+  }
+)
+
+export const loginStudent = createAsyncThunk(
+  'auth/login',
+  async (payload: {username: string; password: string}) => {
+    const {username, password} = payload
+    const data = await HttpService.loginStudent({username, password})
     return data
   }
 )

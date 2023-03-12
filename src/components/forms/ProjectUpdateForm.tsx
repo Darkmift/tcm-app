@@ -4,7 +4,11 @@ import {FormControl, Grid, TextField, Typography} from '@mui/material'
 import * as Yup from 'yup'
 import {Instructor, Internship, Member, Project, Year} from '@/types'
 import {useAppDispatch, useAppSelector} from '@/store'
-import {createProject, updateProject} from '@/store/project.slice'
+import {
+  createProject,
+  updateProject,
+  updateStudentProject,
+} from '@/store/project.slice'
 import isObject from '../../../utilities/isObject'
 import processImage from '../../../utilities/ProcessImage'
 import InputFormikMUI from './FormikUI/InputFormikMUI'
@@ -56,9 +60,9 @@ const validate = (values: any) => {
   return {}
 }
 
-type Props = {project: Project}
+type Props = {project: Project; studentUsername?: string}
 
-function ProjectUpdateForm({project}: Props) {
+function ProjectUpdateForm({project, studentUsername}: Props) {
   const initialValues: {
     description: string
     image: File | null | undefined | string
@@ -179,13 +183,47 @@ function ProjectUpdateForm({project}: Props) {
       projectFormData.id = project.id
 
       if ((projectFormData.image as File)?.size) {
+        console.log(
+          '🚀 ~ file: ProjectUpdateForm.tsx:186 ~ handleSubmit ~ projectFormData.image:',
+          projectFormData.image
+        )
         const imageData = await processImage(
           projectFormData.name,
           'projects',
-          projectFormData.image as unknown as File
+          projectFormData.image as unknown as File,
+          studentUsername
         )
         if (imageData === null) throw new Error('Failed to save image')
         projectFormData.image = imageData.url
+      }
+
+      if (studentUsername?.length) {
+        dispatch(updateStudentProject(projectFormData))
+          .unwrap()
+          .then((data) => {
+            console.log('🚀 ~ file: ProjectForm.tsx:144 ~ .then ~ data:', data)
+            setSnackBarState({
+              severity: 'success',
+              open: true,
+              msg: 'update complete',
+            })
+
+            actions.setSubmitting(false)
+            actions.resetForm({
+              values: initialValues,
+            })
+            if (fileInputRef.current) {
+              fileInputRef.current.value = ''
+            }
+          })
+          .catch((err: any) => {
+            setErrorMsg(err.message)
+            setSnackBarState({severity: 'error', open: false, msg: err.message})
+          })
+          .finally(() => {
+            setLoadingStatus(false)
+          })
+        return
       }
 
       dispatch(updateProject(projectFormData))

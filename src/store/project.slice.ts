@@ -4,6 +4,7 @@ import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit'
 import {Project} from '../types'
 import ProjectHttpService from '../Services/HttpService/ProjectHttpService'
 import {RootState} from '.'
+import HttpService from '@/Services/HttpService'
 
 type ProjectsState = {
   projects: Project[]
@@ -37,6 +38,13 @@ export const updateProject = createAsyncThunk(
   'projects/update',
   async (updatedProject: Project) => {
     const project = await ProjectHttpService.updateProject(updatedProject)
+    return project
+  }
+)
+export const updateStudentProject = createAsyncThunk(
+  'projects/updateStudent',
+  async (updatedProject: Project) => {
+    const project = await HttpService.updateStudentProject(updatedProject)
     return project
   }
 )
@@ -77,6 +85,18 @@ const projectSlice = createSlice({
     )
     builder.addCase(
       updateProject.fulfilled,
+      (state, action: PayloadAction<Project>) => {
+        const updatedProject = action.payload
+        const existingIndex = state.projects.findIndex(
+          (project) => project.id === updatedProject.id
+        )
+        if (existingIndex !== -1) {
+          state.projects[existingIndex] = updatedProject
+        }
+      }
+    )
+    builder.addCase(
+      updateStudentProject.fulfilled,
       (state, action: PayloadAction<Project>) => {
         const updatedProject = action.payload
         const existingIndex = state.projects.findIndex(
