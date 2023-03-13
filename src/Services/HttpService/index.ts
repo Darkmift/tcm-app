@@ -15,10 +15,10 @@ import WinnerProjectTypeHttpService from './WinnerProjectTypeHttpService'
 import ImageHttpService from './ImageHttpService'
 import StudentHttpService from './StudentHttpService'
 
-const DOMAIN = ''
-// const DOMAIN = ''process.env.NEXT_PUBLIC_DOMAIN
-console.log('🚀 ~ file: HttpService.ts:8 ~ DOMAIN:', DOMAIN)
-const BASE_URL = `${DOMAIN}/api/`
+// const DOMAIN = ''
+// // const DOMAIN = ''process.env.NEXT_PUBLIC_DOMAIN
+// const BASE_URL = `${DOMAIN}/api/`
+const BASE_URL = `/api/`
 
 export const axiosInstance = axios.create({
   baseURL: BASE_URL,
@@ -101,31 +101,6 @@ const HttpService = {
       throw ex
     }
   },
-  // DEPRECATED
-  async getMetada(year: string | number): Promise<any> {
-    try {
-      const result: AxiosResponse<any, any> = await axiosInstance.get(
-        '/metadata?year=' + year
-      )
-
-      if (!result?.data) {
-        throw new Error('no data!')
-      }
-      const {members, projects, projectMemberRelation} = result.data
-
-      const {projects: p, members: m} = StitchProjectsAndMembers({
-        projects,
-        members,
-        relation_object: projectMemberRelation,
-      })
-
-      return {...result.data, projects: p, members: m}
-    } catch (error) {
-      console.error('🚀 ~ file: HttpService.ts:17 ~ login ~ error', error)
-      return null
-    }
-  },
-
   ...InternShipsHttpService,
   ...YearHttpService,
   ...MemberHttpService,
