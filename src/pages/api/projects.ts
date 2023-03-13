@@ -71,7 +71,9 @@ const createProject = async (
         instructorId: instructorId?.id,
         internshipId: internshipId?.id,
         imageUrl: image,
-      }
+        image: image,
+      },
+      {expand: 'instructorId,internshipId'}
     )
 
     if (!createdProject) throw new Error('project creation failed')
@@ -92,6 +94,20 @@ const createProject = async (
           }
         )
       }
+    }
+
+    const relations: ProjectMemberRelation[] =
+      await pocketDbService.getCollection('project_member_relation', {
+        expand: 'memberId',
+      })
+
+    const relationsPerProject = relations.filter(
+      (r) => r.projectId === createdProject.id
+    )
+    if (relationsPerProject?.length) {
+      createdProject.members = relationsPerProject.map(
+        (r) => r.expand?.memberId
+      ) as Member[]
     }
 
     res.status(201).json(createdProject)
