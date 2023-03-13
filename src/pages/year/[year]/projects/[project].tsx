@@ -7,6 +7,7 @@ import Image from 'next/image'
 import {Typography} from '@mui/material'
 import {IMAGE_ASSETS_FOLDER_PATH} from '@/const'
 import ProjectUpdateForm from '@/components/forms/ProjectUpdateForm'
+import GoBackBtn from '@/components/GoBackBtn'
 
 type Props = {}
 
@@ -18,6 +19,9 @@ function ProjectIndex({}: Props) {
   const internship = projectRedux?.expand?.internshipId
   const instructor = projectRedux?.expand?.instructorId
 
+  const pathImage = IMAGE_ASSETS_FOLDER_PATH + '/projects/'
+  const alternatePath = pathImage + 'default-project-img.jpg'
+
   useEffect(() => {
     if (!!projectRedux?.id === false) {
       router.back()
@@ -25,10 +29,11 @@ function ProjectIndex({}: Props) {
   }, [projectRedux, router])
   return (
     <>
+      <GoBackBtn />
       {projectRedux && (
         <div className={styles['project-container']}>
           <Image
-            src={projectRedux.image as string}
+            src={(projectRedux.image as string) || alternatePath}
             alt={projectRedux.name}
             width="400"
             height="480"
