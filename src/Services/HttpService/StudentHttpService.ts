@@ -95,7 +95,7 @@ const StudentHttpService = {
     formData.append('imageFile', file)
 
     const response = await axiosInstance.put(
-      `student-update-image?id=${file.name}&studentUsername=${studentUsername}`,
+      `student-update-image?id=${studentUsername}&studentUsername=${studentUsername}`,
       formData,
       {
         headers: {'Content-Type': 'multipart/form-data'},

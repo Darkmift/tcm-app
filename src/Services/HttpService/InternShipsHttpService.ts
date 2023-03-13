@@ -10,7 +10,6 @@ const InternShipsHttpService = {
       const response = await axiosInstance.get(
         `${API_INTERNSHIPS_URL}?year=${selectedYear}`
       )
-      console.log("🚀 ~ file: InternShipsHttpService.ts:13 ~ getAllInternships ~ response:", response)
       return response.data
     } catch (error: any) {
       throw new Error(error.response.data.error)
