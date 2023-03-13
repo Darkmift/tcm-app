@@ -5,13 +5,17 @@ export default async function processImage(
   title: string,
   collectionName: string,
   imageFile: File,
-  studentUsername?: string
+  studentUsername?: string,
+  originalFilename?: string
 ): Promise<any> {
-  console.log("🚀 ~ file: ProcessImage.ts:10 ~ imageFile:", imageFile)
+  console.log('🚀 ~ file: ProcessImage.ts:10 ~ imageFile:', imageFile)
   try {
     if (studentUsername) {
+      if (originalFilename) {
+        ;(imageFile as any).imageUrlUpdate = originalFilename
+      }
       return await StudentHttpService.updateStudentImage(
-        title,
+        studentUsername,
         collectionName,
         imageFile,
         studentUsername
