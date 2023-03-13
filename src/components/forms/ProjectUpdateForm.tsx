@@ -20,7 +20,7 @@ import FileInputFormikMUI from './FormikUI/FileInputFormikMUI'
 
 const validationSchema = Yup.object({
   name: Yup.string().required('Name is required'),
-  description: Yup.string(),
+  description: Yup.string().required('Name is required'),
   image: Yup.mixed(),
   year: Yup.number()
     .min(2000, 'year is too early')
