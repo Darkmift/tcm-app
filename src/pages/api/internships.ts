@@ -16,6 +16,31 @@ const getInterships = async (
       COLLECTIONS.INTERNSHIPS,
       {filter: `year = ${year}`}
     )
+
+    for await (const internship of internships) {
+      const filter = `internshipId = "${internship.id}"`
+      const relations = await pocketDbService.findByFilter(
+        COLLECTIONS.INTERNSHIP_INSTRUCTOR_RELATION,
+        filter,
+        true
+      )
+
+      if (!relations?.length) {
+        continue
+      }
+
+      for await (const relation of relations) {
+        const instructor = await pocketDbService.getRecord(
+          COLLECTIONS.INSTRUCTORS,
+          relation.instructorId
+        )
+
+        if (instructor?.id) {
+          internship.instructors.push(instructor)
+        }
+      }
+    }
+
     res.status(200).json(internships)
   } catch (error) {
     console.log('🚀 ~ file: internships.ts ~ error:', error)
@@ -139,6 +164,28 @@ const updateInternship = async (
           }
         )
       }
+
+      // const unpdatedInternshipWithInstructors = await pocketDbService.getRecord(
+      //   COLLECTIONS.INTERNSHIPS,
+      //   id,
+      //   {expand: 'instructorId'}
+      // )
+
+      // return res.status(200).json(unpdatedInternshipWithInstructors)
+    }
+
+    if (result?.length) {
+      const instructors: any[] = []
+
+      for await (const instructorRelation of result) {
+        const instructor = await pocketDbService.getRecord(
+          COLLECTIONS.INSTRUCTORS,
+          instructorRelation.instructorId
+        )
+        instructors.push(instructor)
+      }
+
+      updatedInternship.instructors = instructors
     }
 
     res.status(200).json(updatedInternship)
