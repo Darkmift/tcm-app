@@ -26,6 +26,14 @@ function AdminDashboard() {
         fullWidth
         variant="contained"
         component={Link}
+        href="/admin/media"
+      >
+        Media
+      </Button>
+      <Button
+        fullWidth
+        variant="contained"
+        component={Link}
         href="/admin/internships"
       >
         Internships

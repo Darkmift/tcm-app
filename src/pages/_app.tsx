@@ -22,6 +22,7 @@ import WatchInternshipsRedux from '@/components/EmptyComponents.ts/WatchInternsh
 import WatchWinningProjectTypesRedux from '@/components/EmptyComponents.ts/WatchWinningProjectTypesRedux'
 import WatchInstructorsRedux from '@/components/EmptyComponents.ts/WatchInstructorsRedux'
 import WatchMembersRedux from '@/components/EmptyComponents.ts/WatchMembersRedux'
+import WatchMediaRedux from '@/components/EmptyComponents.ts/WatchMediaRedux'
 
 export default function App({Component, pageProps}: AppProps) {
   return (
@@ -37,6 +38,7 @@ export default function App({Component, pageProps}: AppProps) {
       <>
         <WatchUserRedux />
         <WatchYearRedux />
+        <WatchMediaRedux />
         <WatchProjectsRedux />
         <WatchInternshipsRedux />
         <WatchInstructorsRedux />

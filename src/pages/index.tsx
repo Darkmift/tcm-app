@@ -16,6 +16,7 @@ export default function Home() {
   const yearsRedux = useAppSelector((state) => state.years.years)
 
   const projectsRedux = useAppSelector((state) => state.projects.projects)
+  const mediaRedux = useAppSelector((state) => state.media.media)
   const selectedYearRedux = useAppSelector((state) => state.years.selectedYear)
 
   const yearsAsRoutes = useMemo(
@@ -42,13 +43,17 @@ export default function Home() {
 
   return (
     <Container sx={{display: 'flex', flexDirection: 'column'}}>
-      <MediaCarousel>
-        {
-          SLIDER_DATA.map((slide, index) => (
-            <Video key={index} src={slide.image} />
-          )) as any
-        }
-      </MediaCarousel>
+      {mediaRedux?.length ? (
+        <MediaCarousel>
+          {
+            mediaRedux.map((slide, index) => (
+              <Video key={index} src={slide.url} />
+            )) as any
+          }
+        </MediaCarousel>
+      ) : (
+        <>No Media</>
+      )}
       <Grid container spacing={2} p={3}>
         {projectsRedux?.length ? (
           projectsRedux.map((project, key) => (
@@ -56,7 +61,7 @@ export default function Home() {
               <ProjectCard
                 id={project.id}
                 title={project.name}
-                imgName={project.image}
+                imgName={project.image as string}
               />
             </Grid>
           ))
