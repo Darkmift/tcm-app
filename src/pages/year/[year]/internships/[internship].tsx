@@ -10,6 +10,7 @@ import {IMAGE_ASSETS_FOLDER_PATH} from '@/const'
 import ProjectCard from '@/components/ProjectCard'
 
 function Internship() {
+  const pathImage = IMAGE_ASSETS_FOLDER_PATH + '/instructors/'
   const router = useRouter()
   const {
     query: {internship: internshipId, year},
@@ -54,17 +55,92 @@ function Internship() {
           >
             {selectedInternshipRedux.name}
           </Typography>
+
+          {selectedInternshipRedux.instructors.length ? (
+            <Grid
+              container
+              spacing={2}
+              p={2}
+              sx={{display: 'flex', flexDirection: 'column'}}
+            >
+              <Typography
+                variant="h6"
+                px={1}
+                sx={{
+                  borderLeft: '5px solid #2474e4',
+                  marginBottom: '10px',
+                }}
+              >
+                Instructors
+              </Typography>
+              {selectedInternshipRedux.instructors.map(
+                (selectedInstructor, key) => (
+                  <Grid item key={key} xs={12} sm={6} md={4} lg={4}>
+                    <Box p={2} sx={{display: 'flex', gap: '20px'}}>
+                      <Box sx={{minWidth: '33%'}}>
+                        <Image
+                          src={
+                            selectedInstructor.image
+                              ? selectedInstructor.image
+                              : pathImage + 'default-instructor-img.jpg'
+                          }
+                          alt={selectedInstructor.name}
+                          width={100}
+                          height={120}
+                        />
+                      </Box>
+                      <Box>
+                        <Typography
+                          variant="h6"
+                          px={1}
+                          sx={{
+                            borderLeft: '5px solid #2474e4',
+                            marginBottom: '10px',
+                          }}
+                        >
+                          {selectedInstructor.name}
+                        </Typography>
+                      </Box>
+                    </Box>
+                  </Grid>
+                )
+              )}
+            </Grid>
+          ) : (
+            <Typography>
+              There are no projects associated with{' '}
+              {selectedInternshipRedux.name} in {selectedYearRedux}
+            </Typography>
+          )}
+
           {projectsRedux.length ? (
-            <Grid container spacing={2} p={3}>
-              {projectsRedux.map((project, key) => (
-                <Grid item key={project.id} xs={12} sm={6} md={4} lg={4}>
-                  <ProjectCard
-                    id={project.id}
-                    title={project.name}
-                    imgName={projectImagePath + project.image}
-                  />
-                </Grid>
-              ))}
+            <Grid
+              container
+              spacing={2}
+              p={3}
+              sx={{display: 'flex', flexDirection: 'column'}}
+            >
+              <Typography
+                variant="h6"
+                px={1}
+                sx={{
+                  borderLeft: '5px solid #2474e4',
+                  marginBottom: '10px',
+                }}
+              >
+                Projects
+              </Typography>
+              <Box sx={{display: 'flex', flexWrap: 'wrap'}}>
+                {projectsRedux.map((project, key) => (
+                  <Grid item key={project.id} xs={12} sm={6} md={4} lg={4}>
+                    <ProjectCard
+                      id={project.id}
+                      title={project.name}
+                      imgName={projectImagePath + project.image}
+                    />
+                  </Grid>
+                ))}
+              </Box>
             </Grid>
           ) : (
             <Typography>
