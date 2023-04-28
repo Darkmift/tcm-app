@@ -8,6 +8,7 @@ import membersReducer from './member.slice'
 import projectsReducer from './project.slice'
 import projectMemberRelationReducer from './projectMemberRelation.slice'
 import winnerProjectTypesReducer from './winnerProjectTypes.slice'
+import mediaReducer from './media.slice'
 
 const store = configureStore({
   reducer: {
@@ -19,6 +20,7 @@ const store = configureStore({
     projects: projectsReducer,
     projectMemberRelation: projectMemberRelationReducer,
     winnerProjectTypes: winnerProjectTypesReducer,
+    media: mediaReducer,
   },
 })
 

@@ -47,6 +47,7 @@ export const SLIDER_DATA = [
 ]
 
 export const COLLECTIONS = {
+  MEDIA: 'media',
   WINNER_PROJECT_TYPES: 'winner_project_types',
   YEARS_AUTH: 'years_auth',
   AUTH: 'auth',

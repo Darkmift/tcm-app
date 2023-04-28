@@ -77,3 +77,14 @@ export type Year = {
   expand?: any
   updated?: string
 }
+
+export type Media = {
+  id: string
+  url: string
+  heading: string
+  desc: string
+  created: Date
+  updated: Date
+}
+
+export type NewMedia = Omit<Media, 'id' | 'created' | 'updated'>
