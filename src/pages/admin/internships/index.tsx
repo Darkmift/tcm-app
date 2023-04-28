@@ -20,11 +20,25 @@ function InternshipDashboard({}: Props) {
     useState<Internship | null>(null)
 
   useEffect(() => {
-    if (!selectedInternship && internshipsRedux?.[0]) {
+    if (selectedInternship) {
+      const intenrship = internshipsRedux.find(
+        (i) => selectedInternship.id === i.id
+      )
+      if (intenrship?.id) {
+        setSelectedInternship(intenrship)
+      }
+    } else if (internshipsRedux?.[0]) {
       setSelectedInternship(internshipsRedux[0])
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [internshipsRedux])
+
+  useEffect(() => {
+    console.log(
+      '🚀 ~ file: index.tsx:33 ~ InternshipDashboard ~ selectedInternship:',
+      selectedInternship
+    )
+  }, [selectedInternship])
 
   return (
     <Container sx={{display: 'flex', flexDirection: 'column', gap: '20px'}}>
@@ -44,7 +58,7 @@ function InternshipDashboard({}: Props) {
 
       {internshipsRedux?.length && selectedInternship ? (
         <Card raised sx={{p: 4}}>
-          <Typography variant="h4">Edit Instructor Form</Typography>
+          <Typography variant="h4">Edit Internship Form</Typography>
           <SelectMultipleMUI2
             value={selectedInternship}
             handleChange={(evt) => setSelectedInternship(evt.target.value)}
