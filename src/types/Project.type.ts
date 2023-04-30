@@ -9,6 +9,7 @@ export type Project = {
   description: string
   id: string
   image: string | File
+  imageUrl?: string
   instructorId: string | Instructor
   internshipId: string | Internship
   legacyId: string

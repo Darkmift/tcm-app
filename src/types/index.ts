@@ -6,6 +6,7 @@ export * from './Internships.type'
 export * from './Instructors.type'
 export * from './ProjectMemberRelations.type'
 export * from './WinnerProjectType.type'
+export * from './WinnerProject.type'
 
 export type AuthUser = {
   username: string
@@ -85,6 +86,13 @@ export type Media = {
   desc: string
   created: Date
   updated: Date
+}
+
+export type User = {
+  id?: string
+  role: Role
+  username: string
+  password?: string
 }
 
 export type NewMedia = Omit<Media, 'id' | 'created' | 'updated'>
