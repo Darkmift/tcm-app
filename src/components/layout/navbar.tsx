@@ -19,7 +19,7 @@ import Tooltip from '@mui/material/Tooltip'
 import MenuItem from '@mui/material/MenuItem'
 import {useRouter} from 'next/router'
 // consts
-import {AVATAR_LINKS, INTERNSHIP_LINKS, PAGES_LINKS, YEAR_LINKS} from '@/const'
+import {AVATAR_LINKS} from '@/const'
 import NavbarDropDown from './navbarDropDown'
 import {Divider} from '@mui/material'
 import {useAppDispatch, useAppSelector} from '@/store'
@@ -28,7 +28,6 @@ import {FunctionWithOptionalPayload, LinkConfig, NavBarClick} from '@/types'
 import {setYear} from '@/store/year.slice'
 import {logout} from '@/store/user.slice'
 
-const pages = PAGES_LINKS
 const settings = AVATAR_LINKS
 
 function ResponsiveAppBar() {
@@ -93,6 +92,15 @@ function ResponsiveAppBar() {
       dispatch(setYear(payload.name))
     }
   }
+
+  const pages: LinkConfig[] = [
+    {name: 'Home', pathTo: '/'},
+    {name: 'Instructors', pathTo: `/year/${selectedYearRedux}/instructors`},
+    {
+      name: 'Winning Projects',
+      pathTo: `/year/${selectedYearRedux}/winningProjects`,
+    },
+  ]
 
   return (
     <AppBar position="static">
@@ -204,7 +212,6 @@ function ResponsiveAppBar() {
             variant="h5"
             noWrap
             component="a"
-            href=""
             sx={{
               mr: 2,
               display: {xs: 'flex', md: 'none'},

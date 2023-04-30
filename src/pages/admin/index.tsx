@@ -4,6 +4,41 @@ import Link from 'next/link'
 import React from 'react'
 
 function AdminDashboard() {
+  const btnData: {href: string; text: string}[] = [
+    {
+      href: '/admin/instructors',
+      text: 'Instructors',
+    },
+    {
+      href: '/admin/media',
+      text: 'Media',
+    },
+    {
+      href: '/admin/internships',
+      text: 'Internships',
+    },
+    {
+      href: '/admin/members',
+      text: 'Members',
+    },
+    {
+      href: '/admin/years',
+      text: 'Years',
+    },
+    {
+      href: '/admin/project',
+      text: 'Projects',
+    },
+    {
+      href: '/admin/students/create-users-from-csv',
+      text: 'Create users from csv',
+    },
+    {
+      href: '/admin/students/manage-students',
+      text: 'Manage Students',
+    },
+  ]
+
   return (
     <Container
       sx={{
@@ -14,62 +49,18 @@ function AdminDashboard() {
       }}
     >
       <Typography variant="h4">Admin Dashboard</Typography>
-      <Button
-        fullWidth
-        variant="contained"
-        component={Link}
-        href="/admin/instructors"
-      >
-        Instructors
-      </Button>
-      <Button
-        fullWidth
-        variant="contained"
-        component={Link}
-        href="/admin/media"
-      >
-        Media
-      </Button>
-      <Button
-        fullWidth
-        variant="contained"
-        component={Link}
-        href="/admin/internships"
-      >
-        Internships
-      </Button>
-      <Button
-        fullWidth
-        variant="contained"
-        component={Link}
-        href="/admin/members"
-      >
-        Members
-      </Button>
-      <Button
-        fullWidth
-        variant="contained"
-        component={Link}
-        href="/admin/years"
-      >
-        Years
-      </Button>
-      <Button
-        fullWidth
-        variant="contained"
-        component={Link}
-        href="/admin/project"
-      >
-        Projects
-      </Button>
-      <Button
-        fullWidth
-        variant="contained"
-        component={Link}
-        href="/admin/students/create-users-from-csv"
-      >
-        Create users from csv
-      </Button>
+
+      {btnData.map((data, key) => (
+        <Button
+          key={key}
+          fullWidth
+          variant="contained"
+          component={Link}
+          href={data.href}
+        >
+          {data.text}
+        </Button>
+      ))}
     </Container>
   )
 }

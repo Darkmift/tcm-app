@@ -8,12 +8,19 @@ import {
   Paper,
 } from '@mui/material'
 
-import React from 'react'
+import React, {useEffect} from 'react'
 
-type Props = {dataset: any[]}
+type Props = {dataset: any[]; customHeaders?: string[]}
 
-function BasicTable({dataset}: Props) {
-  const headers = Object.keys(dataset[0])
+function BasicTable({dataset, customHeaders}: Props) {
+  const headers = customHeaders ? customHeaders : Object.keys(dataset[0])
+
+  useEffect(() => {
+    console.log('🚀 ~ file: BasicTable.tsx:17 ~ BasicTable ~ headers:', {
+      dataset,
+      headers,
+    })
+  }, [dataset])
 
   return (
     <TableContainer component={Paper}>
