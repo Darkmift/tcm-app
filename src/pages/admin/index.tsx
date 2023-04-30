@@ -37,6 +37,10 @@ function AdminDashboard() {
       href: '/admin/students/manage-students',
       text: 'Manage Students',
     },
+    {
+      href: '/admin/winning-projects',
+      text: 'Manage Winning Projects',
+    },
   ]
 
   return (
