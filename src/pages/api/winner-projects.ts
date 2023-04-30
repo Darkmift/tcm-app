@@ -1,11 +1,10 @@
 import {NextApiRequest, NextApiResponse} from 'next'
 import pocketDbService from '../../../backend/services/pocketbase'
 import checkAuthMiddleware from '../../../backend/middleware/checkIsAdmin'
-import {WinnerProject} from '@/types'
+import {InsertWinnerProject, WinnerProject} from '@/types'
 import {COLLECTIONS} from '@/const'
-// import
 
-// Handler to get all winner project types
+// Handler to get all winner project
 const getAllWinnerProjects = async (
   req: NextApiRequest,
   res: NextApiResponse<{winnerProjects: WinnerProject[]} | {error: string}>
@@ -24,27 +23,30 @@ const getAllWinnerProjects = async (
   }
 }
 
-/*
-// Handler to create a new winner project type
+// Handler to create a new winner project
 const createWinnerProjectType = async (
   req: NextApiRequest,
-  res: NextApiResponse<WinnerProjectType | {error: string}>
+  res: NextApiResponse<WinnerProject | {error: string}>
 ) => {
   try {
     // Extract necessary fields from request body
-    const {icon, name, year} = req.body as InsertWinnerProjectType
+    const {title, projectId, year} = req.body as InsertWinnerProject
+    console.log(
+      '🚀 ~ file: winner-projects.ts:35 ~ {title, projectId, year}:',
+      {title, projectId, year}
+    )
 
-    if (!icon || !name || !year) {
+    if (!title || !projectId || !year) {
       return res
         .status(400)
-        .json({error: 'Please provide an icon, name, and year'})
+        .json({error: 'Please provide an title,projectId, and year'})
     }
 
     const createdWinnerProjectType = await pocketDbService.insertRecord(
-      COLLECTIONS.WINNER_PROJECT_TYPES,
+      COLLECTIONS.WINNER_PROJECTS,
       {
-        icon,
-        name,
+        title,
+        projectId,
         year,
       }
     )
@@ -58,31 +60,32 @@ const createWinnerProjectType = async (
   }
 }
 
-// Handler to update an existing winner project type
+// Handler to update an existing winner project
 const updateWinnerProjectType = async (
   req: NextApiRequest,
-  res: NextApiResponse<WinnerProjectType | {error: string}>
+  res: NextApiResponse<WinnerProject | {error: string}>
 ) => {
   try {
-    const {id, icon, name, year} = req.body as WinnerProjectType
+    const {id} = req.query
+    const {title, projectId, year} = req.body as WinnerProject
 
-    if (!id || !icon || !name || !year) {
+    if (!title || !projectId || !year) {
       return res
         .status(400)
-        .json({error: 'Please provide an id, icon, name, and year'})
+        .json({error: 'Please provide a title,projectId, and year'})
     }
 
-    const updatedWinnerProjectType = await pocketDbService.updateRecord(
-      COLLECTIONS.WINNER_PROJECT_TYPES,
-      id,
+    const updatedWinnerProject = await pocketDbService.updateRecord(
+      COLLECTIONS.WINNER_PROJECTS,
+      id as string,
       {
-        icon,
-        name,
+        title,
+        projectId,
         year,
       }
     )
 
-    res.status(200).json(updatedWinnerProjectType)
+    res.status(200).json(updatedWinnerProject)
   } catch (error) {
     console.log('🚀 ~ file: winnerProjectTypes.ts ~ line 68 ~ error', error)
     return res
@@ -91,18 +94,18 @@ const updateWinnerProjectType = async (
   }
 }
 
-// Handler to delete an existing winner project type
+// Handler to delete an existing winner project
 const deleteWinnerProjectType = async (
   req: NextApiRequest,
-  res: NextApiResponse<WinnerProjectType | {error: string}>
+  res: NextApiResponse<WinnerProject | {error: string}>
 ) => {
   try {
     const {id} = req.query
-    const deletedWinnerProjectType = await pocketDbService.deleteRecord(
-      COLLECTIONS.WINNER_PROJECT_TYPES,
+    const deletedWinnerProject = await pocketDbService.deleteRecord(
+      COLLECTIONS.WINNER_PROJECTS,
       id as string
     )
-    res.status(200).json(deletedWinnerProjectType)
+    res.status(200).json(deletedWinnerProject)
   } catch (error) {
     console.log('🚀 ~ file: winnerProjectTypes.ts ~ line 86 ~ error', error)
     return res
@@ -112,16 +115,12 @@ const deleteWinnerProjectType = async (
 }
 
 // Use the checkAuthMiddleware to protect the create/update/delete routes
-const checkedCreateWinnerProjectType = checkAuthMiddleware(
-  createWinnerProjectType
-)
-const checkedUpdateWinnerProjectType = checkAuthMiddleware(
-  updateWinnerProjectType
-)
-const checkedDeleteWinnerProjectType = checkAuthMiddleware(
-  deleteWinnerProjectType
-)
-*/
+const checkedCreateWinnerProject = checkAuthMiddleware(createWinnerProjectType)
+
+const checkedUpdateWinnerProject = checkAuthMiddleware(updateWinnerProjectType)
+
+const checkedDeleteWinnerProject = checkAuthMiddleware(deleteWinnerProjectType)
+
 export default function handler(
   req: NextApiRequest,
   res: NextApiResponse<any>
@@ -131,18 +130,17 @@ export default function handler(
   switch (method) {
     case 'GET':
       return getAllWinnerProjects(req, res)
-    /*
     case 'POST':
-      return checkedCreateWinnerProjectType(req, res)
+      return checkedCreateWinnerProject(req, res)
 
     case 'PUT':
-      return checkedUpdateWinnerProjectType(req, res)
+      return checkedUpdateWinnerProject(req, res)
 
     case 'DELETE':
-      return checkedDeleteWinnerProjectType(req, res)
-    */
+      return checkedDeleteWinnerProject(req, res)
+
     default:
-      res.setHeader('Allow', ['GET' /*, 'POST', 'PUT', 'DELETE'*/])
+      res.setHeader('Allow', ['GET', 'POST', 'PUT', 'DELETE'])
       res.status(405).json({error: `Method ${method} Not Allowed`})
   }
 }
