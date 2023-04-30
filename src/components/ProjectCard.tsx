@@ -44,7 +44,7 @@ function ProjectCard({id, title, imgName, projectWinner}: Prop) {
               data-id={projectWinner.id}
               className={styles['project-icon_winner']}
             >
-              {Icon()}
+              {projectWinner && Icon()}
             </span>
           </Tooltip>
         )}
