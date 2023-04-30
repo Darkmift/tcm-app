@@ -15,6 +15,7 @@ import WinnerProjectTypeHttpService from './WinnerProjectTypeHttpService'
 import ImageHttpService from './ImageHttpService'
 import StudentHttpService from './StudentHttpService'
 import MediaHttpService from './MediaHttpService'
+import WinnerProjectsHttpService from './WinnerProjectHttpService'
 
 // const DOMAIN = ''
 // // const DOMAIN = ''process.env.NEXT_PUBLIC_DOMAIN
@@ -112,6 +113,7 @@ const HttpService = {
   ...ImageHttpService,
   ...StudentHttpService,
   ...MediaHttpService,
+  ...WinnerProjectsHttpService,
 }
 
 export default HttpService

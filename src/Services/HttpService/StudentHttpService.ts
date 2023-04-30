@@ -103,6 +103,10 @@ const StudentHttpService = {
     )
     return response.data
   },
+  async getAllStudents() {
+    const response = await axiosInstance.get(`/students`)
+    return response.data
+  },
 }
 
 export default StudentHttpService
