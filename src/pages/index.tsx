@@ -11,7 +11,6 @@ import {FunctionWithOptionalPayload, LinkConfig, NavBarClick} from '../types'
 import {setYear} from '../store/year.slice'
 
 export default function Home() {
-  const pathImage = IMAGE_ASSETS_FOLDER_PATH + '/projects/'
   const dispatch = useAppDispatch()
   const yearsRedux = useAppSelector((state) => state.years.years)
 
