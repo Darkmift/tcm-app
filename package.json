@@ -2,6 +2,9 @@
   "name": "tcm-app",
   "version": "0.1.0",
   "private": true,
+  "engines": {
+    "node": "14.18"
+  },
   "scripts": {
     "build": "next build",
     "start": "concurrently --prefix \" \" \"pocketbase serve\" next start",
