@@ -42,7 +42,7 @@ function Internship() {
         <>
           <Box className={styles['internships_img']}>
             <Image
-              src={internshipImagePath + selectedInternshipRedux.image}
+              src={selectedInternshipRedux.image}
               alt={selectedInternshipRedux.name}
               width={150}
               height={80}
@@ -130,17 +130,17 @@ function Internship() {
               >
                 Projects
               </Typography>
-              <Box sx={{display: 'flex', flexWrap: 'wrap'}}>
+              <Grid container spacing={2}>
                 {projectsRedux.map((project, key) => (
-                  <Grid item key={project.id} xs={12} sm={6} md={4} lg={4}>
+                  <Grid item key={project.id} xs={12} sm={6} md={3} lg={4}>
                     <ProjectCard
                       id={project.id}
                       title={project.name}
-                      imgName={projectImagePath + project.image}
+                      imgName={project.image as string}
                     />
                   </Grid>
                 ))}
-              </Box>
+              </Grid>
             </Grid>
           ) : (
             <Typography>
