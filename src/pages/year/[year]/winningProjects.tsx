@@ -14,11 +14,6 @@ function WinningProjects() {
   useEffect(() => {
     HttpService.getAllWinnerProjects()
       .then((winnerProjects) => {
-        console.log(
-          '🚀 ~ file: winningProjects.tsx:13 ~ .then ~ winnerProjects:',
-          winnerProjects
-        )
-
         setWinningProjects(
           winnerProjects.filter((p) => p.year === '' + selectedYearRedux)
         )
@@ -41,7 +36,7 @@ function WinningProjects() {
         winningProjects.map((project: WinnerProject, index: number) => (
           <Box key={index}>
             <ProjectCard
-              id={project.id}
+              id={project.expand.projectId.id}
               title={project.title}
               imgName={
                 project.expand.projectId.imageUrl ||
