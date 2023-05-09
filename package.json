@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "build": "next build",
-    "start": "next start",
+    "start": "concurrently --prefix \" \" \"pocketbase serve\" next start",
     "lint": "next lint",
     "dev": "cross-env NODE_OPTIONS='--inspect=http://localhost:3000' && (if exist .next rd /s /q .next 2>nul) && concurrently --prefix \" \" \"pocketbase serve\" next dev",
     "test:old": "nodemon -r dotenv/config tests/dbService.js",
