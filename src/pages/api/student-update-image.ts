@@ -191,7 +191,8 @@ const updateImage = async (req: NextApiRequest, res: NextApiResponse) => {
   }
 }
 
-export default checkStudentOwnsProject(createImage)
+// export default checkStudentOwnsProject(createImage)
+export default createImage
 // export default checkStudentOwnsProject(updateImage)
 
 // VV important VV

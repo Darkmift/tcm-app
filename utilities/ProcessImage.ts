@@ -1,25 +1,34 @@
 import HttpService from '@/Services/HttpService'
 import StudentHttpService from '@/Services/HttpService/StudentHttpService'
+import {Project} from '@/types'
 
-export default async function processImage(
-  title: string,
-  collectionName: string,
-  imageFile: File,
-  studentUsername?: string,
+export default async function processImage({
+  title,
+  collectionName,
+  imageFile,
+  studentUsername,
+  studentProject,
+  originalFilename,
+}: {
+  title: string
+  collectionName: string
+  imageFile: File
+  studentUsername?: string
+  studentProject?: Project
   originalFilename?: string
-): Promise<any> {
-  console.log('🚀 ~ file: ProcessImage.ts:10 ~ imageFile:', imageFile)
+}): Promise<any> {
   try {
     if (studentUsername) {
       if (originalFilename) {
         ;(imageFile as any).imageUrlUpdate = originalFilename
       }
-      return await StudentHttpService.updateStudentImage(
+      return await StudentHttpService.updateStudentImage({
+        title: studentUsername,
+        collection: collectionName,
+        file: imageFile,
         studentUsername,
-        collectionName,
-        imageFile,
-        studentUsername
-      )
+        studentProject: studentProject as Project,
+      })
     }
     return await HttpService.createImage(title, collectionName, imageFile)
   } catch (error: any) {

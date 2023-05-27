@@ -19,7 +19,7 @@ const StudentProjectEdit = async (
       members,
       instructorId,
       internshipId,
-    }: ApiProjectEntry = req.body
+    }: ApiProjectEntry = req.body?.project
 
     if (!id) {
       return res.status(400).json({error: 'Please provide an id'})

@@ -56,16 +56,6 @@ function SelectMultipleMUI2({
 }: Props) {
   const theme = useTheme()
 
-  React.useEffect(() => {
-    if (name === 'instructorId' || name === 'internshipId') {
-      console.log('🚀 ~ file: SelectMultipleMUI2.tsx:57 ~ value:', {
-        name,
-        value,
-      })
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [value])
-
   const parseEventHandler = (evt: SelectChangeEvent | any) => {
     if (!evt.target.value) {
       evt.target.value = multiple ? [] : null

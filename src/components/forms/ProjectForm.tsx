@@ -153,11 +153,11 @@ function ProjectForm({}: Props) {
       const projectFormData = structuredClone(values) as Project
 
       if (projectFormData.image) {
-        const imageData = await processImage(
-          projectFormData.name,
-          'projects',
-          projectFormData.image as unknown as File
-        )
+        const imageData = await processImage({
+          title: projectFormData.name,
+          collectionName: 'projects',
+          imageFile: projectFormData.image as unknown as File,
+        })
         if (imageData === null) throw new Error('Failed to save image')
         projectFormData.image = imageData.url
       }

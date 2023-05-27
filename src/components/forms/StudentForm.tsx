@@ -15,6 +15,7 @@ import HttpService from '@/Services/HttpService'
 import InputFormikMUI from './FormikUI/InputFormikMUI'
 import AutoCloseSnackBar from './UI/AutoCloseSnackBar'
 import {LoadingButton} from '@mui/lab'
+import {UserFromCsv} from '@/types'
 
 const validationSchema = Yup.object({
   username: Yup.string().required('Username is required'),
@@ -52,7 +53,7 @@ function StudentForm({}: Props) {
 
   const handleSubmit = async (values: StudentFormData) => {
     try {
-      HttpService.registerStudent(values)
+      HttpService.registerStudent(values as UserFromCsv)
         .then((data: any) => {
           console.log('🚀 ~ file: YearForm.tsx:55 ~ .then ~ data:', data)
           setErrorMsg('')

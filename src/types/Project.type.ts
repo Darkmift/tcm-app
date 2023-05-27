@@ -1,3 +1,4 @@
+import {AuthUser} from './index'
 import {Internship, Year} from '@/types'
 import {Instructor} from './Instructors.type'
 import {Member} from './Member.type'
@@ -23,6 +24,7 @@ export type Project = {
   members?: Member[]
   expand?: {
     instructorId: Instructor
+    ownerId: AuthUser
     internshipId: Internship
   }
 }

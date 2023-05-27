@@ -16,6 +16,7 @@ function ProjectIndex({}: Props) {
   const projectId = router.query.project
   const projectRedux = useAppSelector(selectProjectById(projectId as string))
   const usernameRedux = useAppSelector((state) => state.auth.username)
+  const usernameId = useAppSelector((state) => state.auth.id)
   const internship = projectRedux?.expand?.internshipId
   const instructor = projectRedux?.expand?.instructorId
 
@@ -73,7 +74,7 @@ function ProjectIndex({}: Props) {
         </div>
       )}
 
-      {projectRedux && usernameRedux === projectRedux.id ? (
+      {projectRedux && usernameId === projectRedux?.expand?.ownerId?.id ? (
         <ProjectUpdateForm
           project={projectRedux}
           studentUsername={usernameRedux}

@@ -179,20 +179,23 @@ function ProjectUpdateForm({project, studentUsername}: Props) {
     try {
       setErrorMsg('')
       setLoadingStatus(true)
-      const projectFormData = structuredClone(values) as Project
-      projectFormData.id = project.id
+      const projectFormData = {
+        ...project,
+        ...structuredClone(values),
+      } as Project
 
       if ((projectFormData.image as File)?.size) {
         console.log(
           '🚀 ~ file: ProjectUpdateForm.tsx:186 ~ handleSubmit ~ projectFormData.image:',
           projectFormData.image
         )
-        const imageData = await processImage(
-          projectFormData.name,
-          'projects',
-          projectFormData.image as unknown as File,
-          studentUsername
-        )
+        const imageData = await processImage({
+          title: projectFormData.name,
+          collectionName: 'projects',
+          imageFile: projectFormData.image as unknown as File,
+          studentUsername,
+          studentProject: project,
+        })
         if (imageData === null) throw new Error('Failed to save image')
         projectFormData.image = imageData.url
       }

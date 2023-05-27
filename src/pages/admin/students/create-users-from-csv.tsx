@@ -10,11 +10,10 @@ import {Container, TextField, Typography} from '@mui/material'
 import React, {useState} from 'react'
 
 type Props = {}
+type CsvData = {projectId: string; password: string; year: string}
 
 function CreateUsersFromCsv({}: Props) {
-  const [csvData, setCsvData] = useState<
-    {projectId: string; password: string}[]
-  >([])
+  const [csvData, setCsvData] = useState<CsvData[]>([])
   const [studentsCreated, setStudentsCreated] = useState<RegisterResult>([])
 
   const [loading, setLoading] = useState(false)
@@ -34,8 +33,8 @@ function CreateUsersFromCsv({}: Props) {
       const rows = csvContent.trim().split('\n').splice(1) // exclude first row
 
       const result = rows.map((row) => {
-        const [projectId, password] = row.replace('\r', '').split(',')
-        return {projectId, password: password}
+        const [projectId, password, year] = row.replace('\r', '').split(',')
+        return {projectId, password: password, year}
       })
 
       setCsvData(result)
@@ -52,15 +51,35 @@ function CreateUsersFromCsv({}: Props) {
         const registerAttemptResult = await HttpService.registerStudent({
           username: row.projectId,
           password: row.password,
+          year: row.year,
         })
+        console.log(
+          '🚀 ~ file: create-users-from-csv.tsx:56 ~ forawait ~ registerAttemptResult:',
+          registerAttemptResult
+        )
+        if (!registerAttemptResult) {
+          throw new Error('error making students')
+        }
+        if (registerAttemptResult?.error) {
+          const {error, username} = registerAttemptResult
+          results.push({
+            username,
+            id: '',
+            password: '',
+            created: false,
+            error,
+          })
+          continue
+        }
         results.push({
-          id: registerAttemptResult?.id,
-          username: registerAttemptResult?.username,
-          password: registerAttemptResult?.password,
+          id: registerAttemptResult.id,
+          username: registerAttemptResult.username,
+          password: registerAttemptResult.password,
           created: !!registerAttemptResult,
+          error: 'no error',
         })
       }
-      setStudentsCreated(results)
+      setStudentsCreated(results as any)
     } catch (error) {
       console.log(
         '🚀 ~ file: create-users-from-csv.tsx:52 ~ createUsers ~ error:',

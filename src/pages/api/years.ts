@@ -17,11 +17,6 @@ const getYears = async (req: NextApiRequest, res: NextApiResponse) => {
 const createYear = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     const {year, is_enabled} = req.body
-    console.log(
-      '🚀 ~ file: years.ts:20 ~ createYear ~ year, is_enabled:',
-      year,
-      is_enabled
-    )
     // validate year object
     if (VALID_YEAR_REGEX.test(year) === false) {
       return res.status(400).json({error: 'Invalid Year'})

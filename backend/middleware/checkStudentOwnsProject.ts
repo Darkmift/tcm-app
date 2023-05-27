@@ -24,20 +24,18 @@ const checkStudentOwnsProject = (handler: Handler) =>
         username: string
       }
 
-      let id = req?.body?.id
-      const {studentUsername} = req.query
-      if (studentUsername?.length) {
-        id = studentUsername
+      const {project} = req?.body
+
+      const ownerId = project?.expand?.ownerId?.id
+
+      if (!project) {
+        throw new Error('project not provided')
       }
 
-      if (!id) {
-        throw new Error('project.id not provided')
-      }
-
-      if (decoded.username !== id) {
+      if (decoded.id !== ownerId) {
         console.log(
           '🚀 ~ file: checkStudentOwnsProject.ts:38 ~ decoded.username !== id:',
-          {du: decoded.username, id}
+          {du: decoded.username, ownerId}
         )
         throw new Error('user not owner of project')
       }

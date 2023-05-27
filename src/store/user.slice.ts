@@ -29,6 +29,7 @@ export const logout = createAsyncThunk('auth/logout', async () => {
 type UserState = {
   isLoggedIn: boolean | null
   username: string
+  id: string
   role: Role
   status: 'idle' | 'loading' | 'succeeded' | 'failed'
   kickUser: boolean
@@ -37,6 +38,7 @@ type UserState = {
 
 const initialState: UserState = {
   isLoggedIn: null,
+  id: '',
   username: '',
   role: 'User',
   status: 'idle',
@@ -74,6 +76,7 @@ const userSlice = createSlice({
       if (!username || !role) throw new Error('Invalid payload at login thunk')
       state.username = action.payload.username
       state.role = action.payload.role
+      state.id = action.payload.id
       state.status = 'succeeded'
     })
     builder.addCase(login.pending, (state, action) => {

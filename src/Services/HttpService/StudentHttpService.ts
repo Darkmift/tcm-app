@@ -1,14 +1,20 @@
-import {AuthUser, Project, Role} from '../../types'
+import {
+  AuthUser,
+  Project,
+  RegisterResultStudent,
+  Role,
+  UserFromCsv,
+} from '../../types'
 import {axiosInstance} from '.'
 import LocalStorageService from '../LocalStorageService'
 import {ROLE_LS_KEY, TOKEN_LS_KEY, USERNAME_LS_KEY} from '@/const'
-import {AxiosResponse} from 'axios'
+import axios, {AxiosError, AxiosResponse} from 'axios'
 
 const StudentHttpService = {
   async loginStudent({
     username: Uname,
     password,
-  }: AuthUser): Promise<{username: string; role: Role} | null> {
+  }: AuthUser): Promise<{username: string; role: Role; id: string} | null> {
     try {
       const result: AxiosResponse<any, any> = await axiosInstance.post(
         '/login-student',
@@ -22,7 +28,7 @@ const StudentHttpService = {
         throw new Error('no data!')
       }
 
-      const {token, role, username} = result.data
+      const {token, role, username, id} = result.data
 
       if (role !== 'User' && role !== 'Admin') {
         throw new Error('Role provided not recognized', role)
@@ -36,7 +42,7 @@ const StudentHttpService = {
         throw new Error('Login failed')
       }
 
-      return {role, username}
+      return {role, username, id}
     } catch (error) {
       console.error('🚀 ~ file: HttpService.ts:17 ~ login ~ error', error)
       throw error
@@ -53,7 +59,9 @@ const StudentHttpService = {
       throw ex
     }
   },
-  async registerStudent(user: AuthUser): Promise<AuthUser | null> {
+  async registerStudent(
+    user: UserFromCsv
+  ): Promise<RegisterResultStudent | null> {
     try {
       const result: AxiosResponse<any, any> = await axiosInstance.post(
         '/admin/register-student',
@@ -67,32 +75,51 @@ const StudentHttpService = {
       const {newUser} = result.data
 
       return newUser
-    } catch (error) {
-      console.error('🚀 ~ file: HttpService.ts:17 ~ register ~ error', error)
-      return null
+    } catch (err: unknown | AxiosError) {
+      console.error('🚀 ~ file: HttpService.ts:17 ~ register ~ error', err)
+      if (axios.isAxiosError(err)) {
+        return {
+          username: err.response?.data?.payload?.username,
+          password: '',
+          error: err.response?.data?.error,
+        }
+      }
+      return {
+        username: '',
+        password: '',
+        error: (err as any)?.message,
+      }
     }
   },
   async updateStudentProject(project: Project): Promise<Project> {
     try {
-      const response = await axiosInstance.put(
+      const response = await axiosInstance.post(
         `/student-project-edit?id=${project.id}`,
-        project
+        {project}
       )
       return response.data
     } catch (error: any) {
       throw new Error(error.response.data.error)
     }
   },
-  async updateStudentImage(
-    title: string,
-    collection: string,
-    file: File,
+  async updateStudentImage({
+    title,
+    collection,
+    file,
+    studentUsername,
+    studentProject,
+  }: {
+    title: string
+    collection: string
+    file: File
     studentUsername?: string
-  ): Promise<File> {
+    studentProject: Project
+  }): Promise<File> {
     const formData = new FormData()
     formData.append('title', title)
     formData.append('collection', collection)
     formData.append('imageFile', file)
+    formData.append('studentProject', JSON.stringify(studentProject))
 
     const response = await axiosInstance.put(
       `student-update-image?id=${studentUsername}&studentUsername=${studentUsername}`,

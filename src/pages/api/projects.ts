@@ -14,7 +14,7 @@ const getAllProjects = async (
     console.log('🚀 ~ file: projects.ts:14 ~ year:', year)
     const projects: Project[] = await pocketDbService.getCollection(
       COLLECTIONS.PROJECTS,
-      {filter: `year=${year}`, expand: 'instructorId,internshipId'}
+      {filter: `year=${year}`, expand: 'instructorId,internshipId,ownerId'}
     )
     const relations: ProjectMemberRelation[] =
       await pocketDbService.getCollection('project_member_relation', {
@@ -73,7 +73,7 @@ const createProject = async (
         imageUrl: image,
         image: image,
       },
-      {expand: 'instructorId,internshipId'}
+      {expand: 'instructorId,internshipId,ownerId'}
     )
 
     if (!createdProject) throw new Error('project creation failed')

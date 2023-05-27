@@ -14,11 +14,26 @@ export type AuthUser = {
   id?: string
 }
 
+export type UserFromCsv = {
+  username: string
+  password: string
+  id?: string
+  year: string
+}
+export type RegisterResultStudent = {
+  username: string
+  password: string
+  id?: string
+  year?: string
+  error: Error
+}
+
 export type RegisterResult = {
-  id: string | undefined
-  username: string | undefined
-  password: string | undefined
-  created: boolean
+  id?: string | undefined
+  username?: string | undefined
+  password?: string | undefined
+  created?: boolean
+  error?: string
 }[]
 
 export type Role = 'User' | 'Admin'

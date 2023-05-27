@@ -57,7 +57,7 @@ const HttpService = {
   async login({
     username: Uname,
     password,
-  }: AuthUser): Promise<{username: string; role: Role} | null> {
+  }: AuthUser): Promise<{username: string; role: Role; id: string} | null> {
     try {
       const result: AxiosResponse<any, any> = await axiosInstance.post(
         '/admin/login',
@@ -71,7 +71,7 @@ const HttpService = {
         throw new Error('no data!')
       }
 
-      const {token, role, username} = result.data
+      const {token, role, username, id} = result.data
 
       if (role !== 'User' && role !== 'Admin') {
         throw new Error('Role provided not recognized', role)
@@ -85,7 +85,7 @@ const HttpService = {
         throw new Error('Login failed')
       }
 
-      return {role, username}
+      return {role, username, id}
     } catch (error) {
       console.error('🚀 ~ file: HttpService.ts:17 ~ login ~ error', error)
       throw error
@@ -97,6 +97,7 @@ const HttpService = {
       LocalStorageService.delete(ROLE_LS_KEY)
       LocalStorageService.delete(USERNAME_LS_KEY)
       const result = await axios.post('/api/admin/logout')
+      // window.location.href = '/'
       return true
     } catch (ex) {
       console.error('Failed to logout', ex)
