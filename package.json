@@ -7,7 +7,7 @@
   },
   "scripts": {
     "build": "next build",
-    "start": "./pocketbase serve & next start",
+    "start": "./pocketbase.linux serve & next start",
     "start:win": "concurrently --prefix \" \" \"pocketbase serve\" next start",
     "lint": "next lint",
     "dev": "cross-env NODE_OPTIONS='--inspect=http://localhost:3000' && (if exist .next rd /s /q .next 2>nul) && concurrently --prefix \" \" \"pocketbase serve\" next dev",
