@@ -95,11 +95,11 @@ function InstructorForm({}: Props) {
       const instructorFormData = structuredClone(values) as Instructor
 
       if (instructorFormData.image) {
-        const imageData = await processImage(
-          instructorFormData.name,
-          COLLECTIONS.INSTRUCTORS,
-          instructorFormData.image as unknown as File
-        )
+        const imageData = await processImage({
+          title: instructorFormData.name,
+          collectionName: COLLECTIONS.INSTRUCTORS,
+          imageFile: instructorFormData.image as unknown as File,
+        })
         if (imageData === null) throw new Error('Failed to save image')
         instructorFormData.image = imageData.url
       }

@@ -109,11 +109,11 @@ function InternShipForm({}: Props) {
       const internShipFormData = structuredClone(values) as Internship
 
       if (internShipFormData.image) {
-        const imageData = await processImage(
-          internShipFormData.name,
-          COLLECTIONS.INSTRUCTORS,
-          internShipFormData.image as unknown as File
-        )
+        const imageData = await processImage({
+          title: internShipFormData.name,
+          collectionName: COLLECTIONS.INSTRUCTORS,
+          imageFile: internShipFormData.image as unknown as File,
+        })
         if (imageData === null) throw new Error('Failed to save image')
         internShipFormData.image = imageData.url
       }
